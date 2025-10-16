@@ -110,9 +110,9 @@ async def test(game_name, stats):
     else:
         print('"player" command is NOT ok.')
 
-
+    print('Success!')
     if wins / stats < 0.98:
-        print('Suspect win rate against random AI: ', traitement_pourcentage(wins / stats))
+        print('But suspect win rate against random AI: ', traitement_pourcentage(wins / stats))
 
 
 if '__main__' == __name__:
@@ -121,3 +121,4 @@ if '__main__' == __name__:
     stats = int(input('Number of matchs for the test (100-300 recommanded): '))
 
     asyncio.run(test(game_name, stats))
+
