@@ -19,7 +19,7 @@ anti_correspondance_hex = {'c': 2, 'h': 7, 's': 18, 'j': 9, 'e': 4, 'f': 5, 'o':
 class Textual_AI(Player):
 
 
-    def __init__(self, program_name, program_arguments='', program_directory='', game:Game = None, search_time_per_action=1, logfile='logfile.log', history_file='history.json', timeout=60*30, time_for_program_quit=10, move_keywords=[], advance_profiling=False, back_first=True, endgame_imply_quit=True):
+    def __init__(self, program_name, program_arguments='', program_directory='', game:Game = None, search_time_per_action=1, logfile='logfile.log', history_file='history.json', timeout=60*30, time_for_program_quit=10, move_keywords=[], endgame_imply_quit=True):#advance_profiling=False, back_first=True,
 
         self.logfile_name = logfile
 
@@ -43,7 +43,7 @@ class Textual_AI(Player):
 
             self.history_file=program_directory + history_file
 
-            self.advance_profiling = advance_profiling
+            #self.advance_profiling = advance_profiling
             self.black_first = True
 
             self.build_move_verifier()
@@ -111,23 +111,23 @@ class Textual_AI(Player):
             return 'b'
 
     async def get_current_player(self) -> int:
-        if not self.advance_profiling:
+        """if not self.advance_profiling:
             return 0
+        else:"""
+        player = (await self.send('player')).lower()
+
+        if player in self.get_black_words() and self.black_first or player in self.get_white_words() and not self.black_first:
+            return 0
+
+        elif player in self.get_white_words() and self.black_first or player in self.get_black_words() and not self.black_first:
+            return 1
+
+        elif player.isdigit():
+            return int(player)
+
         else:
-            player = (await self.send('player')).lower()
-
-            if player in self.get_black_words() and self.black_first or player in self.get_white_words() and not self.black_first:
-                return 0
-
-            elif player in self.get_white_words() and self.black_first or player in self.get_black_words() and not self.black_first:
-                return 1
-
-            elif player.isdigit():
-                return int(player)
-
-            else:
-                assert player in self.get_chance_words()
-                return -1
+            assert player in self.get_chance_words()
+            return -1
 
 
     async def send(self, line):
