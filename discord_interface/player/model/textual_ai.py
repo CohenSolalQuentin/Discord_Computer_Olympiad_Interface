@@ -169,7 +169,16 @@ class Textual_AI(Player):
     async def recv(self):
 
         if self.get_error_symbol():
-            i = await asyncio.to_thread(self.processus.expect, ['\r\n'+self.get_response_symbol(), '\r\n'+self.get_error_symbol()], timeout=self.timeout)
+
+            await asyncio.to_thread(self.processus.expect, r'\r\n(=|\?)', timeout=self.timeout)
+            #match = self.processus.match.group(1)
+
+            #if '=' in match:
+            if '=' in self.processus.after:
+                i = 0
+            else:
+                assert '?' in self.processus.after
+                i = 1
 
         else:
             await asyncio.to_thread(self.processus.expect, '\r\n'+self.get_response_symbol(), timeout=self.timeout)
@@ -182,7 +191,7 @@ class Textual_AI(Player):
 
         if i == 1:
             print(red('GTP Failure Response!'))
-            print('GTP response: ', response)
+            print('GTP response: ', '?'+response)
             print('Last command: ',self.last_command)
 
         if '#' in response:
