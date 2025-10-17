@@ -9,6 +9,7 @@ import traceback
 from re import compile
 
 from discord_interface.utils.pattern_enum import EnumPattern
+from discord_interface.utils.terminal import red
 
 correspondance_hex = {0: 'a', 1: 'b', 2: 'c', 3: 'd', 4: 'e', 5: 'f', 6: 'g', 7: 'h', 8: 'i', 9: 'j', 10: 'k', 11: 'l', 12: 'm', 13: 'n', 14: 'o', 15: 'p', 16: 'q', 17: 'r', 18: 's'}
 
@@ -159,12 +160,26 @@ class Textual_AI(Player):
     def get_response_symbol(self):
         return ''
 
+    def get_error_symbol(self):
+        return ''
+
     async def recv(self):
 
-        await asyncio.to_thread(self.processus.expect, '\r\n'+self.get_response_symbol(), timeout=self.timeout)
+        if self.get_error_symbol():
+            i = await asyncio.to_thread(self.processus.expect, ['\r\n'+self.get_response_symbol(), '\r\n'+self.get_error_symbol()], timeout=self.timeout)
+
+        else:
+            await asyncio.to_thread(self.processus.expect, '\r\n'+self.get_response_symbol(), timeout=self.timeout)
+            i = 0
+
         await asyncio.to_thread(self.processus.expect, '\r\n', timeout=self.timeout)
 
         response = self.processus.before
+
+
+        if i == 1:
+            print(red('GTP Failure Response!'))
+            print(response)
 
         if '#' in response:
 
@@ -177,6 +192,8 @@ class Textual_AI(Player):
             for comment in comments:
                 print(comment)
 
+        if i == 1:
+            raise Exception('GTP Failure Response!')
 
         return response.strip()
 
