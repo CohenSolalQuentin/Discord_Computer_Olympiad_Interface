@@ -19,6 +19,10 @@ class GTP_AI(Textual_AI):
     def get_response_symbol(self):
         return '='
 
+    def get_error_symbol(self):
+        return '?'
+
+
     async def invalid_action_processing(self):
         await self.undo()
 
