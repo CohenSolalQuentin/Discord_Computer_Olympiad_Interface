@@ -24,6 +24,8 @@ class Textual_AI(Player):
 
         self.logfile_name = logfile
 
+        self.last_command = ''
+
         try:
             #print('* init')
 
@@ -133,6 +135,7 @@ class Textual_AI(Player):
 
     async def send(self, line):
         await asyncio.to_thread(self.processus.sendline, line)
+        self.last_command=line
         return await self.recv()
 
 
@@ -179,7 +182,8 @@ class Textual_AI(Player):
 
         if i == 1:
             print(red('GTP Failure Response!'))
-            print(response)
+            print('GTP response: ', response)
+            print('Last command: ',self.last_command)
 
         if '#' in response:
 
