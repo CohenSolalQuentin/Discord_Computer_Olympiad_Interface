@@ -5,10 +5,12 @@ from discord_interface.games.games_enum import EnumGames
 from discord_interface.player.instances.gtp_ai import GTP_AI
 from discord_interface.utils.configuration_files import load_configurations
 from discord_interface.utils.mytime import Time
-from lanceur.traitement.calcul_gain import traitement_pourcentage
 
 import sys
 import time
+
+from discord_interface.utils.terminal import traitement_pourcentage
+
 
 def progress_bar(pct, width=40, text=""):
     """
@@ -76,6 +78,7 @@ async def test(game_name, stats):
 
         while not game.ended():
 
+            #print(game.get_current_player(), await ai.get_current_player())
             if not game.get_current_player() == await ai.get_current_player():
                 current_player_ok = False
 
@@ -121,4 +124,3 @@ if '__main__' == __name__:
     stats = int(input('Number of matchs for the test (100-300 recommanded): '))
 
     asyncio.run(test(game_name, stats))
-
