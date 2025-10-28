@@ -51,6 +51,11 @@ if __name__ != "__main__":
                 self.move_keywords = []
             else:
                 self.move_keywords = move_keywords
+
+            #print(self.move_keywords)
+            self.move_keywords.append('resign')
+            #print(self.move_keywords)
+
             self.move_verifier = None
             self.build_move_verifier()
 
@@ -63,6 +68,7 @@ if __name__ != "__main__":
 
             self.move_verifier = compile(new_global_pattern)
 
+            #print('>>',self.move_keywords)
 
 
 
@@ -236,3 +242,13 @@ if __name__ != "__main__":
         @abstractmethod
         def get_numpy_board(self) -> np.array:
             pass
+
+        @abstractmethod
+        def terminate(self, winner):
+            """Abstract method that terminate the game instance.
+
+            method "ended" must now return True
+            attribute "winner" must be set as winner
+            -------
+            None
+            """

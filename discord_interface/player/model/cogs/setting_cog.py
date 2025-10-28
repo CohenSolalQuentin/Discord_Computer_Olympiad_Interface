@@ -41,6 +41,23 @@ if __name__ != '__main__':
 
             await self.bot.close()
 
+        @commands.command(name="resign", description="command to resign.")
+        #@commands.dm_only()
+        async def _resign(self, ctx: Context, *args: None) -> None:
+            """Coroutine that implements the resign command"""
+
+            # If the author is not the owner, raise a CheckFailure...
+            if not self.bot.check_owner(ctx.author):
+                #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                #await ctx.send(f"test... "+str(ctx.author))
+                return
+
+            #await ctx.send(f"resigning...")
+
+            await self.bot.resign()
+
+
+
         @commands.command(name="info", description="command used for debugging purposes")
         @commands.dm_only()
         async def _info(self, ctx: Context) -> None:
@@ -53,41 +70,6 @@ if __name__ != '__main__':
 
             embedVar = Embed(title="Player's Settings", description=self.bot.player.__str__(), color=Colour.random())
             await ctx.send(embed=embedVar)
-
-
-
-
-        @commands.command(name='continue', description='Continue the match.', aliases=['c'])
-        #@commands.dm_only()
-        @commands.guild_only()
-        async def _continue(self, ctx: Context) -> None:
-            #print("???")
-            """Command that starts the game
-
-            After verifying that the bot is neither in game nor in preparation, invoke the function that starts the game
-
-            PARAMETERS
-            ----------
-            ctx : discord.Context
-                The invocation context.
-
-            RETURNS
-            -------
-            None
-            """
-            #print('+continue')
-            # Checking section
-            # To start a game, the model should be in 'in-game' mode
-            if self.bot.check_in_game():
-                raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
-
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                return
-
-            await self.bot.continue_match(ctx)#
-            #print('-continue')
 
 
 

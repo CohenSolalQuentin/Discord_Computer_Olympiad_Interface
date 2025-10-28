@@ -45,6 +45,12 @@ class InterfaceJeuDiscord(Game):
     def ended(self):
         return self.jeu.fini
 
+    def terminate(self, winner):
+        self.jeu.fini = True
+
+        self.winner = winner
+
+
     def actu_winner(self):
         self.gagnant = self.jeu.gagnant
         if self.jeu.gagnant == 'noir':

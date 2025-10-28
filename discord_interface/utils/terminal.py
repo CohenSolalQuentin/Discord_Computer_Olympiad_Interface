@@ -94,7 +94,6 @@ def traitement_pourcentage(n, retrait_debut=0, precision=2, taille = 6):
         raise Exception('trautement pourcentage ???')
 
 
-
 """Black        0;30     Dark Gray     1;30
 Red          0;31     Light Red     1;31
 Green        0;32     Light Green   1;32

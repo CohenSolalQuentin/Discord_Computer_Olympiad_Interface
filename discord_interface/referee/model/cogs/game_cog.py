@@ -372,6 +372,50 @@ if __name__ != "__main__":
             # Stop the chronometer
             #&#self.cog_unload_chronometer()
 
+            if move == 'resign':
+
+                self.bot.referee.game.terminate(winner=1-self.bot.referee.game.get_current_player())
+
+
+                assert self.bot.referee.game.ended()
+
+                # print('Traitement fin de partie classique')
+                self.bot.referee.enters_end_game()
+
+                self.game_in_progress = False
+                self.last_id = None
+
+                # Reset the instruction message
+                self.instruction_message.reset()
+
+                try:
+                    # Display end game information
+                    # print('The game has ended:', datetime.now().strftime("%H:%M"))
+                    await message.channel.send(f'The game has ended')
+                    await message.channel.send(f'{self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].mention} won')
+                    self.alarme()
+                    self.alarme()
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
+                    raise e
+
+                # Store the winner/loser
+                self.bot.bot_ref_log["winner"] = self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].id
+                self.bot.bot_ref_log["loser"] = self.bot.referee.opposite(self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner]).id
+                self.bot.bot_ref_log["ended"] = True
+
+                # Reset the referee instance keeping some property as they are at the moment (display_activated, game.time_per_player, ...)
+                self.bot.referee.reset_end_game()
+
+                self.chronometer_stop()
+
+                # Dump into the json file the data stored through the game
+                await self.save_bot_ref_log()
+
+                return
+
+
             ok = False
             # Try to translate into an AI-understable language the move, and play it on the referee game instance
             try:

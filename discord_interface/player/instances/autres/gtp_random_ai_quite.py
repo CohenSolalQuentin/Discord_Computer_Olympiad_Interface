@@ -79,7 +79,7 @@ if __name__ == '__main__':
         else:
 
             if game is None:
-                print('=?')
+                print('?')
 
             elif command == 'player':
                 print('=',game.get_current_player())

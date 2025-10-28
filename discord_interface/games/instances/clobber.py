@@ -26,6 +26,11 @@ class Clobber(Game):
     def ended(self):
         return self.fini
 
+    def terminate(self, winner):
+        self.fini = True
+
+        self.winner = winner
+
     def init(self):
 
         self.coups_licites = {}

@@ -9,13 +9,13 @@ CURRENT_DIR_NAME=$(basename "$PWD")
 if [ "$CURRENT_DIR_NAME" = "$EXPECTED_DIR_NAME" ]; then
 
 
-python3 -m pip install pexpect
+pip3 install pexpect
 
-python3 -m pip install -U discord.py
+pip3 install -U discord.py
 
-python3 -m pip install -U numpy
+pip3 install -U numpy
 
-python3 -m pip install -U aiofiles
+pip3 install -U aiofiles
 
 UPPER_DIR_DCOI=$(dirname "$PWD")
 

@@ -121,6 +121,9 @@ move = "color" "vertex"
     def show_game(self):
         """"""
 
+    def terminate(self, winner):
+        self.jeu.fini = True
+        self.winner = winner
 
     def get_numpy_board(self, copy=True):# copy=False only if you do not modify the numpy board
         raise Exception('GTP Game: no tensor representation!')

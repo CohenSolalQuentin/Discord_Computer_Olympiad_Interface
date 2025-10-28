@@ -79,7 +79,7 @@ if __name__ == '__main__':
         else:
 
             if game is None:
-                print('=?','#','Game does not chosen.')
+                print('?','#','Game does not chosen.')
 
             elif command == 'player':
                 print('=',game.get_current_player(),'#','Current player:',int(game.get_current_player()),'.')

@@ -95,6 +95,8 @@ if __name__ != "__main__":
             self.plays_time_archived = None
             self.deconnection_lost_time_archived = None
 
+            self.resigning = False
+
 
         async def on_ready(self) -> None:
             """Coroutine that is triggered when the model is ready."""
@@ -184,7 +186,7 @@ if __name__ != "__main__":
 
         async def reprise_des_messages_corps(self) -> None:
 
-                if self.last_id:#*# and self.last_channel:
+                if self.last_id and self.player.channel is not None:#*# and self.last_channel:
 
                     #print('to reprise_des_messages')
                     #*#async for missed_msg in self.last_channel.history(after=Object(id=self.last_id), oldest_first=True):
@@ -589,6 +591,9 @@ if __name__ != "__main__":
             else:
                 return await self.player.get_current_player()
 
+        def resign(self):
+            self.resigning = True
+
         async def in_game_process(self, message: Message) -> None:
             """coroutine that apply an "in-game" process to the message that is in input.
 
@@ -616,6 +621,40 @@ if __name__ != "__main__":
             #print(message.author , self.player.get_opponent() , self.move_verifier(message.content), message.content)
 
             if EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user in message.mentions and message.channel == self.player.channel:
+
+                if self.resigning:
+                    self.resigning = False
+
+                    move = 'resign'
+
+                    try:
+                        msg = await self.player.channel.send(move)
+                    except Exception as e:
+                        import traceback
+                        traceback.print_exc()
+                        # print('On recommence dans 5 secondes...')
+                        try:
+                            await sleep(5)
+                            msg = await self.player.channel.send(move)
+                        except Exception as e:
+                            import traceback
+                            traceback.print_exc()
+                            # print('On recommence dans 30 secondes...')
+                            try:
+                                await sleep(30)
+                                msg = await self.player.channel.send(move)
+                            except Exception as e:
+                                import traceback
+                                traceback.print_exc()
+                                raise e
+
+                    self.player.game.terminate(winner=1 - await self.get_current_player())
+                    self.bot_play_log['moves'].append(message.content)
+
+                    await self.save_bot_play_log()
+
+                    return
+
 
                 current_player = await self.get_current_player()
 
@@ -903,6 +942,14 @@ if __name__ != "__main__":
                 if emoji == '🟩':
 
                     self.player.last_actions_opponents.append(message.content)  # Record it internally
+
+                    if message.content == 'resign':
+                        self.player.game.terminate(winner=1 - await self.get_current_player())
+                        self.bot_play_log['moves'].append(message.content)
+
+                        await self.save_bot_play_log()
+
+                        return
 
                     try:
 
