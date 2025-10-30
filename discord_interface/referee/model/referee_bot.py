@@ -44,9 +44,10 @@ if __name__ != "__main__":
         """
         #ALLOWED_GUILD = int(os.getenv('GUILD_ID'))
 
-        def __init__(self, current_date: str, guild_id: int) -> None:
+        def __init__(self, current_date: str, guild_id: int, channel_id: int) -> None:
 
             self.guild_id=guild_id
+            self.channel_id=channel_id
 
             # Setting intents of our client
             intents = Intents.default()
@@ -133,13 +134,14 @@ if __name__ != "__main__":
             for guild in self.guilds:
                 print(f'We have logged in as {self.user} on {guild.name}')
 
-
+        def correct_context(self, ctx: Context):
+            return ctx.guild.id == self.guild_id and ctx.channel.id == self.channel_id
 
         #@classmethod
         #def check_guild(cls):
         def check_guild(self):
             def predicate(ctx: Context):
-                return ctx.guild.id == self.guild_id#cls.ALLOWED_GUILD
+                return ctx.guild.id == self.guild_id and ctx.channel.id == self.channel_id
 
             return commands.check(predicate)
 

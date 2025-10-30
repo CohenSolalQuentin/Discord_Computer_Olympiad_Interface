@@ -19,7 +19,11 @@ pip3 install -U aiofiles
 
 UPPER_DIR_DCOI=$(dirname "$PWD")
 
-echo "export PYTHONPATH=$PYTHONPATH:"$UPPER_DIR_DCOI >> ~/.bashrc
+if [ -f "$HOME/.zshrc" ]; then
+    echo "export PYTHONPATH=$PYTHONPATH:"$UPPER_DIR_DCOI >> ~/.zshrc
+fi
+    echo "export PYTHONPATH=$PYTHONPATH:"$UPPER_DIR_DCOI >> ~/.bashrc
+
 
 export PYTHONPATH=$PYTHONPATH:$UPPER_DIR_DCOI
 echo

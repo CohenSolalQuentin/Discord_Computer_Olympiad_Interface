@@ -45,6 +45,10 @@ if __name__ != "__main__":
             -------
             None
             """
+
+            if not self.bot.correct_context(ctx):
+                return
+
             embedVar = Embed(title="Referee's Settings", color=Colour.random())
             embedVar.add_field(name="Referee's info", value=self.bot.referee.__str__())
             embedVar.add_field(name="Game's info", value=self.bot.referee.game.__str__())
@@ -84,6 +88,10 @@ if __name__ != "__main__":
             -------
             None
             """
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if self.bot.check_in_game():
                 raise commands.CheckFailure(message ="The model shouldn't be in game when invoking the dump command.")
 
@@ -100,12 +108,17 @@ if __name__ != "__main__":
                 import traceback
                 traceback.print_exc()
                 raise e
+
         @commands.command(name = 'reset', description = 'resets the current referee instance.')
         @commands.has_permissions(administrator = True)
         @commands.guild_only()
         #@RefereeBot.check_guild()
         async def _reset(self, ctx: Context, *args:None) -> None:
             """Command that resets the current referee instance."""
+
+            if not self.bot.correct_context(ctx):
+                return
+
             self.bot.referee.reset()
             try:
                 await ctx.send(f'The referee was reset...')
@@ -114,6 +127,7 @@ if __name__ != "__main__":
                 import traceback
                 traceback.print_exc()
                 raise e
+
         @commands.command(name = 'quit', description = 'Command that shuts down the current model (for debugging purposes).')
         @commands.has_permissions(administrator = True)
         @commands.guild_only()
@@ -121,6 +135,10 @@ if __name__ != "__main__":
         async def _quit(self, ctx: Context, *args:None) -> None:
             """Command that shuts down the model."""
             # Save the log structure
+
+            if not self.bot.correct_context(ctx):
+                return
+
             await self.save_bot_ref_log()
 
             try:

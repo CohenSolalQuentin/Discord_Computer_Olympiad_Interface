@@ -82,7 +82,7 @@ if __name__ != "__main__":
                     raise e
                 return False
 
-            if message.guild.id != self.bot.guild_id:
+            if message.guild.id != self.bot.guild_id or message.channel.id != self.bot.channel_id:
                 return False
 
             #print(message.content, self.bot.referee.is_in_game() , message.channel ,self.bot.referee.channel)
@@ -117,16 +117,18 @@ if __name__ != "__main__":
                 The most recent message sent in the channel.
             """
 
+
             #print("Message reçu :", message.content)
             #print("Mentions utilisateurs :", [user.name for user in message.mentions])
             #print('on_message:',self.ended,self.timeout_player, self.game_in_progress, self.last_id)
-            self.messages_history.append((str(message.author), str(message.content), int(message.id), str(datetime.now())))
 
             async with self.message_lock:
 
                 continuer = await self.prepreprocessing(message)
                 if not continuer:
                     return
+
+                self.messages_history.append((str(message.author), str(message.content), int(message.id), str(datetime.now())))
 
                 ### RECUPERATION DES GAPS DE MESSAGE
                 if message.id in self.processed_ids:
@@ -276,6 +278,9 @@ if __name__ != "__main__":
             message: discord.Message
                 The message that was deleted
             """
+
+            if message.guild.id != self.bot.guild_id or message.channel.id != self.bot.channel_id:
+                return False
 
             if self.bot.referee.is_in_game() and message.channel != self.bot.referee.channel:  ### ICI blocage channel que j ai ajouter ###
                 return False
@@ -816,6 +821,11 @@ if __name__ != "__main__":
             -------
             None
             """
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             # Checking section
             # To start a game, the model should be in 'in-game' mode
             if self.bot.check_in_game():
@@ -1049,6 +1059,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _pause(self, ctx: Context, *args: None) -> None:
             """Command that pauses the game"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if not self.bot.check_in_game():
                 raise commands.CheckFailure(message="The model should be in game when invoking the pause command.")
 
@@ -1081,6 +1096,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _resume(self, ctx: Context, *args: None) -> None:
             #print('+ _resume')
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if not self.bot.check_resumed_author(ctx):
                 raise commands.CheckFailure(message="The user requesting the game to be resumed should be the same as the one who initiated the pause.")
             if not self.bot.check_in_game():
@@ -1131,6 +1151,10 @@ if __name__ != "__main__":
             -------
             None
             """
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if not self.bot.check_player_in_game(ctx):
                 raise commands.CheckFailure(message="The user who invoked this command should be a player of the game.")
 
@@ -1232,6 +1256,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _history(self, ctx: Context, *args: None) -> None:
             """Coroutine that display the recent games that were played"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if self.bot.check_in_game():
                 raise commands.CheckFailure(message="The model shouldn't be in game when invoking the history command.")
 
@@ -1289,9 +1318,15 @@ if __name__ != "__main__":
                     import traceback
                     traceback.print_exc()
                     raise e
+
         @commands.group()
         async def set(self, ctx: Context) -> None:
             """Command that will be used to set various parameters in the game"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if self.bot.check_in_game():
                 raise commands.CheckFailure(message="The model shouldn't be in game when invoking the set command.")
 
@@ -1303,6 +1338,7 @@ if __name__ != "__main__":
                     import traceback
                     traceback.print_exc()
                     raise e
+
         @set.command(name='time_per_move',
                      description='Command that activates the time per move mode that allows player to have a certain amount of time each round.')
         @commands.has_permissions(administrator=True)
@@ -1310,6 +1346,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _time_per_move_activate(self, ctx: Context, *args: None) -> None:
             """Subcommand of set that allows to flip the value of the time_per_move attribute of the referee instance"""
+
+            if not self.bot.correct_context(ctx):
+                return
+
+
             self.bot.referee.time_per_move_activate()
 
             if self.bot.referee.is_time_per_move_activated():
@@ -1332,6 +1373,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _time(self, ctx: Context, new_time: str) -> None:
             """Subcommand of set that sets time limit per player to the time in seconds in argument"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             if self.bot.check_in_preparation():
                 raise commands.CheckFailure(message="The model shouldn't be in preparation when invoking the set time command.")
 
@@ -1363,6 +1409,12 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _game(self, ctx: Context, gamemode: str, *args: None) -> None:
             """Subcommand that allows to change the game that the referee is currently using"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
+
             if self.bot.check_in_preparation():
                 raise commands.CheckFailure(message="The model shouldn't be in preparation when invoking the set game command.")
 
@@ -1392,6 +1444,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _available_games(self, ctx: Context, *args:None) -> None:
             """Command that resets the current referee instance."""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             try:
                 await ctx.send('list of available games: '+', '.join([e.capitalize() for e in EnumGames.__members__]).replace('Gtp_','GTP_'))
 
@@ -1405,6 +1462,10 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _add_freegame_moves(self, ctx: Context, *args: str) -> None:
             """Command that resets the current referee instance."""
+
+
+            if not self.bot.correct_context(ctx):
+                return
 
             if args:
                 FreeGame.EXTRA_MOVE_KEYWORDS.extend(args)
@@ -1427,6 +1488,10 @@ if __name__ != "__main__":
         async def _show_freegame_moves(self, ctx: Context) -> None:
             """Command that resets the current referee instance."""
 
+
+            if not self.bot.correct_context(ctx):
+                return
+
             try:
                 await ctx.send('Extra Keywords of Free_game: '+', '.join(FreeGame.EXTRA_MOVE_KEYWORDS))
 
@@ -1443,6 +1508,10 @@ if __name__ != "__main__":
         async def _clear_freegame_moves(self, ctx: Context) -> None:
             """Command that resets the current referee instance."""
 
+
+            if not self.bot.correct_context(ctx):
+                return
+
             FreeGame.EXTRA_MOVE_KEYWORDS = []
 
             try:
@@ -1458,6 +1527,10 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _show_move_keywords(self, ctx: Context) -> None:
             """Command that resets the current referee instance."""
+
+
+            if not self.bot.correct_context(ctx):
+                return
 
             try:
                 if self.game_in_progress:
@@ -1476,6 +1549,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _stop_activate(self, ctx: Context, *args: None) -> None:
             """Subcommand that flips the value of the stop_activated field of the referee instance"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             self.bot.referee.stop_activate()
 
             try:
@@ -1494,6 +1572,11 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         async def _display_activate(self, ctx: Context, *args: None) -> None:
             """Subcommand that flips the value of the display_activated field of the referee instance"""
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             self.bot.referee.display_activate()
 
             try:
@@ -1696,6 +1779,9 @@ Bottle.aiff	Glass.aiff	Ping.aiff	Sosumi.aiff"""
             if before.author == self.bot.user:
                 return
 
+            if before.guild.id != self.bot.guild_id or before.channel.id != self.bot.channel_id:
+                return False
+
             if self.bot.referee.is_in_game() and before.channel != self.bot.referee.channel:  ### ICI blocage channel que j ai ajouter ###
                 return False
 
@@ -1854,6 +1940,11 @@ Bottle.aiff	Glass.aiff	Ping.aiff	Sosumi.aiff"""
             -------
             None
             """
+
+
+            if not self.bot.correct_context(ctx):
+                return
+
             #print('+continue')
             # Checking section
             # To start a game, the model should be in 'in-game' mode

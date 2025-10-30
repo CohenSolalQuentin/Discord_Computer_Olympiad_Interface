@@ -26,6 +26,12 @@ class Textual_AI(Player):
 
         self.last_command = ''
 
+        if program_arguments is None:
+            program_arguments = ''
+
+        if program_directory is None:
+            program_directory = ''
+
         try:
             #print('* init')
 
