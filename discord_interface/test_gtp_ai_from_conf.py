@@ -83,7 +83,7 @@ async def test(game_name, stats):
                 if not game.get_current_player() == await ai.get_current_player():
                     current_player_ok = False
             except:
-                current_player_ok = False   
+                current_player_ok = False
 
             if is_first and game.get_current_player() == 0 or not is_first and game.get_current_player() == 1:
 

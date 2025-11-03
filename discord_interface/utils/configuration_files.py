@@ -28,8 +28,8 @@ def load_configurations():
                         value = float(value)
                     else:
                         value = int(value)
-                elif value == '':
-                    value = None
+                elif value.replace(' ','') == '':
+                    value = ''
 
                 d[variable] = value
             except Exception:

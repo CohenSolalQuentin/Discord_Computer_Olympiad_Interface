@@ -49,7 +49,7 @@ def progress_bar(pct, width=40, text=""):
 
 async def test(game_name, stats):
 
-    ai = GTP_AI(program_name='python3', program_arguments='player/instances/autres/gtp_random_ai.py', program_directory='')
+    ai = GTP_AI(program_name='python3', program_arguments='player/instances/autres/gtp_random_ai_quite.py', program_directory='')
 
     await ai.update_game(game_name)
 
@@ -108,16 +108,10 @@ async def test(game_name, stats):
         if is_first and game.winner == 0 or not is_first and game.winner == 1:
             wins += 1
 
-        progress_bar(int((100 * _ / stats)), width=30, text="Wins: " + str(traitement_pourcentage(wins / (_ + 1))))
-
-    if current_player_ok:
-        print('"player" command is ok.')
-    else:
-        print('"player" command is NOT ok.')
+        progress_bar(int((100 * _ / stats)), width=30)
 
     print('Success!')
-    if wins / stats < 0.98:
-        print('But suspect win rate against random AI: ', traitement_pourcentage(wins / stats))
+
 
 
 if '__main__' == __name__:

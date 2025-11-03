@@ -85,6 +85,9 @@ def bot_starting(AI_Class, **AI_args):
 
 def gpt_bot_starting(program_name, program_arguments='', program_directory=''):
 
+    if program_arguments is None:
+        program_arguments = ''
+
     if not isinstance(program_arguments, str):
         program_arguments = ' '.join([str(e) for e in program_arguments])
 
