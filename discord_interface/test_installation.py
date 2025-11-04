@@ -108,7 +108,7 @@ async def test(game_name, stats):
         if is_first and game.winner == 0 or not is_first and game.winner == 1:
             wins += 1
 
-        progress_bar(int((100 * _ / stats)), width=30)
+        progress_bar(int((100 * (_+1) / stats)), width=30)
 
     print('Success!')
 

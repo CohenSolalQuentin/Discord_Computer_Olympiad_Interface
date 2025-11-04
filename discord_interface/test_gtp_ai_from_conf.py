@@ -109,7 +109,7 @@ async def test(game_name, stats):
         if is_first and game.winner == 0 or not is_first and game.winner == 1:
             wins += 1
 
-        progress_bar(int((100 * _ / stats)), width=30, text="Wins: " + str(traitement_pourcentage(wins / (_ + 1))))
+        progress_bar(int((100 * (_+1) / stats)), width=30, text="Wins: " + str(traitement_pourcentage(wins / (_ + 1))))
 
     if current_player_ok:
         print('"player" command is ok.')

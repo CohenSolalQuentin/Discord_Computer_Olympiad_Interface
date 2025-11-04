@@ -1,5 +1,6 @@
 from asyncio import sleep
 from datetime import datetime
+from json import JSONDecodeError
 from time import time
 
 import aiofiles
@@ -272,6 +273,8 @@ if __name__ != "__main__":
                         ### RECOVERY SECTION
                         ####################
                         ####################
+            except JSONDecodeError as e:
+                print('JSONDecodeError')
             except Exception as e:
                 import traceback
                 print('last_game_file:',last_game_file)

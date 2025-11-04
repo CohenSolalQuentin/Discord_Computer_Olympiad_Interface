@@ -1,6 +1,9 @@
 from random import choice
 
 from discord_interface.games.instances.amazons import AmazonsDiscord
+from discord_interface.games.instances.breakthrough import BreakthroughDiscord
+from discord_interface.games.instances.clobber import Clobber
+from discord_interface.games.instances.santorini import SantoriniDiscord
 
 CORRESPONDENCE = {0: 'A', 1: 'B', 2: 'C', 3: 'D', 4: 'E', 5: 'F', 6: 'G', 7: 'H', 8: 'I', 9: 'J', 10: 'K', 11: 'L',  #
                   12: 'M', 13: 'N', 14: 'O', 15: 'P', 16: 'Q', 17: 'R', 18: 'S'}  #
@@ -73,13 +76,22 @@ if __name__ == '__main__':
             if arg[0].lower() == 'amazons':
                 game = AmazonsDiscord()
                 print('=')
+            elif arg[0].lower() == 'clobber':
+                game = Clobber()
+                print('=')
+            elif arg[0].lower() == 'breakthrough':
+                game = BreakthroughDiscord()
+                print('=')
+            elif arg[0].lower() == 'santorini':
+                game = SantoriniDiscord()
+                print('=')
             else:
                 game = None
                 print('=')
         else:
 
             if game is None:
-                print('?')
+                print('?','#','Game does not chosen. Available games: Amazons, Clobber, Breakthrough, Santorini.')
 
             elif command == 'player':
                 print('=',game.get_current_player())
