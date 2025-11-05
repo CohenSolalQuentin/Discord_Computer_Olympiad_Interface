@@ -3,6 +3,7 @@ from random import randint, choice
 
 from discord_interface.games.games_enum import EnumGames
 from discord_interface.player.instances.gtp_ai import GTP_AI
+from discord_interface.player.instances.gtp_ai_go import GTP_AI_Go
 from discord_interface.utils.configuration_files import load_configurations
 from discord_interface.utils.mytime import Time
 
@@ -50,7 +51,7 @@ def progress_bar(pct, width=40, text=""):
 async def test(game_name, stats):
     gpt = load_configurations()
 
-    ai = GTP_AI(program_name=gpt['program_name'], program_arguments=gpt['program_arguments'], program_directory=gpt['program_directory'] if gpt['program_directory'] is not None else '')
+    ai = GTP_AI_Go(program_name=gpt['program_name'], program_arguments=gpt['program_arguments'], program_directory=gpt['program_directory'] if gpt['program_directory'] is not None else '')
 
     await ai.update_game(game_name)
 
@@ -112,8 +113,7 @@ async def test(game_name, stats):
             wins += 1
 
         progress_bar(int((100 * (_+1) / stats)), width=30, text="Wins: " + str(traitement_pourcentage(wins / (_ + 1)))+ 'running match'+'.'*randint(1,3))
-
-    progress_bar(int((100 * (_ + 1) / stats)), width=30, text="Wins: " + str(traitement_pourcentage(wins / (_ + 1))))
+    progress_bar(int((100 * (_+1) / stats)), width=30, text="Wins: " + str(traitement_pourcentage(wins / (_ + 1))))
 
     if current_player_ok:
         print('"player" command is ok.')

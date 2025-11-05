@@ -1,5 +1,6 @@
 
 from discord_interface.player.instances.gtp_ai import GTP_AI
+from discord_interface.player.instances.gtp_ai_go import GTP_AI_Go
 from discord_interface.player.model.player_bot import PlayerBot
 from discord_interface.player.model.player_bot import Player
 from discord_interface.utils.configuration_files import load_configurations
@@ -92,3 +93,14 @@ def gpt_bot_starting(program_name, program_arguments='', program_directory=''):
         program_arguments = ' '.join([str(e) for e in program_arguments])
 
     bot_starting(GTP_AI, program_name=program_name, program_arguments=program_arguments, program_directory=program_directory)
+
+
+def go_gpt_bot_starting(program_name, program_arguments='', program_directory=''):
+
+    if program_arguments is None:
+        program_arguments = ''
+
+    if not isinstance(program_arguments, str):
+        program_arguments = ' '.join([str(e) for e in program_arguments])
+
+    bot_starting(GTP_AI_Go, program_name=program_name, program_arguments=program_arguments, program_directory=program_directory)
