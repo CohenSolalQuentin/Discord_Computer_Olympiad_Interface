@@ -40,7 +40,7 @@ class GTP_AI_Go(Textual_AI):
         await self.send('time_left ' + self.self_color() + ' ' + str(time_left.to_seconds()))
         await self.send('time_left ' + self.opponent_color() + ' ' + str(opponent_time_left.to_seconds()))
         #print('A')
-        action = await self.send('genmove')
+        action = await self.send('genmove '+self.self_color())
         #print("'"+action+"'")
         action = self.move_conversion_from_gtp(action)
         #print("'"+self.move_conversion_from_gtp(action)+"'")
