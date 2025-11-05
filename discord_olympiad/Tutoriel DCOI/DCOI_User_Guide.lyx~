@@ -1,0 +1,4856 @@
+#LyX 2.4 created this file. For more info see https://www.lyx.org/
+\lyxformat 620
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\begin_preamble
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+\end_modules
+\maintain_unincluded_children no
+\language english
+\language_package default
+\inputencoding utf8
+\fontencoding auto
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_roman_osf false
+\font_sans_osf false
+\font_typewriter_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\float_placement class
+\float_alignment class
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_formatted_ref 0
+\use_minted 0
+\use_lineno 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 3cm
+\topmargin 3cm
+\rightmargin 3cm
+\bottommargin 3cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tablestyle default
+\tracking_changes false
+\output_changes false
+\change_bars false
+\postpone_fragile_content true
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\docbook_table_output 0
+\docbook_mathml_prefix 1
+\end_header
+
+\begin_body
+
+\begin_layout Title
+User Guide for the Discord Computer Olympiad Interface
+\begin_inset Note Note
+status open
+
+\begin_layout Plain Layout
+TODO :
+ Ajouter de nouveaux jeux
+\end_layout
+
+\begin_layout Plain Layout
+Utiliser l'arbitre
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Author
+Quentin Cohen-Solal
+\begin_inset Newline newline
+\end_inset
+
+
+\size small
+quentin.cohen-solal@dauphine.psl.eu
+\end_layout
+
+\begin_layout Standard
+This document explains how to use the three main features of the Discord Computer Olympiad Interface (DCOI),
+ namely:
+\end_layout
+
+\begin_layout Itemize
+running a match in manual mode:
+ a human manually enters the actions of their program as text messages in the Discord conversation (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Jeu-manuel"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+running a match in automatic mode:
+ using a player Discord bot that writes the game actions provided by your program in the Discord conversation on your behalf (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Jeu-automatisé-par"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+creating your own game server:
+ to run a local beta test for the Computer Olympiad or to organize your own competition (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Création-d'un-serveur"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you wish to use only the automatic mode,
+ it is nevertheless necessary to read the following section.
+ In addition to briefly describing how to play in manual mode,
+ it explains the DCOI in order to make the following sections easier to understand —
+ including how to select a game and start a match.
+ This first section also covers the Free_game mode,
+ which allows you to play (either in manual or automatic mode) any perfect-information game,
+ by delegating to the players the verification of valid moves as well as the determination of the end of the game.
+\end_layout
+
+\begin_layout Remark
+If you encounter any frustrations or bugs while reading this document or using the DCOI,
+ please don’t hesitate to let me know.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This document is a translation of 
+\begin_inset Quotes eld
+\end_inset
+
+Guide d’utilisation du Discord Computer Olympiad Interface
+\begin_inset Quotes erd
+\end_inset
+
+ (guide_utilisateur_DCOI.pdf).
+ If you have any problems with the translation,
+ please consult this document or the author of this document.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Description of the DCOI and use in manual mode
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Jeu-manuel"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To use the DCOI,
+ you must be able to use Discord.
+ Therefore,
+ you need to install the Discord application or use the web version,
+ and create an account if you haven’t already done so.
+ (see 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://discord.com
+\end_layout
+
+\end_inset
+
+).
+ This section begins by presenting the overall functioning of the system (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Fonctionnement-global"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+ then explains how to access the match channels (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:L'application-Discord-et"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+ followed by instructions on how to play a match (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Lancement-d'une-partie"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+ including an explanation of the action syntax (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Syntaxe-des-actions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ A few warnings are also described in Sections
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Matchs-et-discussions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+,
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Mise-en-garde"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+
+\begin_inset space ~
+\end_inset
+
+and
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Avertissement-sur-les"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ Finally,
+ we briefly discuss the match logging system (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Logging-des-matchs"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection
+Overall Functioning
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Fonctionnement-global"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+DCOI and Referee Bot
+\end_layout
+
+\begin_layout Standard
+The DCOI is both a Python library and a collection of ready-to-use or extensible Python bots designed to create player bots and referee bots,
+ enabling gameplay and match management within a Discord conversation.
+\end_layout
+
+\begin_layout Standard
+Players and program operators join the competition’s Discord server.
+ When match launch commands are entered in a Discord channel,
+ the game begins.
+ It is then managed by a referee bot (set up by the organizers).
+ Players and player bots must post their game actions in the conversation when prompted by the referee bot.
+ The referee bot checks the legality of moves,
+ handles errors,
+ tracks player time,
+ and announces the end of the game (either normal or due to a time limit being exceeded) along with the winner.
+\end_layout
+
+\begin_layout Subsubsection
+Focus on Player Bots
+\end_layout
+
+\begin_layout Standard
+All aspects related to Discord are automated through the Discord bots.
+ Users only need to connect their program to the player Discord bot,
+ which handles Discord events and posts messages in the conversation,
+ among other things.
+ To interface the two programs,
+ you can either subclass a player bot and implement the plays method using DCOI’s gameplay methods,
+ or implement the Go Text Protocol (GTP) communication protocol.
+ In both cases,
+ you may need to convert the DCOI game action syntax into your program’s own syntax.
+ Finally,
+ you must create a bot account and specify a configuration file to link the bot account with your bot program.
+\end_layout
+
+\begin_layout Subsection
+The Discord Application and Match Channels
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:L'application-Discord-et"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Discord:
+ Servers and Channels
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Discord:-serveurs-et-salons"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We will now briefly review the different elements of the Discord application that are needed to run a match.
+\end_layout
+
+\begin_layout Standard
+A screenshot of the application is shown in Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-App"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ The first step is to join the competition server (servers on Discord are called guilds).
+ On your first access,
+ click the “+” icon at the bottom of the server list (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-servers-list"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ During the competition or the beta test,
+ click “Join a Server”,
+ then enter the invitation link provided by the organizers.
+ For the beta test,
+ you must join the beta test server:
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://discord.gg/mbHBdH3K
+\end_layout
+
+\end_inset
+
+.
+ Once the server has been added to your account,
+ you can return to it at any time by clicking its icon,
+ now visible in your server list (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-servers-list"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ After joining the server,
+ you need to enter a match channel by clicking on its name.
+ The available channels are displayed in the designated area (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-channel-list"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ You may also join the general or discussion channel to talk with other participants,
+ or any other channel —
+ for example,
+ to ask for help.
+ As in any instant messaging platform,
+ to write in the selected channel,
+ simply type in the text input area provided for this purpose (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-input-area"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ Once you press Enter,
+ your message will be sent and will appear in the area showing the conversation history (the middle of the window —
+ see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-conversation"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ if needed).
+\end_layout
+
+\begin_layout Subsubsection
+Matches and Discussions
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Matchs-et-discussions"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that you can also talk in the match channels,
+ as long as your message does not consist solely of a text-formatted action.
+ Indeed,
+ if the match has started and you are one of the players,
+ your message will be interpreted as a game move.
+\end_layout
+
+\begin_layout Standard
+For example,
+ never write just “A1” or “A2-B3” during a conversation.
+ Instead,
+ you may write something like “Why did you play A1?”,
+ or even just “A1.” or “A1?”.
+\end_layout
+
+\begin_layout Standard
+In general,
+ try to avoid chatting in the match channel as much as possible,
+ at least during ongoing matches,
+ to prevent cluttering the conversation.
+\end_layout
+
+\begin_layout Subsubsection
+Warning About Editing or Deleting Messages
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Mise-en-garde"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Discord allows you to edit and delete your messages.
+ During a match—
+whether you or your bot are playing—
+never use this feature under any circumstances.
+ There is a small but non-negligible chance that doing so could cause system instability,
+ preventing the match from being completed.
+\end_layout
+
+\begin_layout Standard
+If such an event occurs,
+ you will be held responsible and will automatically lose the match.
+\end_layout
+
+\begin_layout Standard
+If you accidentally edit your move,
+ immediately edit it again to restore the original action —
+ this should resolve the issue without consequence.
+\end_layout
+
+\begin_layout Standard
+If you accidentally delete your move,
+ unfortunately,
+ this action is irreversible,
+ and you must hope it does not affect the rest of the game.
+\end_layout
+
+\begin_layout Standard
+Note that the system’s default behavior is to ignore message deletions and edits,
+ so there is absolutely no benefit in attempting such actions.
+\end_layout
+
+\begin_layout Standard
+In case of any problem,
+ contact an organizer.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename interface.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord App
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-App"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename interface_serveurs.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord servers list (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-servers-list"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename interface_salons.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord channel list (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-channel-list"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename interface_zone_de_saisie.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord input area for conversation and match playing (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-input-area"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename interface_conversation.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord conversation / match history (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-conversation"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Starting a Match
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Lancement-d'une-partie"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now move on to the core of the topic and explain what you need to know —
+ and how to proceed —
+ to start a match.
+\end_layout
+
+\begin_layout Subsubsection
+Choosing the Game and Other Parameters
+\end_layout
+
+\begin_layout Standard
+To choose the game for the match,
+ type the following command in the conversation:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!set game <GAME_NAME>
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Example
+\begin_inset Quotes eld
+\end_inset
+
+!set game Clobber
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Remark
+If the command worked,
+ the referee bot will respond in the conversation:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Game set to <GAME_NAME>
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+To see the list of available games,
+ you can type the following command in the conversation:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!available_games
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+If you need to adjust the total time allocated to each player per match (default is 30 minutes per player per match),
+ you can use the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!time <T>
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Standard
+where <T> is an integer indicating the time in seconds,
+ or an integer followed by one of the units “s”,
+ “min”,
+ or “h” to specify the unit (for example,
+ 
+\begin_inset Quotes eld
+\end_inset
+
+!time 20min
+\begin_inset Quotes erd
+\end_inset
+
+ ou 
+\begin_inset Quotes eld
+\end_inset
+
+!time 1h
+\begin_inset Quotes erd
+\end_inset
+
+).
+ 
+\end_layout
+
+\begin_layout Remark
+If you plan to play a series of matches on the same game,
+ it is not necessary to set the game before each launch.
+\end_layout
+
+\begin_layout Subsubsection
+Special Case:
+ Free_game Mode
+\end_layout
+
+\begin_layout Standard
+The DCOI provides the ability to play any perfect-information,
+ deterministic game using the “pseudo-game” called Free_game.
+ Note,
+ however,
+ that —
+ while this is not a practical limitation —
+ players must take turns alternately (i.e.,
+ never play twice in a row).
+ This mode allows matches to be played for such games but with the following trade-off:
+ no legality checking of moves and no automatic winner determination.
+ Players must therefore take turns entering the action “end” to signal the end of the match.
+ This feature should only be used if participants are certain they are following the same rules and each have their own game engine.
+ To use Free_game,
+ type:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!set game Free_game
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The valid actions for this mode are all actions that follow the DCOI action syntax (for example,
+ “A1”,
+ “B2-C3”,
+ “D4-E17-H23”;
+ see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Syntaxe-des-actions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+) plus the action “end”.
+ Yet,
+ you can also add custom special actions to Free_game with the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!add_freegame_moves
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+You can list all additional special actions of Free_game with the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!show_extra_freegame_moves
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+And you can remove all special actions from Free_game with the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!clear_freegame_moves
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+These commands must,
+ of course,
+ be used before the match begins.
+\end_layout
+
+\begin_layout Subsubsection
+Starting the Match
+\end_layout
+
+\begin_layout Standard
+We now turn to the practical process of running a match.
+ The first step is to ask the referee bot to propose a game.
+ To do this,
+ use the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!start @<Discord_Player_ID_1> @<Discord_Player_ID_2>
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+You can save time by using the alias “!s” instead of “!start”.
+ To enter this somewhat technical command,
+ start typing “!start @” —
+ Discord will then display a list of available user IDs.
+ Use the up/down arrow keys to select the ID of the first player in the match and press Enter.
+ If it is not in the list,
+ you can start typing its name until it appears.
+ Note that simply typing the name does not work —
+ you must always select it from the list and then confirm by pressing “Enter”.
+\end_layout
+
+\begin_layout Standard
+Then type a space followed by “@” again,
+ and select the second player in the same way.
+ If one of the players is using a bot,
+ you must select the bot’s ID,
+ not the operator’s.
+ Moreover,
+ if one of the players is a bot,
+ that bot must already be running before the !start command is sent.
+\end_layout
+
+\begin_layout Remark
+There is a rare Discord bug in which some players or bots may temporarily disappear from the “@” selector.
+ This issue usually resolves itself,
+ but it can take hours or even days.
+ However,
+ it can easily be bypassed in two ways:
+\end_layout
+
+\begin_layout Remark
+• Simply use a different match channel.
+\end_layout
+
+\begin_layout Remark
+• Or,
+ write the command in another channel and copy-paste it into the intended match channel.
+\end_layout
+
+\begin_layout Remark
+Always keep at least one channel empty of messages,
+ as it seems that sending messages may trigger this strange bug.
+\end_layout
+
+\begin_layout Standard
+Once the command is executed,
+ the referee displays the details of the proposed match (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:waiting_start"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).Participants must then click the thumbs-up icon under the message to confirm the match.
+ If you are using a bot,
+ this step is handled automatically by the library —
+ you don’t need to do anything.
+ In the current configuration,
+ players have 15 minutes to accept the match proposal.
+ When all players have clicked the thumbs-up,
+ the match begins.
+ If you wish to decline the proposed match,
+ click the thumbs-down icon instead.
+\end_layout
+
+\begin_layout Remark
+It is normal to see the number 1 next to the thumbs-up and thumbs-down icons.
+ These reactions were added by the referee bot to make them visible and to make it easier for players to react.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename start_attente_de_reponse.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Example of the beginning of a match (example of waiting for player confirmation to start the game)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:waiting_start"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Progression and End of the Match
+\end_layout
+
+\begin_layout Standard
+During a match,
+ the referee indicates when it is a player’s turn to move.
+ It writes a message in the conversation such as:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+@<PLAYER> must play (he has <TIME> left)
+\begin_inset Quotes erd
+\end_inset
+
+.
+ At that moment,
+ the mentioned player may enter in the conversation the action chosen by their program.
+ A player must not post any move before being explicitly told to play.
+ Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Début-d'une-partie"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ shows the beginning of a match corresponding to the following sequence of actions:
+ “J4-I5” followed by “C5” (the first player plays twice in a row).
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename start.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Example of the beginning of a match
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Début-d'une-partie"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the action entered is incorrect,
+ it is marked with a red square,
+ and the referee indicates the error and provides the list of legal actions (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Invalid-move"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename invalid_move.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Example of invalid move
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Invalid-move"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+When the match is over,
+ the referee announces it and indicates the winner (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Example-of-endgame"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename endgame.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Example of endgame
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Example-of-endgame"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Once the match is finished,
+ you can start a new game using the 
+\begin_inset Quotes eld
+\end_inset
+
+!start
+\begin_inset Quotes erd
+\end_inset
+
+ command.
+\end_layout
+
+\begin_layout Subsubsection
+Non-Standard Match Endings:
+ Timeout / Forfeit
+\end_layout
+
+\begin_layout Standard
+We now turn to special match endings,
+ triggered either by a player exceeding their thinking time (default:
+ 30 minutes per player per game) or by a player’s decision.
+\end_layout
+
+\begin_layout Standard
+If a player exceeds their allotted thinking time,
+ the match ends and that player loses the game (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Example-of-timeout"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ 
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename timeout.png
+	lyxscale 50
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Example of timeout
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Example-of-timeout"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you need to stop an ongoing match,
+ you can use the “!stop” command.
+ This will trigger a vote.
+ Note that this command does not currently work if you are using a Discord bot.
+\end_layout
+
+\begin_layout Standard
+If you wish to forfeit a match,
+ when it is your turn to play,
+ you can enter the action resign (type “resign”).
+ This will immediately end the match and award the victory to your opponent (without triggering a vote).
+\end_layout
+
+\begin_layout Standard
+If you are using a bot,
+ use the “!resign” command instead.
+ When it is your bot’s turn,
+ it will execute the resign action,
+ which will similarly end the match.
+\end_layout
+
+\begin_layout Subsubsection
+Action Syntax (Text Format)
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Syntaxe-des-actions"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+With the DCOI,
+ it is important to distinguish between action syntax and legal actions.
+ In order for the DCOI to differentiate a normal conversation from a game move,
+ it requires a specific syntax.
+ This syntax includes moves like “A1”,
+ “B2-C12”,
+ and also longer sequences such as “D5-E3-G15”,
+ possibly combined with specific keywords,
+ e.g.,
+ “queen-A8”.
+ Note that “resign” is an example of a keyword common to all games.
+ To see the list of keywords for the current game,
+ use the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+!show_move_keywords.
+\end_layout
+
+\begin_layout Standard
+Note that the general syntax for game actions is defined by the following regular expression:
+\end_layout
+
+\begin_layout Standard
+\align center
+([a-zA-Z][0-9]{1,2} | keyword1 | ...
+ | keyword_n)(-([a-zA-Z][0-9]{1,2} | keyword1 | ...
+ | keyword_n))*.
+\end_layout
+
+\begin_layout Standard
+In other words,
+ a text-formatted action is a sequence of blocks of length one or more,
+ separated by hyphens,
+ where each block is either a coordinate (e.g.,
+ A12,
+ B5,
+ C18) or a keyword.
+\end_layout
+
+\begin_layout Standard
+When a message is posted in the conversation,
+ the referee bot checks whether the text follows the expected syntax.
+ If it does,
+ and if it is that player’s turn,
+ the bot will attempt to play the action.
+ If the action is valid,
+ it is executed;
+ otherwise,
+ the bot reports that the action is illegal,
+ as described previously.
+ If the syntax is not respected,
+ the referee simply ignores the message.
+\end_layout
+
+\begin_layout Subsection
+Match Logging
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Logging-des-matchs"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Matches are saved in .json files (in the directory discord_interface/log/bot_play_log/),
+ using the following format:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+play_<PLAYER_ID>_Computer-Olympiad_<CHANNEL_NAME>_<DATE>_<TIME>.json
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+This file contains a human-readable Python dictionary with many attributes,
+ in particular:
+\end_layout
+
+\begin_layout Itemize
+game_name – the name of the game,
+\end_layout
+
+\begin_layout Itemize
+moves – the history of moves in the match,
+\end_layout
+
+\begin_layout Itemize
+players – a list of PLAYER_IDs,
+\end_layout
+
+\begin_layout Itemize
+winner – True if you or your bot won the match.
+\end_layout
+
+\begin_layout Subsection
+Warning About Matches That Are Too Short
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Avertissement-sur-les"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Note that there is a delay in action communication due to internet latency (which depends on the quality of your connection),
+ as well as Discord’s latency,
+ and to a lesser extent,
+ the DCOI’s own processing time.
+ This delay is measured in seconds,
+ typically around one second on average.
+ The DCOI is therefore not suitable for matches with an average time of less than 1 second per action.
+ Moreover,
+ sending more than one message per second by a bot or user violates Discord’s terms of service,
+ which interprets such behavior as flooding.
+ This can lead to various penalties,
+ including bans,
+ shadow bans,
+ or slowed Discord functions.
+ However,
+ in practice,
+ sending actions at intervals of about one second has never caused issues during our extensive testing.
+\end_layout
+
+\begin_layout Section
+Automated Play via Discord Bot
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Jeu-automatisé-par"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this section,
+ we explain the different ways to conduct a match with the DCOI in automatic mode.
+\end_layout
+
+\begin_layout Standard
+In all cases,
+ automated play is carried out using a Discord player bot.
+ This requires creating a Discord bot account on the Discord Developer Portal (see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-du-compte"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ Next,
+ the native way to run matches in automatic mode is to extend one of the DCOI Python Player classes (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Programmation-d'un-Bot-python"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ The other method,
+ described in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Utilisation-du-Bot-GTP"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ is to use a fully implemented bot that communicates with your program via input/output (inter-process communication) using the Go Text Protocol (GTP).
+ This second approach has the advantage of not requiring any programming with the DCOI library —
+ nor any knowledge of the Python language.
+ Finally,
+ in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Fonctionnalités-avancées"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ we introduce advanced features related to bots.
+\end_layout
+
+\begin_layout Standard
+We begin by detailing the installation of the Python packages required by the DCOI.
+\end_layout
+
+\begin_layout Subsection
+Installation of Required DCOI Packages
+\end_layout
+
+\begin_layout Standard
+We will now detail the installation of DCOI.
+ Note that Python 3.10+ is required to install and use DCOI.
+\end_layout
+
+\begin_layout Remark
+If you are using Python for your projects,
+ to avoid breaking dependencies,
+ it is recommended to use a Python virtual environment.
+\end_layout
+
+\begin_layout Standard
+To install the DCOI packages,
+ you have two possible methods:
+\end_layout
+
+\begin_layout Paragraph
+Quick method:
+\end_layout
+
+\begin_layout Standard
+Execute the following commands in your terminal:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+cd discord_interface
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+chmod +x install.sh
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+bash install.sh
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+(optional) Test the installation:
+ run in the terminal:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 test_installation.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Remark
+If you move the discord_interface folder to another location,
+ you will need to run 
+\begin_inset Quotes eld
+\end_inset
+
+bash install.sh
+\begin_inset Quotes erd
+\end_inset
+
+ again.
+\end_layout
+
+\begin_layout Paragraph
+Step-by-step method:
+\end_layout
+
+\begin_layout Standard
+The DCOI is based on the official Python library for Discord.
+ To use the DCOI library,
+ you need to install it by running the following command in your terminal:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 -m pip install -U discord.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+ You also need the numpy library to run the games:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 -m pip install -U numpy
+\begin_inset Quotes erd
+\end_inset
+
+.
+ If you wish to use GTP,
+ you will additionally need the pexpect library to enable inter-process communication.
+ Install it with:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+pip install pexpect
+\begin_inset Quotes erd
+\end_inset
+
+.
+ You can then test your installation by running in the terminal:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 test_installation.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Finally,
+ you need to modify the Python path to include the parent folder of “discord_interface”:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+UPPER_DIR_DCOI='<path_to_discord_interface>'
+\end_layout
+
+\begin_layout Plain Layout
+
+echo 'export PYTHONPATH=$PYTHONPATH:'$UPPER_DIR_DCOI >> ~/.bashrc
+\end_layout
+
+\begin_layout Plain Layout
+
+source ~/.bashrc
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If you move the discord_interface folder,
+ you will need to update the PYTHON PATH with the new path.
+\end_layout
+
+\begin_layout Subsection
+Creating Your Player Discord Bot Account
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Création-du-compte"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now turn to creating your bot account,
+ which allows the bot program to connect to the Discord application.
+ More specifically,
+ this series of steps lets you retrieve various pieces of information.
+ Some of this information must be entered into the parameters.conf configuration file located at the root of the discord_interface folder.
+ Creating the account also provides a link that you must give to the organizer so they add your bot to the competition’s Discord server.
+\end_layout
+
+\begin_layout Subsubsection
+Creating the Bot Account and Inviting It to the Server
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Créer-le-compte-de-bot"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+Go to the Discord Developer Portal website:
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://discord.com/developers/applications
+\end_layout
+
+\end_inset
+
+.
+ Log in with your Discord account.
+ Then click “New Application” at the top right of the screen (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:New-Application"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ if needed) and give your bot a name.
+ You will then arrive at the bot’s page.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+If you encounter difficulties,
+ try using a different web browser.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Next,
+ enable the “Message Content Intent” option in the Bot tab (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Bot-window-and"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ if needed).
+\end_layout
+
+\begin_layout Enumerate
+Then,
+ retrieve the TOKEN of the bot —
+ this is essentially its password,
+ so it must be kept secret.
+ Note it down,
+ as we will need it to configure the bot in the next section.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Go to the Bot tab (still on the bot page).
+ In the TOKEN section,
+ click the “Reset Token” button (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Reset-Token-button"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ if needed).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Go to the OAuth2 tab,
+ then 
+\begin_inset Quotes eld
+\end_inset
+
+OAuth2 URL Generator
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Under the SCOPES section,
+ check the “bot” option.
+\end_layout
+
+\begin_layout Enumerate
+5.
+ In the bot permissions subsection,
+ check the following options:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+"View Channels",
+\end_layout
+
+\begin_layout Enumerate
+"Send Messages",
+ 
+\end_layout
+
+\begin_layout Enumerate
+"Read Message History",
+ 
+\end_layout
+
+\begin_layout Enumerate
+"Add Reactions".
+ 
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Finally,
+ at the bottom of the page,
+ in the 
+\begin_inset Quotes eld
+\end_inset
+
+Generated URL
+\begin_inset Quotes erd
+\end_inset
+
+ field,
+ copy the URL.
+ Send this URL to the organizer so they can add your bot to the competition’s Discord server.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename new_application.png
+	lyxscale 25
+	scale 15
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+New application button (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:New-Application"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename message content intent.png
+	lyxscale 25
+	scale 15
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Bot window and message content intent option to be activated (red boxes)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Bot-window-and"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename token.png
+	lyxscale 25
+	scale 15
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Reset Token button (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Reset-Token-button"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Retrieving Your Discord ID (Optional)
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Récupération-de-votre"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Next,
+ it is recommended to retrieve your Discord user ID to specify it in the configuration file.
+ This step is optional,
+ but it allows you to use commands that control your bot to access certain features.
+ For example,
+ it is required to resume a match after a crash (see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Fonctionnalités-avancées"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+ In this section,
+ we explain how to obtain your Discord ID.
+\end_layout
+
+\begin_layout Standard
+The first step is to enable Developer Mode on your Discord account.
+ To do this:
+\end_layout
+
+\begin_layout Enumerate
+Open the Discord application.
+\end_layout
+
+\begin_layout Enumerate
+Go to Settings (click the “gear” icon;
+ see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Discord-parameters-button"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ if needed).
+ 
+\end_layout
+
+\begin_layout Enumerate
+Click on the “Advanced” tab.
+\end_layout
+
+\begin_layout Enumerate
+Enable the “Developer Mode” option.
+\end_layout
+
+\begin_layout Enumerate
+Click on your username at the bottom right.
+\end_layout
+
+\begin_layout Enumerate
+In the small pop-up window,
+ click “Copy User ID” (see Figure
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Open-owner-window"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ if needed).
+\end_layout
+
+\begin_layout Enumerate
+Return to Settings and disable the Developer Mode option.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename interface_paramètres.png
+	scale 50
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord parameters button (red box)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-parameters-button"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename advanced.png
+	lyxscale 50
+	scale 25
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Discord advanced window and developper mode option (red boxes)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Discord-advanced-window"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Graphics
+	filename Owner id.png
+	lyxscale 25
+	scale 15
+
+\end_inset
+
+
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Open owner window and copy Owner ID (red boxes)
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Open-owner-window"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Specifying the Configuration File
+\end_layout
+
+\begin_layout Standard
+We now explain how to configure the parameters.conf file,
+ located at the root of the discord_interface folder,
+ which allows the bot program to access Discord.
+\end_layout
+
+\begin_layout Enumerate
+Set the value of PLAYER_BOT_DISCORD_TOKEN to the TOKEN of your bot account (retrieved in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Créer-le-compte-de-bot"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+Optional but recommended:
+ set the value of OWNER_ID to your Discord user ID (retrieved in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Récupération-de-votre"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+To verify that the configuration file is correctly set,
+ launch your bot and check:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+cd <discord_interface_path>/discord_interface 
+\end_layout
+
+\begin_layout Plain Layout
+
+python3 main_random_ai.py
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the terminal shows the error “Bad OWNER_ID”,
+ you need to correct the OWNER_ID variable in 
+\begin_inset Quotes eld
+\end_inset
+
+parameters.conf
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+For a more advanced test,
+ launch your bot and type in a channel on the competition’s Discord server the following command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!conf_test
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+If nothing happens,
+ contact me.
+\end_layout
+
+\begin_layout Itemize
+If everything works correctly,
+ “All is OK!” will appear in the terminal.
+\end_layout
+
+\begin_layout Itemize
+If an error occurs in the terminal (discord.errors.LoginFailure:
+ Improper token has been passed),
+ the PLAYER_BOT_DISCORD_TOKEN has been incorrectly specified.
+\end_layout
+
+\begin_layout Subsection
+Programming a Discord Bot Using Python
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Programmation-d'un-Bot-python"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now explain how to program a Discord bot in Python.
+ You need to inherit one of the Python Player classes provided by the DCOI library.
+ Here,
+ we describe the simplest way to do this.
+\end_layout
+
+\begin_layout Paragraph
+Bot programming
+\end_layout
+
+\begin_layout Standard
+To program your bot,
+ you need to inherit the BasicPlayer class from the file:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+discord_interface/player/model/basic_player.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The only thing you need to do is define the method:
+ my_plays(self,
+ game_history,
+ time_left=inf,
+ opponent_time_left=inf).
+ This method should return the action that your program wants to play in the current game state.
+ The current state can be reconstructed from the game_history parameter,
+ which contains the list of moves in text format played since the start of the match.
+ You can also use the native game methods provided by the DCOI,
+ which allows you to avoid implementing the game logic yourself.
+ In this second case,
+ you will need the methods described in Table
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Elementary-game-methods"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="8" columns="2">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+game methods of any player
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.get_numpy_board()
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+return a numpy array representing the game board
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.get_current_player()
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+returns 
+\begin_inset Formula $i$
+\end_inset
+
+ if the current player is the player 
+\begin_inset Formula $i$
+\end_inset
+
+ (
+\begin_inset Formula $i\in\mathbb{N}$
+\end_inset
+
+) 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.textual_legal_moves()
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+list of valid actions in text format (e.g.
+ 
+\begin_inset Quotes eld
+\end_inset
+
+A1
+\begin_inset Quotes erd
+\end_inset
+
+ or 
+\begin_inset Quotes eld
+\end_inset
+
+A2-B3
+\begin_inset Quotes erd
+\end_inset
+
+)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.ended()
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+return True if the game is ended
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.winner
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+return the index 
+\begin_inset Formula $i$
+\end_inset
+
+ of the winner player (
+\begin_inset Formula $i\in\mathbb{N}$
+\end_inset
+
+) 
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.textual_plays(move)
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+apply the move in the current game state (i.e.self.game)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+self.game.undo()
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+undo the last action of the current game state (i.e.self.game)
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+Elementary methods of any Player Python object for programming an AI player.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Elementary-game-methods"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Pay attention to the time_left parameter:
+ it indicates the remaining time your program has for the rest of the match.
+ If this value reaches 0,
+ you will lose the game.
+\end_layout
+
+\begin_layout Standard
+An example of inheritance is provided in the TextualRandomAI class in the file:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+discord_interface/player/instances/textual_random_ai.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Standard
+This bot plays randomly,
+ except when there is a winning move among the available actions.
+ In that case,
+ it plays the winning move.
+\end_layout
+
+\begin_layout Paragraph
+Launching the bot
+\end_layout
+
+\begin_layout Standard
+Once your bot account is created,
+ the configuration file is set up,
+ and your Player class is inherited,
+ all that remains is to launch your bot in a main script.
+ To do this,
+ use the method:
+ bot_starting(AI_Class) from the file:
+ discord_interface/player/model/bot_launcher.py with AI_Class set to your AI Python Player class.
+ An example of a bot launcher program is provided in the file:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+discord_interface/main_random_ai.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+All that remains for you to do is:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 <your_main>.py
+\begin_inset Quotes erd
+\end_inset
+
+ in the folder 
+\begin_inset Quotes eld
+\end_inset
+
+discord_interface
+\begin_inset Quotes erd
+\end_inset
+
+.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+cd <discord_interface_path>/discord_interface 
+\end_layout
+
+\begin_layout Plain Layout
+
+python3 main_textual_random_ai.py
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The bot now waits for the command:
+ !s @<Bot_name_1> @<Bot_name_2> to be executed and for the referee bot to display the match information.
+ At that point,
+ the bot performs its initialization and adds its “thumbs up.” The match then begins,
+ and the bot plays automatically whenever it is its turn,
+ until the end of the game.
+\end_layout
+
+\begin_layout Remark
+If you used a Python virtual environment during installation,
+ remember to activate it before launching the bot.
+\end_layout
+
+\begin_layout Paragraph
+Advanced Features
+\end_layout
+
+\begin_layout Standard
+Finally,
+ optionally,
+ if you need advanced features,
+ such as code to execute at the initialization or end of the match,
+ you can inherit from the class AdvancedBasicPlayer (file:
+ discord_interface/player/model/advanced_basic_player.py) and define the methods:
+ my_initialisation(game_name) and my_end().
+\end_layout
+
+\begin_layout Subsection
+Using the Generic Player Discord Bot via the GTP
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Utilisation-du-Bot-GTP"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now explain how to run automatic matches using GTP.
+ Information about GTP is available,
+ for example,
+ on this website::
+ 
+\begin_inset Flex URL
+status open
+
+\begin_layout Plain Layout
+
+https://www.lysator.liu.se/~gunnar/gtp/gtp2-spec-draft2/gtp2-spec.html
+\end_layout
+
+\end_inset
+
+.
+ In Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Spécification-des-commandes"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+,
+ we will show how to specify a GTP program.
+ Here,
+ we begin by describing how to launch the GTP bot,
+ assuming you already have a program specified in the GTP format.
+ Finally,
+ we will cover an advanced feature that allows you to display information from your program in the terminal,
+ (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Afficher-des-informations"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+) as well as how to handle errors in your program when using GTP (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Gestion-des-erreurs"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsubsection
+Starting the GTP Bot
+\end_layout
+
+\begin_layout Standard
+We begin by explaining the prerequisites for launching your GTP bot.
+ First,
+ you need to connect your program to the GTP bot.
+ To do this,
+ you must specify three parameters:
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+program_name
+\begin_inset Quotes erd
+\end_inset
+
+ :
+ the name of your player program,
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+program_arguments
+\begin_inset Quotes erd
+\end_inset
+
+:
+ the list of arguments for your program (separated by spaces),
+\end_layout
+
+\begin_layout Itemize
+\begin_inset Quotes eld
+\end_inset
+
+program_directory
+\begin_inset Quotes erd
+\end_inset
+
+:
+ the absolute path to your program (or the path relative to the discord_interface folder;
+ for example,
+ you can use an empty string if the program is located at the root of the discord_interface folder).
+\end_layout
+
+\begin_layout Standard
+These variables must be specified in the parameters.conf file at the root of the discord_interface folder.
+\end_layout
+
+\begin_layout Standard
+To run your program,
+ all you need to do is:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+python3 main_gtp_ai_from_conf.py
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+in the terminal from the root of the discord_interface folder.
+\end_layout
+
+\begin_layout Remark
+If you are comfortable with Python,
+ you can also modify and run the main_gtp_ai.py file to avoid editing the configuration file.
+\end_layout
+
+\begin_layout Subsubsection
+Specifying the GTP Commands
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Spécification-des-commandes"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In order to use the GTP-based bot,
+ your program must read GTP commands from standard input (which will be sent by the GTP bot) and write the results of these commands to standard output (which will then be read and processed by the GTP bot).
+\end_layout
+
+\begin_layout Standard
+The required GTP commands to run the GTP bot,
+ which need to be implemented in your program,
+ are described in Table
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:List-of-GTP-commands"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ To verify that your GTP command implementation is correct,
+ you can run the following test program in the terminal:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 test_gtp_ai_from_conf.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float table
+placement document
+alignment document
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="9" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<column alignment="center" valignment="top">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+GTP command
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+return
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+effect
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+clear_board
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+restart the game
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+undo
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+cancel the last move
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+play <player> <move>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+plays <move> for <player>
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+time_left <player> <time>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+inform the time left in seconds
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+genmove <player>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+<move>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+return the <move> to play and play it
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+quit
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+shutdown the program
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+player
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+<player>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+return the current player
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+game <game>
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+\begin_inset Formula $=$
+\end_inset
+
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+initialization for <game>
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption Standard
+
+\begin_layout Plain Layout
+List of GTP commands to implement,
+ the syntax of their return and their expected effect (<move> is an action in text format (see the syntax in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Syntaxe-des-actions"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+) ;
+ <player> is an integer 
+\begin_inset Formula $n\in\mathbb{N}$
+\end_inset
+
+ ;
+ <game> is the game name of the match).
+ Remark:
+ commands 
+\begin_inset Quotes eld
+\end_inset
+
+game
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+player
+\begin_inset Quotes erd
+\end_inset
+
+ are not part of standard GTP;
+ they are optional (make them only return 
+\begin_inset Quotes eld
+\end_inset
+
+=
+\begin_inset Quotes erd
+\end_inset
+
+);
+ 
+\begin_inset Quotes eld
+\end_inset
+
+game
+\begin_inset Quotes erd
+\end_inset
+
+ is required only for multi-games participation ;
+ 
+\begin_inset Quotes eld
+\end_inset
+
+player
+\begin_inset Quotes erd
+\end_inset
+
+ is required only for profiling (see Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Bot-profiling"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:List-of-GTP-commands"
+
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If needed,
+ an example of a Python implementation of GTP commands is available in the file:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+discord_interface/player/instances/autres/gtp_random_ai.py
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Remark
+Example of GTP communication between the bot and the player program:
+\end_layout
+
+\begin_layout Remark
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+genmove 0
+\end_layout
+
+\begin_layout Plain Layout
+
+=A2-A3
+\end_layout
+
+\begin_layout Plain Layout
+
+play 1 A7-A6
+\end_layout
+
+\begin_layout Plain Layout
+
+=
+\end_layout
+
+\begin_layout Plain Layout
+
+genmove 0
+\end_layout
+
+\begin_layout Plain Layout
+
+=A3-A4
+\end_layout
+
+\begin_layout Plain Layout
+
+...
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If you want your bot to be able to resign automatically,
+ it simply needs to return 
+\begin_inset Quotes eld
+\end_inset
+
+=resign
+\begin_inset Quotes erd
+\end_inset
+
+ in response to the genmove command at the appropriate time.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If you want to resign your bot manually,
+ use the already functional command !resign.
+\end_layout
+
+\begin_layout Subsubsection
+Displaying Information in the Terminal
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Afficher-des-informations"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Finally,
+ we briefly discuss an option that allows you to display information from your program in the terminal when using the GTP bot.
+\end_layout
+
+\begin_layout Standard
+Setting up this feature is very simple.
+ For each GTP command return,
+ simply concatenate the return with the # symbol followed by the line you want to display in the terminal.
+\end_layout
+
+\begin_layout Example
+If you want to display in the terminal:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+The move was correctly cancelled
+\begin_inset Quotes erd
+\end_inset
+
+ when the undo command is executed,
+ the return of undo should be:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+=#The move was correctly cancelled
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Note that the line to display in the terminal must not contain line breaks.
+ However,
+ you can create line breaks by adding multiple # symbols.
+ Each additional # will be interpreted as a line break.
+\end_layout
+
+\begin_layout Example
+If the return of the genmove command is:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+=<move>#Calculating the next move completed#Move played:
+ <move>#Calculation time 15 seconds
+\begin_inset Quotes erd
+\end_inset
+
+,
+ this will display the following in the terminal:
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{verbatim}
+\end_layout
+
+\begin_layout Plain Layout
+
+Calculating the next move completed
+\end_layout
+
+\begin_layout Plain Layout
+
+Move played:
+ <move>
+\end_layout
+
+\begin_layout Plain Layout
+
+Calculation time 15 seconds
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{verbatim}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection
+Error Handling with GTP
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Gestion-des-erreurs"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If you want error handling with GTP,
+ meaning that your program notifies the Discord bot when an error occurs,
+ you must use the standard GTP syntax designed for this purpose.
+ Specifically,
+ when an error occurs and needs to be communicated,
+ write to standard output but modify the output format by replacing 
+\begin_inset Quotes eld
+\end_inset
+
+=<output_line>
+\begin_inset Quotes erd
+\end_inset
+
+ with 
+\begin_inset Quotes eld
+\end_inset
+
+?<output_line>
+\begin_inset Quotes erd
+\end_inset
+
+.
+ The presence of the 
+\begin_inset Quotes eld
+\end_inset
+
+?
+\begin_inset Quotes erd
+\end_inset
+
+ allows the Discord bot to trigger an error,
+ which will be displayed in the terminal.
+ Additional information will also appear in the terminal,
+ including:
+\end_layout
+
+\begin_layout Itemize
+The name of the command that caused the 
+\begin_inset Quotes eld
+\end_inset
+
+?
+\begin_inset Quotes erd
+\end_inset
+
+,
+\end_layout
+
+\begin_layout Itemize
+The output of your program,
+\end_layout
+
+\begin_layout Itemize
+Any comments displayed using the feature described in the previous section.
+\end_layout
+
+\begin_layout Subsection
+Advanced Features
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Fonctionnalités-avancées"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now describe several advanced features of player bots.
+\end_layout
+
+\begin_layout Subsubsection
+Crash Management
+\end_layout
+
+\begin_layout Standard
+If for any reason your bot crashes and needs to be restarted,
+ to resume the ongoing match,
+ after relaunching your bot in the terminal,
+ you must use in the Discord conversation the command:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+!continue
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Its alias is 
+\begin_inset Quotes eld
+\end_inset
+
+!c
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Before the competition,
+ I suggest forcing a bot kill during a match,
+ then relaunching it and verifying that the !continue command works correctly.
+ This ensures you can resume a match in case of a problem.
+\end_layout
+
+\begin_layout Standard
+If the referee bot does not respond,
+ contact a competition official to restart the referee and also execute the !continue command.
+\end_layout
+
+\begin_layout Subsubsection
+Bot Profiling
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Bot-profiling"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Profiling can be performed using the command:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+!p
+\begin_inset Quotes erd
+\end_inset
+
+.
+ 
+\end_layout
+
+\begin_layout Remark
+If you are using a GTP bot,
+ some of the profiling values provided may be incorrect if the GTP 
+\begin_inset Quotes eld
+\end_inset
+
+player
+\begin_inset Quotes erd
+\end_inset
+
+ command has not been implemented or has been implemented incorrectly.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Creating a Personal Discord Game Server
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Création-d'un-serveur"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this section,
+ we explain how to create your own personal game server,
+ either for a local beta test of the Computer Olympiad or to organize your own competition.
+ Several steps must be completed:
+\end_layout
+
+\begin_layout Enumerate
+Creating a Discord server (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-d'un-serveur"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Enumerate
+Creating the “bot account” for the referee bot (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-du-compte-arbitre"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Enumerate
+Inviting players to the server (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Invitation-des-joueurs"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Enumerate
+Inviting bots to the server (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Invitation-des-bots"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+),
+\end_layout
+
+\begin_layout Enumerate
+Launching the referee bot (Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Lancement-du-bot"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Standard
+Note that there can be only one referee bot per channel,
+ and you must specify the corresponding channel for each referee bot.
+ This will be addressed in the following section.
+ Therefore,
+ you need multiple referee bots if you want to run multiple matches in parallel.
+\end_layout
+
+\begin_layout Subsection
+Creating a Discord Server
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Création-d'un-serveur"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We begin by detailing how to create a Discord server:
+\end_layout
+
+\begin_layout Enumerate
+In the vertical server bar on the left of the Discord application:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Click the “+”,
+ then “Create My Own” (choose your options and server name).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Enable 
+\begin_inset Quotes eld
+\end_inset
+
+Developer Mode
+\begin_inset Quotes eld
+\end_inset
+
+ (steps 1 to 4 in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Récupération-de-votre"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Enumerate
+Left-click the icon of the server you just created in the server bar.
+\end_layout
+
+\begin_layout Enumerate
+Click “Copy Server ID”.
+\end_layout
+
+\begin_layout Enumerate
+For a Computer Olympiad beta test:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+In the file parameters.conf:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+copy the line starting with:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Quotes eld
+\end_inset
+
+BETA_TEST_COMPUTER_OLYMPIAD_GUILD_ID=
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Comment out the original line with #.
+\end_layout
+
+\begin_layout Enumerate
+Replace the value of BETA_TEST_COMPUTER_OLYMPIAD_GUILD_ID with the ID of the created server.
+\end_layout
+
+\begin_layout Enumerate
+Ensure that in parameters.conf,
+ BETA_TEST_MODE=True.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+For each referee bot (index 
+\shape italic
+i
+\shape default
+):
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+In the server,
+ create a channel named 
+\begin_inset Quotes eld
+\end_inset
+
+match_
+\shape italic
+i
+\shape default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Right-click the channel and select Copy ID.
+\end_layout
+
+\begin_layout Enumerate
+In parameters.conf
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\align block
+paste it as the value of REFEREE_BOT_
+\shape italic
+i
+\shape default
+_DISCORD_CHANNEL.
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+For a server used for other purposes:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+In parameters.conf:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Duplicate the line starting with:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\begin_inset Quotes eld
+\end_inset
+
+COMPUTER_OLYMPIAD_GUILD_ID=
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Comment out the original line with #.
+\end_layout
+
+\begin_layout Enumerate
+Replace the value of 
+\begin_inset Quotes eld
+\end_inset
+
+COMPUTER_OLYMPIAD_GUILD_ID
+\begin_inset Quotes erd
+\end_inset
+
+ with the ID of the created server.
+\end_layout
+
+\begin_layout Enumerate
+Ensure that in parameters.conf,
+ BETA_TEST_MODE=False.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+For each referee bot (index 
+\shape italic
+i
+\shape default
+):
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+In the server,
+ create a channel named 
+\begin_inset Quotes eld
+\end_inset
+
+match_
+\shape italic
+i
+\shape default
+
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Enumerate
+Right-click the channel and select Copy ID.
+\end_layout
+
+\begin_layout Enumerate
+In parameters.conf
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+\align block
+paste it as the value of BETA_TEST_REFEREE_BOT_
+\shape slanted
+i
+\shape default
+_DISCORD_CHANNEL
+\end_layout
+
+\end_deeper
+\end_deeper
+\end_deeper
+\begin_layout Enumerate
+Deactivate 
+\begin_inset Quotes eld
+\end_inset
+
+Developer Mode
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If you later participate in the Computer Olympiad beta test,
+ remember to remove the added line and uncomment the original.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If you later participate in the Computer Olympiad,
+ remember to set BETA_TEST_MODE=False.
+\end_layout
+
+\begin_layout Subsection
+Creating the Referee “Bot Account”
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Création-du-compte-arbitre"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now explain how to create a “bot account” for a referee bot.
+ Note that,
+ you need to create a bot account for each referee bot.
+\end_layout
+
+\begin_layout Standard
+The procedure is identical to the one in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Créer-le-compte-de-bot"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ except for step 5,
+ where you must additionally enable the “Manage Messages” permission and that for each referee bot,
+ the corresponding token must be set for REFEREE_BOT_
+\shape italic
+i
+\shape default
+_DISCORD_TOKEN in parameter.conf.
+\end_layout
+
+\begin_layout Subsection
+Inviting Players to the Server
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Invitation-des-joueurs"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now explain how to invite human players and bot operators to your server:
+\end_layout
+
+\begin_layout Enumerate
+Right-click the icon of your server in the vertical server bar on the left.
+\end_layout
+
+\begin_layout Enumerate
+Click “Invite People”.
+\end_layout
+
+\begin_layout Enumerate
+Click the “Copy” button.
+\end_layout
+
+\begin_layout Enumerate
+Send the copied link to the people you want to invite.
+\end_layout
+
+\begin_layout Standard
+The invited participants must then follow the protocol described in Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Discord:-serveurs-et-salons"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ using this link instead of the Computer Olympiad server link.
+\end_layout
+
+\begin_layout Subsection
+Inviting Bots to the Server
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Invitation-des-bots"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We now explain how to invite player bots and referee bots to your server.
+ We assume that you have followed Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-d'un-serveur"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and obtained the referee bot invitation URL,
+ and that participants have also provided their invitation URLs after following Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-du-compte"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+ For each URL:
+\end_layout
+
+\begin_layout Enumerate
+Paste the URL into your browser.
+\end_layout
+
+\begin_layout Enumerate
+Log in to your Discord account (if required).
+\end_layout
+
+\begin_layout Enumerate
+Choose your server from the list of available servers.
+\end_layout
+
+\begin_layout Enumerate
+Click the “Continue” button.
+\end_layout
+
+\begin_layout Enumerate
+If it is someone else’s bot:
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Verify that the requested permissions match those specified in the corresponding bot account creation section (player:
+ Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-du-compte"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ / referee:
+ Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "subsec:Création-d'un-serveur"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+).
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+Click the “Authorize” button.
+\end_layout
+
+\begin_layout Subsection
+Starting the Referee Bot
+\begin_inset CommandInset label
+LatexCommand label
+name "subsec:Lancement-du-bot"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We explain in this section how to launch the referee bot.
+ To do so,
+ run the following command in the terminal from the root of the discord_interface folder:
+\end_layout
+
+\begin_layout Standard
+\align center
+\begin_inset Quotes eld
+\end_inset
+
+python3 main_referee_1.py
+\begin_inset Quotes erd
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Manual-mode players should then follow Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Jeu-manuel"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+ and automatic-mode players should follow Section
+\begin_inset space ~
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Jeu-automatisé-par"
+plural "false"
+caps "false"
+noprefix "false"
+nolink "false"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Remark
+To start a second referee bot,
+ run:
+ 
+\begin_inset Quotes eld
+\end_inset
+
+python3 main_referee_2.py.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If the referee bot program crashes during a match,
+ restart it and then execute the !continue command in the match channel.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Separator plain
+\end_inset
+
+
+\end_layout
+
+\begin_layout Remark
+If one of the player bots crashes during a match and restarting it and using !continue does not fix the issue,
+ you can try killing the referee bot,
+ restarting it,
+ and using the !continue command (if you suspect the problem originated from or propagated to the referee bot).
+\end_layout
+
+\end_body
+\end_document
