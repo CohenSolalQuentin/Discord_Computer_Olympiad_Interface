@@ -16,3 +16,5 @@ class GTP_AI(GTP_AI_Go):
     def move_conversion_to_gtp(self, action):
         return action
 
+    def move_conversion_from_gtp(self, move):
+        return move
