@@ -10,6 +10,8 @@ from discord import Colour, DeletedReferencedMessage, DMChannel, Embed, Message,
 from discord.ext import commands, tasks
 from discord.ext.commands import Context
 
+import discord
+
 from discord_interface.games.instances.free_game import FreeGame
 from discord_interface.utils.mytime import Time, NegativeError
 from discord_interface.utils.pattern_enum import EnumCompiledPattern
@@ -18,6 +20,8 @@ from discord_interface.referee.model.referee_bot import RefereeBot
 from discord_interface.utils.mymessage import InstructionMessage
 import asyncio, json
 from typing import List
+
+import re
 
 # Metadata
 __author__ = "Oscar PERIANAYAGASSAMY"
@@ -214,7 +218,9 @@ if __name__ != "__main__":
         @commands.Cog.listener()
         async def on_resumed(self) -> None:
             """Coroutine that is triggered when the model is ready."""
-            print('Reconnexion...')
+
+            if self.bot.referee.is_in_game():
+                print('Reconnexion...')
 
             self.connected = True
             await self.reprise_des_messages()
@@ -251,7 +257,8 @@ if __name__ != "__main__":
             """Coroutine that is triggered when the model is ready."""
             #import traceback
             #traceback.print_stack()
-            print('Déconnexion...')
+            if self.bot.referee.is_in_game():
+                print('Déconnexion...')
             self.connected = False
 
         async def reprise_des_messages(self) -> None:
@@ -799,10 +806,65 @@ if __name__ != "__main__":
                 #print('chronometer.stop')
                 # print("chronometer canceled...")
 
+        def resolve_member_or_role(self, ctx, arg: str):
+
+            # User mention <@id> ou <@!id>
+            match_user = re.match(r'<@!?(\d+)>', arg)
+            if match_user:
+                user_id = int(match_user[1])
+                return ctx.guild.get_member(user_id)
+
+            # Role mention <@&id>
+            match_role = re.match(r'<@&(\d+)>', arg)
+            if match_role:
+                role_id = int(match_role[1])
+                role = ctx.guild.get_role(role_id)
+                if role.members:
+                    return role.members[0]  # premier membre du rôle
+
+                return None
+
+            # Sinon, recherche par nom
+            member = discord.utils.find(lambda m: m.name == arg or m.display_name == arg, ctx.guild.members)
+            if member:
+                return member
+
+            role = discord.utils.get(ctx.guild.roles, name=arg)
+            if role and role.members:
+                return role.members[0]
+
+            # Cas: mention textuelle du style @Nom
+            if arg.startswith("@"):
+                name = arg[1:]  # retirer le @
+            else:
+                name = arg
+
+            # Chercher un membre par nom ou display_name
+            # (insensible à la casse)
+            name_lower = name.lower()
+            for member in ctx.guild.members:
+                if (
+                        member.name.lower() == name_lower or
+                        member.display_name.lower() == name_lower
+                ):
+                    return member
+
+            # Si rien trouvé
+            return None
+
+
         @commands.command(name='start', description='Starts a game with the current referee instance.', aliases=['s'])
         @commands.guild_only()
         #@RefereeBot.check_guild()
-        async def _start(self, ctx: Context, player1: User, player2: User, *args: None) -> None:
+        #async def _start(self, ctx: Context, player1: User, player2: User, *args: None) -> None:
+        async def _start(self, ctx: Context, player1: str, player2: str, *args: None) -> None:
+            print(player1, player2)
+
+            player1 = self.resolve_member_or_role(ctx, player1)
+            player2 = self.resolve_member_or_role(ctx, player2)
+
+            print('here', player1, player2)
+
             #print("???")
             """Command that starts the game
 
@@ -825,6 +887,7 @@ if __name__ != "__main__":
 
             if not self.bot.correct_context(ctx):
                 return
+
 
             # Checking section
             # To start a game, the model should be in 'in-game' mode

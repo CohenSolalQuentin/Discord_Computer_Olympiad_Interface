@@ -52,6 +52,7 @@ if __name__ != "__main__":
             # Setting intents of our client
             intents = Intents.default()
             intents.message_content = True
+            intents.members = True
 
             # Call to the parent class' constructor
             super().__init__(command_prefix='!', intents=intents,
@@ -135,6 +136,7 @@ if __name__ != "__main__":
                 print(f'We have logged in as {self.user} on {guild.name}')
 
         def correct_context(self, ctx: Context):
+            #print( ctx.guild.id , self.guild_id, '/' ,ctx.channel.id , self.channel_id)
             return ctx.guild.id == self.guild_id and ctx.channel.id == self.channel_id
 
         #@classmethod

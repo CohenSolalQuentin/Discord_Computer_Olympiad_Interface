@@ -154,7 +154,8 @@ if __name__ != "__main__":
             """Coroutine that is triggered when the model is ready."""
             #import traceback
             #traceback.print_stack()
-            print('Déconnexion...')
+            if self.player.is_in_game():
+                print('Déconnexion...')
             self.connected = False
             if self.last_deconnection_time is None:
                 self.last_deconnection_time = time()
@@ -162,7 +163,8 @@ if __name__ != "__main__":
 
         async def on_resumed(self) -> None:
             """Coroutine that is triggered when the model is ready."""
-            print('Reconnexion...')
+            if self.player.is_in_game():
+                print('Reconnexion...')
 
             self.connected = True
             await self.reprise_des_messages()
