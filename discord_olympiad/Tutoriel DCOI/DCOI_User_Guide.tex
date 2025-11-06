@@ -1,0 +1,1127 @@
+%% LyX 2.4.3 created this file.  For more info, see https://www.lyx.org/.
+%% Do not edit unless you really know what you are doing.
+\documentclass[english]{article}
+\usepackage[T1]{fontenc}
+\usepackage{textcomp}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{geometry}
+\geometry{verbose,tmargin=3cm,bmargin=3cm,lmargin=3cm,rmargin=3cm}
+
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LyX specific LaTeX commands.
+%% Because html converters don't know tabularnewline
+\providecommand{\tabularnewline}{\\}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Textclass specific LaTeX commands.
+\theoremstyle{plain}
+\newtheorem{thm}{\protect\theoremname}
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{\protect\remarkname}
+\theoremstyle{definition}
+\newtheorem{example}[thm]{\protect\examplename}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\makeatother
+
+\usepackage{babel}
+\providecommand{\examplename}{Example}
+\providecommand{\remarkname}{Remark}
+\providecommand{\theoremname}{Theorem}
+
+\begin{document}
+\title{User Guide for the Discord Computer Olympiad Interface}
+\author{Quentin Cohen-Solal\\
+{\small quentin.cohen-solal@dauphine.psl.eu}}
+
+\maketitle
+This document explains how to use the three main features of the Discord
+Computer Olympiad Interface (DCOI), namely:
+\begin{itemize}
+\item running a match in manual mode: a human manually enters the actions
+of their program as text messages in the Discord conversation (Section~\ref{sec:Jeu-manuel}).
+\item running a match in automatic mode: using a player Discord bot that
+writes the game actions provided by your program in the Discord conversation
+on your behalf (Section~\ref{sec:Jeu-automatis=0000E9-par}).
+\item creating your own game server: to run a local beta test for the Computer
+Olympiad or to organize your own competition (Section~\ref{sec:Cr=0000E9ation-d'un-serveur}).
+\end{itemize}
+%
+If you wish to use only the automatic mode, it is nevertheless necessary
+to read the following section. In addition to briefly describing how
+to play in manual mode, it explains the DCOI in order to make the
+following sections easier to understand --- including how to select
+a game and start a match. This first section also covers the Free\_game
+mode, which allows you to play (either in manual or automatic mode)
+any perfect-information game, by delegating to the players the verification
+of valid moves as well as the determination of the end of the game.
+\begin{rem}
+If you encounter any frustrations or bugs while reading this document
+or using the DCOI, please don’t hesitate to let me know.
+\end{rem}
+
+This document is a translation of ``Guide d’utilisation du Discord
+Computer Olympiad Interface'' (guide\_utilisateur\_DCOI.pdf). If
+you have any problems with the translation, please consult this document
+or the author of this document.
+
+\tableofcontents{}
+
+\section{Description of the DCOI and use in manual mode}\label{sec:Jeu-manuel}
+
+To use the DCOI, you must be able to use Discord. Therefore, you need
+to install the Discord application or use the web version, and create
+an account if you haven’t already done so. (see \url{https://discord.com}).
+This section begins by presenting the overall functioning of the system
+(Section~\ref{subsec:Fonctionnement-global}), then explains how
+to access the match channels (Section~\ref{subsec:L'application-Discord-et}),
+followed by instructions on how to play a match (Section~\ref{subsec:Lancement-d'une-partie}),
+including an explanation of the action syntax (Section~\ref{subsec:Syntaxe-des-actions}).
+A few warnings are also described in Sections~\ref{subsec:Matchs-et-discussions}~,~\ref{subsec:Mise-en-garde}~and~\ref{subsec:Avertissement-sur-les}.
+Finally, we briefly discuss the match logging system (Section~\ref{subsec:Logging-des-matchs}).
+
+\subsection{Overall Functioning}\label{subsec:Fonctionnement-global}
+
+\subsubsection{DCOI and Referee Bot}
+
+The DCOI is both a Python library and a collection of ready-to-use
+or extensible Python bots designed to create player bots and referee
+bots, enabling gameplay and match management within a Discord conversation.
+
+Players and program operators join the competition’s Discord server.
+When match launch commands are entered in a Discord channel, the game
+begins. It is then managed by a referee bot (set up by the organizers).
+Players and player bots must post their game actions in the conversation
+when prompted by the referee bot. The referee bot checks the legality
+of moves, handles errors, tracks player time, and announces the end
+of the game (either normal or due to a time limit being exceeded)
+along with the winner.
+
+\subsubsection{Focus on Player Bots}
+
+All aspects related to Discord are automated through the Discord bots.
+Users only need to connect their program to the player Discord bot,
+which handles Discord events and posts messages in the conversation,
+among other things. To interface the two programs, you can either
+subclass a player bot and implement the plays method using DCOI’s
+gameplay methods, or implement the Go Text Protocol (GTP) communication
+protocol. In both cases, you may need to convert the DCOI game action
+syntax into your program’s own syntax. Finally, you must create a
+bot account and specify a configuration file to link the bot account
+with your bot program.
+
+\subsection{The Discord Application and Match Channels}\label{subsec:L'application-Discord-et}
+
+\subsubsection{Discord: Servers and Channels}\label{subsec:Discord:-serveurs-et-salons}
+
+We will now briefly review the different elements of the Discord application
+that are needed to run a match.
+
+A screenshot of the application is shown in Figure~\ref{fig:Discord-App}.
+The first step is to join the competition server (servers on Discord
+are called guilds). On your first access, click the “+” icon at the
+bottom of the server list (see Figure~\ref{fig:Discord-servers-list}).
+During the competition or the beta test, click “Join a Server”, then
+enter the invitation link provided by the organizers. For the beta
+test, you must join the beta test server: \url{https://discord.gg/mbHBdH3K}.
+Once the server has been added to your account, you can return to
+it at any time by clicking its icon, now visible in your server list
+(see Figure~\ref{fig:Discord-servers-list}). After joining the server,
+you need to enter a match channel by clicking on its name. The available
+channels are displayed in the designated area (see Figure~\ref{fig:Discord-channel-list}).
+You may also join the general or discussion channel to talk with other
+participants, or any other channel --- for example, to ask for help.
+As in any instant messaging platform, to write in the selected channel,
+simply type in the text input area provided for this purpose (see
+Figure~\ref{fig:Discord-input-area}). Once you press Enter, your
+message will be sent and will appear in the area showing the conversation
+history (the middle of the window --- see Figure~\ref{fig:Discord-conversation},
+if needed).
+
+\subsubsection{Matches and Discussions}\label{subsec:Matchs-et-discussions}
+
+Note that you can also talk in the match channels, as long as your
+message does not consist solely of a text-formatted action. Indeed,
+if the match has started and you are one of the players, your message
+will be interpreted as a game move.
+
+For example, never write just “A1” or “A2-B3” during a conversation.
+Instead, you may write something like “Why did you play A1?”, or even
+just “A1.” or “A1?”.
+
+In general, try to avoid chatting in the match channel as much as
+possible, at least during ongoing matches, to prevent cluttering the
+conversation.
+
+\subsubsection{Warning About Editing or Deleting Messages}\label{subsec:Mise-en-garde}
+
+Discord allows you to edit and delete your messages. During a match---whether
+you or your bot are playing---never use this feature under any circumstances.
+There is a small but non-negligible chance that doing so could cause
+system instability, preventing the match from being completed.
+
+If such an event occurs, you will be held responsible and will automatically
+lose the match.
+
+If you accidentally edit your move, immediately edit it again to restore
+the original action --- this should resolve the issue without consequence.
+
+If you accidentally delete your move, unfortunately, this action is
+irreversible, and you must hope it does not affect the rest of the
+game.
+
+Note that the system’s default behavior is to ignore message deletions
+and edits, so there is absolutely no benefit in attempting such actions.
+
+In case of any problem, contact an organizer.
+
+\begin{figure}
+\begin{centering}
+\includegraphics[scale=0.5]{interface}\caption{Discord App}\label{fig:Discord-App}
+\par\end{centering}
+\end{figure}
+
+\begin{figure}
+
+\begin{centering}
+\includegraphics[scale=0.5]{interface_serveurs}\caption{Discord servers list (red box)}\label{fig:Discord-servers-list}
+\par\end{centering}
+\end{figure}
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{interface_salons}\caption{Discord channel list (red box)}\label{fig:Discord-channel-list}
+\end{figure}
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{interface_zone_de_saisie}\caption{Discord input area for conversation and match playing (red box)}\label{fig:Discord-input-area}
+\end{figure}
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{interface_conversation}\caption{Discord conversation / match history (red box)}\label{fig:Discord-conversation}
+\end{figure}
+
+
+\subsection{Starting a Match}\label{subsec:Lancement-d'une-partie}
+
+We now move on to the core of the topic and explain what you need
+to know --- and how to proceed --- to start a match.
+
+\subsubsection{Choosing the Game and Other Parameters}
+
+To choose the game for the match, type the following command in the
+conversation:
+\begin{center}
+``!set game <GAME\_NAME>''.
+\par\end{center}
+\begin{example}
+``!set game Clobber''.
+\end{example}
+
+\begin{rem}
+If the command worked, the referee bot will respond in the conversation:
+``Game set to <GAME\_NAME>''.
+\end{rem}
+
+To see the list of available games, you can type the following command
+in the conversation:
+\begin{center}
+``!available\_games''.
+\par\end{center}
+
+If you need to adjust the total time allocated to each player per
+match (default is 30 minutes per player per match), you can use the
+command:
+\begin{center}
+``!time <T>'' 
+\par\end{center}
+
+where <T> is an integer indicating the time in seconds, or an integer
+followed by one of the units “s”, “min”, or “h” to specify the unit
+(for example, ``!time 20min'' ou ``!time 1h''). 
+\begin{rem}
+If you plan to play a series of matches on the same game, it is not
+necessary to set the game before each launch.
+\end{rem}
+
+
+\subsubsection{Special Case: Free\_game Mode}
+
+The DCOI provides the ability to play any perfect-information, deterministic
+game using the “pseudo-game” called Free\_game. Note, however, that
+--- while this is not a practical limitation --- players must take
+turns alternately (i.e., never play twice in a row). This mode allows
+matches to be played for such games but with the following trade-off:
+no legality checking of moves and no automatic winner determination.
+Players must therefore take turns entering the action “end” to signal
+the end of the match. This feature should only be used if participants
+are certain they are following the same rules and each have their
+own game engine. To use Free\_game, type:
+\begin{center}
+``!set game Free\_game''.
+\par\end{center}
+
+The valid actions for this mode are all actions that follow the DCOI
+action syntax (for example, “A1”, “B2-C3”, “D4-E17-H23”; see Section~\ref{subsec:Syntaxe-des-actions})
+plus the action “end”. Yet, you can also add custom special actions
+to Free\_game with the command:
+\begin{center}
+``!add\_freegame\_moves''. 
+\par\end{center}
+
+You can list all additional special actions of Free\_game with the
+command:
+\begin{center}
+``!show\_extra\_freegame\_moves''. 
+\par\end{center}
+
+And you can remove all special actions from Free\_game with the command:
+\begin{center}
+``!clear\_freegame\_moves''. 
+\par\end{center}
+
+These commands must, of course, be used before the match begins.
+
+\subsubsection{Starting the Match}
+
+We now turn to the practical process of running a match. The first
+step is to ask the referee bot to propose a game. To do this, use
+the command:
+\begin{center}
+``!start @<Discord\_Player\_ID\_1> @<Discord\_Player\_ID\_2>''.
+\par\end{center}
+
+You can save time by using the alias “!s” instead of “!start”. To
+enter this somewhat technical command, start typing “!start @” ---
+Discord will then display a list of available user IDs. Use the up/down
+arrow keys to select the ID of the first player in the match and press
+Enter. If it is not in the list, you can start typing its name until
+it appears. Note that simply typing the name does not work --- you
+must always select it from the list and then confirm by pressing “Enter”.
+
+Then type a space followed by “@” again, and select the second player
+in the same way. If one of the players is using a bot, you must select
+the bot’s ID, not the operator’s. Moreover, if one of the players
+is a bot, that bot must already be running before the !start command
+is sent.
+\begin{rem}
+There is a rare Discord bug in which some players or bots may temporarily
+disappear from the “@” selector. This issue usually resolves itself,
+but it can take hours or even days. However, it can easily be bypassed
+in two ways:
+
+• Simply use a different match channel.
+
+• Or, write the command in another channel and copy-paste it into
+the intended match channel.
+
+Always keep at least one channel empty of messages, as it seems that
+sending messages may trigger this strange bug.
+\end{rem}
+
+Once the command is executed, the referee displays the details of
+the proposed match (see Figure~\ref{fig:waiting_start}).Participants
+must then click the thumbs-up icon under the message to confirm the
+match. If you are using a bot, this step is handled automatically
+by the library --- you don’t need to do anything. In the current
+configuration, players have 15 minutes to accept the match proposal.
+When all players have clicked the thumbs-up, the match begins. If
+you wish to decline the proposed match, click the thumbs-down icon
+instead.
+\begin{rem}
+It is normal to see the number 1 next to the thumbs-up and thumbs-down
+icons. These reactions were added by the referee bot to make them
+visible and to make it easier for players to react.
+\end{rem}
+
+\begin{figure}
+\begin{centering}
+\includegraphics[scale=0.5]{start_attente_de_reponse}
+\par\end{centering}
+\caption{Example of the beginning of a match (example of waiting for player
+confirmation to start the game)}\label{fig:waiting_start}
+\end{figure}
+
+
+\subsubsection{Progression and End of the Match}
+
+During a match, the referee indicates when it is a player’s turn to
+move. It writes a message in the conversation such as: ``@<PLAYER>
+must play (he has <TIME> left)''. At that moment, the mentioned player
+may enter in the conversation the action chosen by their program.
+A player must not post any move before being explicitly told to play.
+Figure~\ref{fig:D=0000E9but-d'une-partie} shows the beginning of
+a match corresponding to the following sequence of actions: “J4-I5”
+followed by “C5” (the first player plays twice in a row).
+
+\begin{figure}
+\begin{centering}
+\includegraphics[scale=0.5]{start}
+\par\end{centering}
+\caption{Example of the beginning of a match}\label{fig:D=0000E9but-d'une-partie}
+\end{figure}
+
+If the action entered is incorrect, it is marked with a red square,
+and the referee indicates the error and provides the list of legal
+actions (see Figure~\ref{fig:Invalid-move}).
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{invalid_move}\caption{Example of invalid move}\label{fig:Invalid-move}
+\end{figure}
+
+When the match is over, the referee announces it and indicates the
+winner (see Figure~\ref{fig:Example-of-endgame}).
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{endgame}\caption{Example of endgame}\label{fig:Example-of-endgame}
+\end{figure}
+
+Once the match is finished, you can start a new game using the ``!start''
+command.
+
+\subsubsection{Non-Standard Match Endings: Timeout / Forfeit}
+
+We now turn to special match endings, triggered either by a player
+exceeding their thinking time (default: 30 minutes per player per
+game) or by a player’s decision.
+
+If a player exceeds their allotted thinking time, the match ends and
+that player loses the game (see Figure~\ref{fig:Example-of-timeout}).
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{timeout}\caption{Example of timeout}\label{fig:Example-of-timeout}
+\end{figure}
+
+If you need to stop an ongoing match, you can use the “!stop” command.
+This will trigger a vote. Note that this command does not currently
+work if you are using a Discord bot.
+
+If you wish to forfeit a match, when it is your turn to play, you
+can enter the action resign (type “resign”). This will immediately
+end the match and award the victory to your opponent (without triggering
+a vote).
+
+If you are using a bot, use the “!resign” command instead. When it
+is your bot’s turn, it will execute the resign action, which will
+similarly end the match.
+
+\subsubsection{Action Syntax (Text Format)}\label{subsec:Syntaxe-des-actions}
+
+With the DCOI, it is important to distinguish between action syntax
+and legal actions. In order for the DCOI to differentiate a normal
+conversation from a game move, it requires a specific syntax. This
+syntax includes moves like “A1”, “B2-C12”, and also longer sequences
+such as “D5-E3-G15”, possibly combined with specific keywords, e.g.,
+“queen-A8”. Note that “resign” is an example of a keyword common to
+all games. To see the list of keywords for the current game, use the
+command:
+\begin{center}
+!show\_move\_keywords.
+\par\end{center}
+
+Note that the general syntax for game actions is defined by the following
+regular expression:
+\begin{center}
+({[}a-zA-Z{]}{[}0-9{]}\{1,2\} | keyword1 | ... | keyword\_n)(-({[}a-zA-Z{]}{[}0-9{]}\{1,2\}
+| keyword1 | ... | keyword\_n)){*}.
+\par\end{center}
+
+In other words, a text-formatted action is a sequence of blocks of
+length one or more, separated by hyphens, where each block is either
+a coordinate (e.g., A12, B5, C18) or a keyword.
+
+When a message is posted in the conversation, the referee bot checks
+whether the text follows the expected syntax. If it does, and if it
+is that player’s turn, the bot will attempt to play the action. If
+the action is valid, it is executed; otherwise, the bot reports that
+the action is illegal, as described previously. If the syntax is not
+respected, the referee simply ignores the message.
+
+\subsection{Match Logging}\label{subsec:Logging-des-matchs}
+
+Matches are saved in .json files (in the directory discord\_interface/log/bot\_play\_log/),
+using the following format:
+\begin{center}
+``play\_<PLAYER\_ID>\_Computer-Olympiad\_<CHANNEL\_NAME>\_<DATE>\_<TIME>.json''.
+\par\end{center}
+
+This file contains a human-readable Python dictionary with many attributes,
+in particular:
+\begin{itemize}
+\item game\_name -- the name of the game,
+\item moves -- the history of moves in the match,
+\item players -- a list of PLAYER\_IDs,
+\item winner -- True if you or your bot won the match.
+\end{itemize}
+
+\subsection{Warning About Matches That Are Too Short}\label{subsec:Avertissement-sur-les}
+
+Note that there is a delay in action communication due to internet
+latency (which depends on the quality of your connection), as well
+as Discord’s latency, and to a lesser extent, the DCOI’s own processing
+time. This delay is measured in seconds, typically around one second
+on average. The DCOI is therefore not suitable for matches with an
+average time of less than 1 second per action. Moreover, sending more
+than one message per second by a bot or user violates Discord’s terms
+of service, which interprets such behavior as flooding. This can lead
+to various penalties, including bans, shadow bans, or slowed Discord
+functions. However, in practice, sending actions at intervals of about
+one second has never caused issues during our extensive testing.
+
+\section{Automated Play via Discord Bot}\label{sec:Jeu-automatis=0000E9-par}
+
+In this section, we explain the different ways to conduct a match
+with the DCOI in automatic mode.
+
+In all cases, automated play is carried out using a Discord player
+bot. This requires creating a Discord bot account on the Discord Developer
+Portal (see Section~\ref{subsec:Cr=0000E9ation-du-compte}). Next,
+the native way to run matches in automatic mode is to extend one of
+the DCOI Python Player classes (Section~\ref{subsec:Programmation-d'un-Bot-python}).
+The other method, described in Section~\ref{subsec:Utilisation-du-Bot-GTP},
+is to use a fully implemented bot that communicates with your program
+via input/output (inter-process communication) using the Go Text Protocol
+(GTP). This second approach has the advantage of not requiring any
+programming with the DCOI library --- nor any knowledge of the Python
+language. Finally, in Section~\ref{subsec:Fonctionnalit=0000E9s-avanc=0000E9es},
+we introduce advanced features related to bots.
+
+We begin by detailing the installation of the Python packages required
+by the DCOI.
+
+\subsection{Installation of Required DCOI Packages}
+
+We will now detail the installation of DCOI. Note that Python 3.10+
+is required to install and use DCOI.
+\begin{rem}
+If you are using Python for your projects, to avoid breaking dependencies,
+it is recommended to use a Python virtual environment.
+\end{rem}
+
+To install the DCOI packages, you have two possible methods:
+
+\paragraph{Quick method:}
+
+Execute the following commands in your terminal:
+\begin{itemize}
+\item ``cd discord\_interface''
+\item ``chmod +x install.sh''
+\item ``bash install.sh''
+\item (optional) Test the installation: run in the terminal: ``python3
+test\_installation.py''.
+\end{itemize}
+\begin{rem}
+If you move the discord\_interface folder to another location, you
+will need to run ``bash install.sh'' again.
+\end{rem}
+
+
+\paragraph{Step-by-step method:}
+
+The DCOI is based on the official Python library for Discord. To use
+the DCOI library, you need to install it by running the following
+command in your terminal: ``python3 -m pip install -U discord.py''.
+You also need the numpy library to run the games: ``python3 -m pip
+install -U numpy''. If you wish to use GTP, you will additionally
+need the pexpect library to enable inter-process communication. Install
+it with: ``pip install pexpect''. You can then test your installation
+by running in the terminal: ``python3 test\_installation.py''.
+
+Finally, you need to modify the Python path to include the parent
+folder of “discord\_interface”:
+
+\begin{verbatim}
+UPPER_DIR_DCOI='<path_to_discord_interface>'
+echo 'export PYTHONPATH=$PYTHONPATH:'$UPPER_DIR_DCOI >> ~/.bashrc
+source ~/.bashrc
+\end{verbatim}
+\begin{rem}
+If you move the discord\_interface folder, you will need to update
+the PYTHON PATH with the new path.
+\end{rem}
+
+
+\subsection{Creating Your Player Discord Bot Account}\label{subsec:Cr=0000E9ation-du-compte}
+
+We now turn to creating your bot account, which allows the bot program
+to connect to the Discord application. More specifically, this series
+of steps lets you retrieve various pieces of information. Some of
+this information must be entered into the parameters.conf configuration
+file located at the root of the discord\_interface folder. Creating
+the account also provides a link that you must give to the organizer
+so they add your bot to the competition’s Discord server.
+
+\subsubsection{Creating the Bot Account and Inviting It to the Server}\label{subsec:Cr=0000E9er-le-compte-de-bot}
+\begin{enumerate}
+\item Go to the Discord Developer Portal website: \url{https://discord.com/developers/applications}.
+Log in with your Discord account. Then click “New Application” at
+the top right of the screen (see Figure~\ref{fig:New-Application}
+if needed) and give your bot a name. You will then arrive at the bot’s
+page.
+\begin{enumerate}
+\item If you encounter difficulties, try using a different web browser.
+\end{enumerate}
+\item Next, enable the “Message Content Intent” option in the Bot tab (see
+Figure~\ref{fig:Bot-window-and}, if needed).
+\item Then, retrieve the TOKEN of the bot --- this is essentially its password,
+so it must be kept secret. Note it down, as we will need it to configure
+the bot in the next section.
+\begin{enumerate}
+\item Go to the Bot tab (still on the bot page). In the TOKEN section, click
+the “Reset Token” button (see Figure~\ref{fig:Reset-Token-button}
+if needed).
+\end{enumerate}
+\item Go to the OAuth2 tab, then ``OAuth2 URL Generator''. Under the SCOPES
+section, check the “bot” option.
+\item 5. In the bot permissions subsection, check the following options:
+\begin{enumerate}
+\item \textquotedbl View Channels\textquotedbl ,
+\item \textquotedbl Send Messages\textquotedbl , 
+\item \textquotedbl Read Message History\textquotedbl , 
+\item \textquotedbl Add Reactions\textquotedbl . 
+\end{enumerate}
+\item Finally, at the bottom of the page, in the ``Generated URL'' field,
+copy the URL. Send this URL to the organizer so they can add your
+bot to the competition’s Discord server.
+\end{enumerate}
+\begin{figure}
+\centering{}\includegraphics[scale=0.15]{new_application}\caption{New application button (red box)}\label{fig:New-Application}
+\end{figure}
+\begin{figure}
+\centering{}\includegraphics[scale=0.15]{\string"message content intent\string".png}\caption{Bot window and message content intent option to be activated (red
+boxes)}\label{fig:Bot-window-and}
+\end{figure}
+\begin{figure}
+\centering{}\includegraphics[scale=0.15]{token}\caption{Reset Token button (red box)}\label{fig:Reset-Token-button}
+\end{figure}
+
+
+\subsubsection{Retrieving Your Discord ID (Optional)}\label{subsec:R=0000E9cup=0000E9ration-de-votre}
+
+Next, it is recommended to retrieve your Discord user ID to specify
+it in the configuration file. This step is optional, but it allows
+you to use commands that control your bot to access certain features.
+For example, it is required to resume a match after a crash (see Section~\ref{subsec:Fonctionnalit=0000E9s-avanc=0000E9es}).
+In this section, we explain how to obtain your Discord ID.
+
+The first step is to enable Developer Mode on your Discord account.
+To do this:
+\begin{enumerate}
+\item Open the Discord application.
+\item Go to Settings (click the “gear” icon; see Figure~\ref{fig:Discord-parameters-button},
+if needed). 
+\item Click on the “Advanced” tab.
+\item Enable the “Developer Mode” option.
+\item Click on your username at the bottom right.
+\item In the small pop-up window, click “Copy User ID” (see Figure~\ref{fig:Open-owner-window},
+if needed).
+\item Return to Settings and disable the Developer Mode option.
+\end{enumerate}
+\begin{figure}
+\centering{}\includegraphics[scale=0.5]{interface_paramètres}\caption{Discord parameters button (red box)}\label{fig:Discord-parameters-button}
+\end{figure}
+
+\begin{figure}
+\centering{}\includegraphics[scale=0.25]{advanced}\caption{Discord advanced window and developper mode option (red boxes)}\label{fig:Discord-advanced-window}
+\end{figure}
+
+\begin{figure}
+\centering{}\includegraphics[scale=0.15]{\string"Owner id\string".png}\caption{Open owner window and copy Owner ID (red boxes)}\label{fig:Open-owner-window}
+\end{figure}
+
+
+\subsubsection{Specifying the Configuration File}
+
+We now explain how to configure the parameters.conf file, located
+at the root of the discord\_interface folder, which allows the bot
+program to access Discord.
+\begin{enumerate}
+\item Set the value of PLAYER\_BOT\_DISCORD\_TOKEN to the TOKEN of your
+bot account (retrieved in Section~\ref{subsec:Cr=0000E9er-le-compte-de-bot}).
+\item Optional but recommended: set the value of OWNER\_ID to your Discord
+user ID (retrieved in Section~\ref{subsec:R=0000E9cup=0000E9ration-de-votre}).
+\end{enumerate}
+To verify that the configuration file is correctly set, launch your
+bot and check:
+
+\begin{verbatim}
+cd <discord_interface_path>/discord_interface 
+python3 main_random_ai.py
+\end{verbatim}
+
+If the terminal shows the error “Bad OWNER\_ID”, you need to correct
+the OWNER\_ID variable in ``parameters.conf''.
+
+For a more advanced test, launch your bot and type in a channel on
+the competition’s Discord server the following command:
+\begin{center}
+``!conf\_test''.
+\par\end{center}
+\begin{itemize}
+\item If nothing happens, contact me.
+\item If everything works correctly, “All is OK!” will appear in the terminal.
+\item If an error occurs in the terminal (discord.errors.LoginFailure: Improper
+token has been passed), the PLAYER\_BOT\_DISCORD\_TOKEN has been incorrectly
+specified.
+\end{itemize}
+
+\subsection{Programming a Discord Bot Using Python}\label{subsec:Programmation-d'un-Bot-python}
+
+We now explain how to program a Discord bot in Python. You need to
+inherit one of the Python Player classes provided by the DCOI library.
+Here, we describe the simplest way to do this.
+
+\paragraph{Bot programming}
+
+To program your bot, you need to inherit the BasicPlayer class from
+the file: ``discord\_interface/player/model/basic\_player.py''.
+The only thing you need to do is define the method: my\_plays(self,
+game\_history, time\_left=inf, opponent\_time\_left=inf). This method
+should return the action that your program wants to play in the current
+game state. The current state can be reconstructed from the game\_history
+parameter, which contains the list of moves in text format played
+since the start of the match. You can also use the native game methods
+provided by the DCOI, which allows you to avoid implementing the game
+logic yourself. In this second case, you will need the methods described
+in Table~\ref{tab:Elementary-game-methods}.
+
+\begin{table}
+\begin{centering}
+\begin{tabular}{|c|c|}
+\hline 
+game methods of any player & \tabularnewline
+\hline 
+\hline 
+self.game.get\_numpy\_board() & return a numpy array representing the game board\tabularnewline
+\hline 
+self.game.get\_current\_player() & returns $i$ if the current player is the player $i$ ($i\in\mathbb{N}$) \tabularnewline
+\hline 
+self.game.textual\_legal\_moves() & list of valid actions in text format (e.g. ``A1'' or ``A2-B3'')\tabularnewline
+\hline 
+self.game.ended() & return True if the game is ended\tabularnewline
+\hline 
+self.game.winner & return the index $i$ of the winner player ($i\in\mathbb{N}$) \tabularnewline
+\hline 
+self.game.textual\_plays(move) & apply the move in the current game state (i.e.self.game)\tabularnewline
+\hline 
+self.game.undo() & undo the last action of the current game state (i.e.self.game)\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\caption{Elementary methods of any Player Python object for programming an
+AI player.}\label{tab:Elementary-game-methods}
+
+\end{table}
+
+Pay attention to the time\_left parameter: it indicates the remaining
+time your program has for the rest of the match. If this value reaches
+0, you will lose the game.
+
+An example of inheritance is provided in the TextualRandomAI class
+in the file:
+\begin{center}
+``discord\_interface/player/instances/textual\_random\_ai.py''. 
+\par\end{center}
+
+This bot plays randomly, except when there is a winning move among
+the available actions. In that case, it plays the winning move.
+
+\paragraph{Launching the bot}
+
+Once your bot account is created, the configuration file is set up,
+and your Player class is inherited, all that remains is to launch
+your bot in a main script. To do this, use the method: bot\_starting(AI\_Class)
+from the file: discord\_interface/player/model/bot\_launcher.py with
+AI\_Class set to your AI Python Player class. An example of a bot
+launcher program is provided in the file:
+\begin{center}
+``discord\_interface/main\_random\_ai.py''.
+\par\end{center}
+
+All that remains for you to do is: ``python3 <your\_main>.py'' in
+the folder ``discord\_interface''. For example:
+
+\begin{verbatim}
+cd <discord_interface_path>/discord_interface 
+python3 main_textual_random_ai.py
+\end{verbatim}
+
+The bot now waits for the command: !s @<Bot\_name\_1> @<Bot\_name\_2>
+to be executed and for the referee bot to display the match information.
+At that point, the bot performs its initialization and adds its “thumbs
+up.” The match then begins, and the bot plays automatically whenever
+it is its turn, until the end of the game.
+\begin{rem}
+If you used a Python virtual environment during installation, remember
+to activate it before launching the bot.
+\end{rem}
+
+
+\paragraph{Advanced Features}
+
+Finally, optionally, if you need advanced features, such as code to
+execute at the initialization or end of the match, you can inherit
+from the class AdvancedBasicPlayer (file: discord\_interface/player/model/advanced\_basic\_player.py)
+and define the methods: my\_initialisation(game\_name) and my\_end().
+
+\subsection{Using the Generic Player Discord Bot via the GTP}\label{subsec:Utilisation-du-Bot-GTP}
+
+We now explain how to run automatic matches using GTP. Information
+about GTP is available, for example, on this website:: \url{https://www.lysator.liu.se/~gunnar/gtp/gtp2-spec-draft2/gtp2-spec.html}.
+In Section~\ref{subsec:Sp=0000E9cification-des-commandes}, we will
+show how to specify a GTP program. Here, we begin by describing how
+to launch the GTP bot, assuming you already have a program specified
+in the GTP format. Finally, we will cover an advanced feature that
+allows you to display information from your program in the terminal,
+(Section~\ref{subsec:Afficher-des-informations}) as well as how
+to handle errors in your program when using GTP (Section~\ref{subsec:Gestion-des-erreurs}).
+
+\subsubsection{Starting the GTP Bot}
+
+We begin by explaining the prerequisites for launching your GTP bot.
+First, you need to connect your program to the GTP bot. To do this,
+you must specify three parameters:
+\begin{itemize}
+\item ``program\_name'' : the name of your player program,
+\item ``program\_arguments'': the list of arguments for your program (separated
+by spaces),
+\item ``program\_directory'': the absolute path to your program (or the
+path relative to the discord\_interface folder; for example, you can
+use an empty string if the program is located at the root of the discord\_interface
+folder).
+\end{itemize}
+These variables must be specified in the parameters.conf file at the
+root of the discord\_interface folder.
+
+To run your program, all you need to do is:
+\begin{center}
+``python3 main\_gtp\_ai\_from\_conf.py''
+\par\end{center}
+
+in the terminal from the root of the discord\_interface folder.
+\begin{rem}
+If you are comfortable with Python, you can also modify and run the
+main\_gtp\_ai.py file to avoid editing the configuration file.
+\end{rem}
+
+
+\subsubsection{Specifying the GTP Commands}\label{subsec:Sp=0000E9cification-des-commandes}
+
+In order to use the GTP-based bot, your program must read GTP commands
+from standard input (which will be sent by the GTP bot) and write
+the results of these commands to standard output (which will then
+be read and processed by the GTP bot).
+
+The required GTP commands to run the GTP bot, which need to be implemented
+in your program, are described in Table~\ref{tab:List-of-GTP-commands}.
+To verify that your GTP command implementation is correct, you can
+run the following test program in the terminal: ``python3 test\_gtp\_ai\_from\_conf.py''.
+
+\begin{table}
+\begin{centering}
+\begin{tabular}{|c|c|c|}
+\hline 
+GTP command & return & effect\tabularnewline
+\hline 
+\hline 
+clear\_board & $=$ & restart the game\tabularnewline
+\hline 
+undo & $=$ & cancel the last move\tabularnewline
+\hline 
+play <player> <move> & $=$ & plays <move> for <player>\tabularnewline
+\hline 
+time\_left <player> <time> & $=$ & inform the time left in seconds\tabularnewline
+\hline 
+genmove <player> & $=$<move> & return the <move> to play and play it\tabularnewline
+\hline 
+quit & $=$ & shutdown the program\tabularnewline
+\hline 
+\hline 
+player & $=$<player> & return the current player\tabularnewline
+\hline 
+game <game> & $=$ & initialization for <game>\tabularnewline
+\hline 
+\end{tabular}
+\par\end{centering}
+\caption{List of GTP commands to implement, the syntax of their return and
+their expected effect (<move> is an action in text format (see the
+syntax in Section~\ref{subsec:Syntaxe-des-actions}) ; <player> is
+an integer $n\in\mathbb{N}$ ; <game> is the game name of the match).
+Remark: commands ``game'' and ``player'' are not part of standard
+GTP; they are optional (make them only return ``=''); ``game''
+is required only for multi-games participation ; ``player'' is required
+only for profiling (see Section~\ref{subsec:Bot-profiling})..}\label{tab:List-of-GTP-commands}
+
+\end{table}
+
+If needed, an example of a Python implementation of GTP commands is
+available in the file: ``discord\_interface/player/instances/autres/gtp\_random\_ai.py''.
+\begin{rem}
+Example of GTP communication between the bot and the player program:
+
+\begin{verbatim}
+genmove 0
+=A2-A3
+play 1 A7-A6
+=
+genmove 0
+=A3-A4
+...
+\end{verbatim}
+\end{rem}
+
+\begin{rem}
+If you want your bot to be able to resign automatically, it simply
+needs to return ``=resign'' in response to the genmove command at
+the appropriate time.
+\end{rem}
+
+\begin{rem}
+If you want to resign your bot manually, use the already functional
+command !resign.
+\end{rem}
+
+
+\subsubsection{Displaying Information in the Terminal}\label{subsec:Afficher-des-informations}
+
+Finally, we briefly discuss an option that allows you to display information
+from your program in the terminal when using the GTP bot.
+
+Setting up this feature is very simple. For each GTP command return,
+simply concatenate the return with the \# symbol followed by the line
+you want to display in the terminal.
+\begin{example}
+If you want to display in the terminal: ``The move was correctly
+cancelled'' when the undo command is executed, the return of undo
+should be: ``=\#The move was correctly cancelled''.
+\end{example}
+
+Note that the line to display in the terminal must not contain line
+breaks. However, you can create line breaks by adding multiple \#
+symbols. Each additional \# will be interpreted as a line break.
+\begin{example}
+If the return of the genmove command is: ``=<move>\#Calculating the
+next move completed\#Move played: <move>\#Calculation time 15 seconds'',
+this will display the following in the terminal:
+\end{example}
+
+\begin{verbatim}
+Calculating the next move completed
+Move played: <move>
+Calculation time 15 seconds
+\end{verbatim}
+
+\subsubsection{Error Handling with GTP}\label{subsec:Gestion-des-erreurs}
+
+If you want error handling with GTP, meaning that your program notifies
+the Discord bot when an error occurs, you must use the standard GTP
+syntax designed for this purpose. Specifically, when an error occurs
+and needs to be communicated, write to standard output but modify
+the output format by replacing ``=<output\_line>'' with ``?<output\_line>''.
+The presence of the ``?'' allows the Discord bot to trigger an error,
+which will be displayed in the terminal. Additional information will
+also appear in the terminal, including:
+\begin{itemize}
+\item The name of the command that caused the ``?'',
+\item The output of your program,
+\item Any comments displayed using the feature described in the previous
+section.
+\end{itemize}
+
+\subsection{Advanced Features}\label{subsec:Fonctionnalit=0000E9s-avanc=0000E9es}
+
+We now describe several advanced features of player bots.
+
+\subsubsection{Crash Management}
+
+If for any reason your bot crashes and needs to be restarted, to resume
+the ongoing match, after relaunching your bot in the terminal, you
+must use in the Discord conversation the command:
+\begin{center}
+``!continue''.
+\par\end{center}
+
+Its alias is ``!c''.
+
+Before the competition, I suggest forcing a bot kill during a match,
+then relaunching it and verifying that the !continue command works
+correctly. This ensures you can resume a match in case of a problem.
+
+If the referee bot does not respond, contact a competition official
+to restart the referee and also execute the !continue command.
+
+\subsubsection{Bot Profiling}\label{subsec:Bot-profiling}
+
+Profiling can be performed using the command: ``!p''. 
+\begin{rem}
+If you are using a GTP bot, some of the profiling values provided
+may be incorrect if the GTP ``player'' command has not been implemented
+or has been implemented incorrectly.
+\end{rem}
+
+
+\section{Creating a Personal Discord Game Server}\label{sec:Cr=0000E9ation-d'un-serveur}
+
+In this section, we explain how to create your own personal game server,
+either for a local beta test of the Computer Olympiad or to organize
+your own competition. Several steps must be completed:
+\begin{enumerate}
+\item Creating a Discord server (Section~\ref{subsec:Cr=0000E9ation-d'un-serveur}),
+\item Creating the “bot account” for the referee bot (Section~\ref{subsec:Cr=0000E9ation-du-compte-arbitre}),
+\item Inviting players to the server (Section~\ref{subsec:Invitation-des-joueurs}),
+\item Inviting bots to the server (Section~\ref{subsec:Invitation-des-bots}),
+\item Launching the referee bot (Section~\ref{subsec:Lancement-du-bot}).
+\end{enumerate}
+Note that there can be only one referee bot per channel, and you must
+specify the corresponding channel for each referee bot. This will
+be addressed in the following section. Therefore, you need multiple
+referee bots if you want to run multiple matches in parallel.
+
+\subsection{Creating a Discord Server}\label{subsec:Cr=0000E9ation-d'un-serveur}
+
+We begin by detailing how to create a Discord server:
+\begin{enumerate}
+\item In the vertical server bar on the left of the Discord application:
+\begin{enumerate}
+\item Click the “+”, then “Create My Own” (choose your options and server
+name).
+\end{enumerate}
+\item Enable ``Developer Mode`` (steps 1 to 4 in Section~\ref{subsec:R=0000E9cup=0000E9ration-de-votre}).
+\item Left-click the icon of the server you just created in the server bar.
+\item Click “Copy Server ID”.
+\item For a Computer Olympiad beta test:
+\begin{enumerate}
+\item In the file parameters.conf:
+\begin{enumerate}
+\item copy the line starting with:
+\begin{enumerate}
+\item ``BETA\_TEST\_COMPUTER\_OLYMPIAD\_GUILD\_ID=''.
+\end{enumerate}
+\item Comment out the original line with \#.
+\item Replace the value of BETA\_TEST\_COMPUTER\_OLYMPIAD\_GUILD\_ID with
+the ID of the created server.
+\item Ensure that in parameters.conf, BETA\_TEST\_MODE=True.
+\end{enumerate}
+\item For each referee bot (index \textit{i}):
+\begin{enumerate}
+\item In the server, create a channel named ``match\_\textit{i}''.
+\item Right-click the channel and select Copy ID.
+\item In parameters.conf
+\begin{enumerate}
+\item paste it as the value of REFEREE\_BOT\_\textit{i}\_DISCORD\_CHANNEL.
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\item For a server used for other purposes:
+\begin{enumerate}
+\item In parameters.conf:
+\begin{enumerate}
+\item Duplicate the line starting with:
+\begin{enumerate}
+\item ``COMPUTER\_OLYMPIAD\_GUILD\_ID=''.
+\end{enumerate}
+\item Comment out the original line with \#.
+\item Replace the value of ``COMPUTER\_OLYMPIAD\_GUILD\_ID'' with the
+ID of the created server.
+\item Ensure that in parameters.conf, BETA\_TEST\_MODE=False.
+\end{enumerate}
+\item For each referee bot (index \textit{i}):
+\begin{enumerate}
+\item In the server, create a channel named ``match\_\textit{i}''.
+\item Right-click the channel and select Copy ID.
+\item In parameters.conf
+\begin{enumerate}
+\item paste it as the value of BETA\_TEST\_REFEREE\_BOT\_\textsl{i}\_DISCORD\_CHANNEL
+\end{enumerate}
+\end{enumerate}
+\end{enumerate}
+\item Deactivate ``Developer Mode''
+\end{enumerate}
+\begin{rem}
+If you later participate in the Computer Olympiad beta test, remember
+to remove the added line and uncomment the original.
+\end{rem}
+
+\begin{rem}
+If you later participate in the Computer Olympiad, remember to set
+BETA\_TEST\_MODE=False.
+\end{rem}
+
+
+\subsection{Creating the Referee “Bot Account”}\label{subsec:Cr=0000E9ation-du-compte-arbitre}
+
+We now explain how to create a “bot account” for a referee bot. Note
+that, you need to create a bot account for each referee bot.
+
+The procedure is identical to the one in Section~\ref{subsec:Cr=0000E9er-le-compte-de-bot}
+except for step 5, where you must additionally enable the “Manage
+Messages” permission and that for each referee bot, the corresponding
+token must be set for REFEREE\_BOT\_\textit{i}\_DISCORD\_TOKEN in
+parameter.conf.
+
+\subsection{Inviting Players to the Server}\label{subsec:Invitation-des-joueurs}
+
+We now explain how to invite human players and bot operators to your
+server:
+\begin{enumerate}
+\item Right-click the icon of your server in the vertical server bar on
+the left.
+\item Click “Invite People”.
+\item Click the “Copy” button.
+\item Send the copied link to the people you want to invite.
+\end{enumerate}
+The invited participants must then follow the protocol described in
+Section~\ref{subsec:Discord:-serveurs-et-salons} using this link
+instead of the Computer Olympiad server link.
+
+\subsection{Inviting Bots to the Server}\label{subsec:Invitation-des-bots}
+
+We now explain how to invite player bots and referee bots to your
+server. We assume that you have followed Section~\ref{subsec:Cr=0000E9ation-d'un-serveur}
+and obtained the referee bot invitation URL, and that participants
+have also provided their invitation URLs after following Section~\ref{subsec:Cr=0000E9ation-du-compte}.
+For each URL:
+\begin{enumerate}
+\item Paste the URL into your browser.
+\item Log in to your Discord account (if required).
+\item Choose your server from the list of available servers.
+\item Click the “Continue” button.
+\item If it is someone else’s bot:
+\begin{enumerate}
+\item Verify that the requested permissions match those specified in the
+corresponding bot account creation section (player: Section~\ref{subsec:Cr=0000E9ation-du-compte}
+/ referee: Section~\ref{subsec:Cr=0000E9ation-d'un-serveur}).
+\end{enumerate}
+\item Click the “Authorize” button.
+\end{enumerate}
+
+\subsection{Starting the Referee Bot}\label{subsec:Lancement-du-bot}
+
+We explain in this section how to launch the referee bot. To do so,
+run the following command in the terminal from the root of the discord\_interface
+folder:
+\begin{center}
+``python3 main\_referee\_1.py''
+\par\end{center}
+
+Manual-mode players should then follow Section~\ref{sec:Jeu-manuel}
+and automatic-mode players should follow Section~\ref{sec:Jeu-automatis=0000E9-par}.
+\begin{rem}
+To start a second referee bot, run: ``python3 main\_referee\_2.py.
+\end{rem}
+
+\begin{rem}
+If the referee bot program crashes during a match, restart it and
+then execute the !continue command in the match channel.
+\end{rem}
+
+\begin{rem}
+If one of the player bots crashes during a match and restarting it
+and using !continue does not fix the issue, you can try killing the
+referee bot, restarting it, and using the !continue command (if you
+suspect the problem originated from or propagated to the referee bot).
+\end{rem}
+
+
+\end{document}
