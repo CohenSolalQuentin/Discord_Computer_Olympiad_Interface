@@ -10,6 +10,7 @@ DCOI is a set of Discord bots:
 - Referee bots: can be used to **arbitrate** (time the game, verify the legality of actions, determine the end of the game, and designate the winner) within a Discord discussion.
 
 DCOI is available for a specific set of games (**more games will be available soon**).
+
 List of **available games**: see discord_interface/games/instances/
 
 **However**, thanks to the game called **"Free_game"**, matches can be played on any two-players game with perfect information.
