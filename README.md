@@ -1,6 +1,7 @@
 # Discord_Computer_Olympiad_Interface
 Human / AI interface with Discord player and referee bots for manual and automatic game playing on Discord servers.
 
+
 Discord Computer Olympiad Interface (DCOI) allows humans to enter the actions of their game program in text format (actions in A1-B2 format, for example) or to use a Discord bot to do it for them, thus automatically playing. 
 
 DCOI is a set of Discord bots:
