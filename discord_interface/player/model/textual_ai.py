@@ -20,9 +20,12 @@ anti_correspondance_hex = {'c': 2, 'h': 7, 's': 18, 'j': 9, 'e': 4, 'f': 5, 'o':
 class Textual_AI(Player):
 
 
-    def __init__(self, program_name, program_arguments='', program_directory='', game:Game = None, search_time_per_action=1, logfile='logfile.log', history_file='history.json', timeout=60*30, time_for_program_quit=10, move_keywords=[], endgame_imply_quit=True):#advance_profiling=False, back_first=True,
+    def __init__(self, program_name, program_arguments='', program_directory='', game:Game = None, search_time_per_action=1, logfile=None, history_file='history.json', timeout=60*30, time_for_program_quit=10, move_keywords=[], endgame_imply_quit=True):#advance_profiling=False, back_first=True,
 
-        self.logfile_name = logfile
+        if logfile is None:
+            self.logfile_name = program_name+'_gtp.log'
+        else:
+            self.logfile_name = logfile
 
         self.last_command = ''
 
@@ -70,7 +73,7 @@ class Textual_AI(Player):
     def init(self):
         import pexpect
 
-        self.logfile = open(self.program_directory + self.logfile_name, 'w')
+        self.logfile = open(self.logfile_name, 'w')#self.program_directory
 
         self.processus = pexpect.spawn(self.cmd, encoding='utf-8', codec_errors='replace', logfile=self.logfile)
 
@@ -134,9 +137,11 @@ class Textual_AI(Player):
         elif player.isdigit():
             return int(player)
 
-        else:
-            assert player in self.get_chance_words()
+        elif player in self.get_chance_words():
             return -1
+
+        else:
+            return 0
 
 
     async def send(self, line):

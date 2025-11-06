@@ -45,12 +45,22 @@ def string_to_action(string):
 
 
 def move_conversion_from_gtp(move):
-    return move
+    action = ''
+    is_number = False
+    if '-' not in move:
+        for c in move:
+            if is_number and not c.isdigit():
+                action += '-' + c
+            else:
+                action += c
+            if c.isdigit():
+                is_number = True
+
+    return action.upper()
 
 
 def move_conversion_to_gtp(action):
-    return action
-
+    return action.lower().replace('-','')
 
 
 if __name__ == '__main__':
@@ -65,44 +75,44 @@ if __name__ == '__main__':
         if command == 'game':
             if arg[0].lower() == 'amazons':
                 game = AmazonsDiscord()
-                print('=','#','Amazons start!')
+                print('=')
             elif arg[0].lower() == 'clobber':
                 game = Clobber()
-                print('=','#','Clobber start!')
+                print('=')
             elif arg[0].lower() == 'breakthrough':
                 game = BreakthroughDiscord()
-                print('=','#','Breakthrough start!')
+                print('=')
             elif arg[0].lower() == 'santorini':
                 game = SantoriniDiscord()
-                print('=','#','Santorini start!')
+                print('=')
             else:
                 game = None
-                print('=','#','Game does not implemented (available games: Amazons, Clobber, Breakthrough, Santorini.')
+                print('=')
         else:
 
             if game is None:
-                print('?','#','Game does not chosen.')
+                print('?','#','Game does not chosen. Available games: Amazons, Clobber, Breakthrough, Santorini.')
 
             elif command == 'player':
-                print('=',game.get_current_player(),'#','Current player:',int(game.get_current_player()),'.')
+                print('=',game.get_current_player())
 
             elif command == 'clear_board':
                 game.reset()
-                print('=','#','Board is cleared.')
+                print('=')
 
             elif command == 'undo':
                 game.undo()
-                print('=','#','Last move canceled.')
+                print('=')
 
             elif command == 'time_left':
-                print('=','#','Time left set.')
+                print('=')
 
             elif command == 'genmove':
                 move = choice(game.textual_legal_moves())
 
                 game.textual_plays(move)
 
-                print('=',move_conversion_to_gtp(move),'#','Generated move:',move,'(',move_conversion_to_gtp(move),')','.')
+                print('=',move_conversion_to_gtp(move))
 
 
             elif command == 'play':
@@ -111,6 +121,6 @@ if __name__ == '__main__':
                 move = move_conversion_from_gtp(move)
 
                 game.textual_plays(move)
-                print('=','#','Move ',move,'of player',color,'have been played.')
+                print('=')
 
         line = input()

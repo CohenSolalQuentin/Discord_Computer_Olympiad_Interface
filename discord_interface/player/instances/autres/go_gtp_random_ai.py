@@ -45,11 +45,22 @@ def string_to_action(string):
 
 
 def move_conversion_from_gtp(move):
-    return move
+    action = ''
+    is_number = False
+    if '-' not in move:
+        for c in move:
+            if is_number and not c.isdigit():
+                action += '-' + c
+            else:
+                action += c
+            if c.isdigit():
+                is_number = True
+
+    return action.upper()
 
 
 def move_conversion_to_gtp(action):
-    return action
+    return action.lower().replace('-','')
 
 
 
