@@ -42,11 +42,11 @@ if __name__ != "__main__":
         RAW_PATTERN_ARGUMENT = r'(\w|\d)+'  # an argument can be a mention or any alphanumerical sequence of characters
         RAW_PATTERN_INSTRUCTION = r'<@\d+> must play \(he has (\d{1,2}h)?(\d{1,2}min)?(\d{1,2}s)?(\d{1,3}ms)? left\)'
         #RAW_PATTERN_MOVE = r'(\w|\d+){2}-(\w|\d+){2}'
-        RAW_PATTERN_MOVE = r'[a-zA-Z][0-9]{1,2}'
+        RAW_PATTERN_MOVE = r'[a-zA-Z]{0,1}[0-9]{1,2}'
         RAW_PATTERN_MENTION = r'<@\d+>'
         RAW_PATTERN_WIN = r'<@\d+> won'
         RAW_PATTERN_EXCEED_TIME = r'<@\d+> has exceeded his allowed time'
-        RAW_PATTERN_START_MESSAGE_INFORMATION = r'\*\*\[([A-Za-z0-9_ ]+)\]\*\* ([A-Za-z0-9_ ]+)'
+        RAW_PATTERN_START_MESSAGE_INFORMATION = r'\*\*\[([-A-Za-z0-9_ ]+)\]\*\* ([-A-Za-z0-9_ ]+)'
 
         RAW_PATTERN_HOUR = r'\d{1,2}h'
         RAW_PATTERN_MIN = r'\d{1,2}min'

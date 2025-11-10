@@ -56,7 +56,9 @@ def move_conversion_from_gtp(move):
             if c.isdigit():
                 is_number = True
 
-    return action.upper()
+        if action[-1].isdigit():
+            return action.upper()
+    return action
 
 
 def move_conversion_to_gtp(action):

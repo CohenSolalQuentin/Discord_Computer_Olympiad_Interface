@@ -142,7 +142,9 @@ if __name__ != "__main__":
 
         def action_to_string(self, action: object) -> str:
             if self.game is None:
-                return str(action).upper()
+                if str(action)[-1].isdigit():
+                    return str(action).upper()
+                return str(action)#.upper()
             else:
                 return self.game.action_to_string(action)
 

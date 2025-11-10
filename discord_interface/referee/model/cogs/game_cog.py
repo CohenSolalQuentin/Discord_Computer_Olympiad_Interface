@@ -404,7 +404,10 @@ if __name__ != "__main__":
                     # Display end game information
                     # print('The game has ended:', datetime.now().strftime("%H:%M"))
                     await message.channel.send(f'The game has ended')
-                    await message.channel.send(f'{self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].mention} won')
+                    if self.bot.referee.game.winner in [0.5, '0.5', 'draw','nul']:
+                        await message.channel.send('The game is a draw')
+                    else:
+                        await message.channel.send(f'{self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].mention} won')
                     self.alarme()
                     self.alarme()
                 except Exception as e:
@@ -431,13 +434,21 @@ if __name__ != "__main__":
             ok = False
             # Try to translate into an AI-understable language the move, and play it on the referee game instance
             try:
+                """print(move, self.bot.referee.game.string_to_action(move))
+                print(self.bot.referee.game.__class__.__name__)
+                print(self.bot.referee.game.jeu.__class__.__name__)
+                print(self.bot.referee.game.jeu.historique)
+                print(self.bot.referee.game.jeu.coupsLicites())
+                print(self.bot.referee.game.valid_actions())
+                print(self.bot.referee.game.historique_partial_moves)
+                print(self.bot.referee.game.partial_moves)"""
 
                 action = self.bot.referee.game.string_to_action(move)
                 assert action is not None, f"The move ({move}) translation is a None object"
                 if not self.bot.referee.game.actions_validation_enabled or action in self.bot.referee.game.valid_actions():
                     self.bot.referee.game.plays(action)
                 else:
-                    raise Exception("Illegal action in that state.")
+                    raise Exception("Illegal action in that state :'"+str(action)+"'"+str(self.bot.referee.game.valid_actions()))
 
             # ...If the move is translated into a None object it means there is an issue in the translation functions
             except AssertionError as e:
@@ -459,6 +470,8 @@ if __name__ != "__main__":
                     print('>>',action, move)
                     print('>>',self.bot.referee.game.valid_actions())
                     print(list(map(lambda a: self.bot.referee.game.action_to_string(a), self.bot.referee.game.valid_actions())))
+                    if hasattr(self.bot.referee.game, 'jeu'):
+                        print('H =',[(a,b) for a,b, *_ in self.bot.referee.game.jeu.historique])
                     # Displaying valid moves
                     await message.channel.send(
                         f'valid moves : {list(map(lambda a: self.bot.referee.game.action_to_string(a), self.bot.referee.game.valid_actions()))}')
@@ -539,7 +552,10 @@ if __name__ != "__main__":
                     # Display end game information
                     #print('The game has ended:', datetime.now().strftime("%H:%M"))
                     await message.channel.send(f'The game has ended')
-                    await message.channel.send(f'{self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].mention} won')
+                    if self.bot.referee.game.winner in [0.5, '0.5', 'draw', 'nul']:
+                        await message.channel.send('The game is a draw')
+                    else:
+                        await message.channel.send(f'{self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].mention} won')
                     self.alarme()
                     self.alarme()
                 except Exception as e:

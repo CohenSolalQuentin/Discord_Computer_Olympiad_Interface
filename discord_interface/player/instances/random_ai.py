@@ -20,6 +20,8 @@ class RandomAI(Player):
 
         action = self.best_move(self.game)
 
+
+
         self.game.plays(action)
 
         return action
@@ -39,6 +41,8 @@ class RandomAI(Player):
         perdants = []
         nuls = []
         autres = []
+
+
 
         for coup in jeu.valid_actions():
             jeu.plays(coup)

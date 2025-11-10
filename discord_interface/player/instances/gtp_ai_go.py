@@ -58,7 +58,9 @@ class GTP_AI_Go(Textual_AI):
                 if c.isdigit():
                     is_number= True
         #print('>',move, '>>', action)
-        return action.upper()
+            if action[-1].isdigit():
+                return action.upper()
+        return action
 
     def move_conversion_to_gtp(self, action):
         return action.lower().replace('-','')

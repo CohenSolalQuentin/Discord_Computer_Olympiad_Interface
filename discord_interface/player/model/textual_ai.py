@@ -44,7 +44,7 @@ class Textual_AI(Player):
             self.timeout = timeout
             self.history = []
 
-            self.move_keywords = move_keywords
+            self.move_keywords_init = move_keywords
 
             if program_directory != '' and program_directory[-1] != '/':
                 program_directory=program_directory+'/'
@@ -58,7 +58,6 @@ class Textual_AI(Player):
             #self.advance_profiling = advance_profiling
             self.black_first = True
 
-            self.build_move_verifier()
 
             self.endgame_imply_quit = endgame_imply_quit
 
@@ -85,6 +84,15 @@ class Textual_AI(Player):
         self.game = None
         self.game_name = game_name
 
+        game = EnumGames.find_game(game_name)
+        if game is None:
+            game_move_keywords = []
+        else:
+            game_move_keywords = game.move_keywords
+
+        self.move_keywords = self.move_keywords_init + game_move_keywords
+        self.build_move_verifier()
+
         if self.processus is None:
             self.init()
 
@@ -100,6 +108,7 @@ class Textual_AI(Player):
         return ['c', 'chance']
 
     def build_move_verifier(self):
+
         if self.move_keywords == []:
             move_pattern = EnumPattern.RAW_PATTERN_MOVE.value
         else:
