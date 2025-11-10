@@ -132,15 +132,21 @@ class InterfaceJeuDiscord(Game):
 
 
     def numbification(self, string):
+        #print('>',string)
         if string[0].isdigit():
             return string
         else:
             lettre = string[0]
             chiffre = string[1:]
 
-            lettre=str(self.ANTI_CORRESPONDENCE[lettre])
+            if lettre in self.ANTI_CORRESPONDENCE and chiffre.isdigit():
 
-            return lettre+','+str(int(chiffre)-1)
+                lettre=str(self.ANTI_CORRESPONDENCE[lettre])
+
+                return lettre+','+str(int(chiffre)-1)
+
+            else:
+                return string
 
         # String.valueOf(letter - 'A') + "," + (Integer.parseInt(s.substring(1)) - 1);
 

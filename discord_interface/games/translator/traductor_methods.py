@@ -75,7 +75,7 @@ def correspondance_nom_jeu_python_ludii(nom_jeu):
         return 'Brazilian Draughts'
     elif 'canadiennes' in nom_jeu:
         return 'Canadian Draughts'
-    elif 'dames' in nom_jeu:
+    elif 'dames' in nom_jeu or 'draughts' in nom_jeu:
         return 'International Draughts'
     elif 'shobu' in nom_jeu:
         return 'Shobu'
@@ -199,7 +199,7 @@ def correspondance_action_python_ludii(jeu, Jeu, coup):
         else:
             return correspondance[j] + str(Jeu.taille - i)
 
-    elif 'xiangqi' in jeu:
+    elif 'xiangqi' in jeu or 'chinese-chess' in jeu or 'chinese_chess' in jeu:
         i1, j1 = i
         i2, j2 = j
         return correspondance[j1] + str(Jeu.longueur - i1) + '-' + correspondance[j2] + str(Jeu.longueur - i2)
@@ -345,6 +345,7 @@ def correspondance_action_python_ludii(jeu, Jeu, coup):
                 31: 75,
             }
 
+            return correspondance[j] + str(Jeu.taille - i)
             if Jeu.historique and (i,j) == Jeu.historique[-1][:2]:
                 return str(corresp_tour_zone_piece[Jeu.tour - 1]) + '-' + correspondance[j] + str(Jeu.taille - i)
             else:
@@ -359,17 +360,59 @@ def correspondance_action_python_ludii(jeu, Jeu, coup):
                 i2a, j2a = i2
                 i2b, j2b = j2
 
-                return (correspondance[j2a] + str(Jeu.taille - i2a) + '-' + correspondance[j2b] + str(Jeu.taille - i2b),
+                """return (correspondance[j2a] + str(Jeu.taille - i2a) + '-' + correspondance[j2b] + str(Jeu.taille - i2b),
                         correspondance[j1] + str(Jeu.taille - i1) + '-' + correspondance[j2a] + str(Jeu.taille - i2a),
-                        )
+                        )"""
+                return correspondance[j2a] + str(Jeu.taille - i2a) + '-' + correspondance[j2b] + str(Jeu.taille - i2b) +'-'+ correspondance[j1] + str(Jeu.taille - i1) + '-' + correspondance[j2a] + str(Jeu.taille - i2a)
             else:
                 i1a, j1a = i1
                 i1b, j1b = j1
 
-                return (correspondance[j1a] + str(Jeu.taille - i1a) + '-' + correspondance[j1b] + str(Jeu.taille - i1b), correspondance[j2] + str(Jeu.taille - i2), )#correspondance[j1b] + str(Jeu.taille - i1b) + '-' +
+                #return (correspondance[j1a] + str(Jeu.taille - i1a) + '-' + correspondance[j1b] + str(Jeu.taille - i1b), correspondance[j2] + str(Jeu.taille - i2), )#correspondance[j1b] + str(Jeu.taille - i1b) + '-' +
+                return correspondance[j1a] + str(Jeu.taille - i1a) + '-' + correspondance[j1b] + str(Jeu.taille - i1b) + '-' + correspondance[j2] + str(Jeu.taille - i2)
 
     elif 'quoridor' in jeu:
-        raise NotImplementedError()
+        (i1, i2), (j1, j2) = i, j
+
+        def quoridor_pos(i, j):
+            return correspondance[j] + str(Jeu.taille - i)
+
+        if i1 % 2 == 0 and i2 % 2 == 0:
+            #print('?')
+            return quoridor_pos(i1//2, i2//2) + '-' + quoridor_pos(j1//2, j2//2)
+            #return correspondance[j1//2] + str(Jeu.taille - i1//2) + '-' + correspondance[j2//2] + str(Jeu.taille - i2//2)
+        else:
+            if i1 % 2 == 0:
+                assert j1 % 2 == 0
+
+                i1 = i1 // 2
+                j1 = j1 // 2
+
+                i2m = i2 // 2
+                j2m = j2 // 2
+
+                i2p = i2 // 2 + 1
+                j2p = j2 // 2 + 1
+
+                return quoridor_pos(i1, i2m) + '-' + quoridor_pos(i1, i2p) + '-' + quoridor_pos(j1, j2m) + '-' + quoridor_pos(j1, j2p)
+
+
+            else:
+                assert i2 % 2 == 0
+                assert j2 % 2 == 0
+
+                i2 = i2 // 2
+                j2 = j2 // 2
+
+                i1m = i1 // 2
+                j1m = j1 // 2
+
+                i1p = i1 // 2 + 1
+                j1p = j1 // 2 + 1
+
+                return quoridor_pos(i1m, i2) + '-' + quoridor_pos(i1p, i2) + '-' + quoridor_pos(j1m, j2) + '-' + quoridor_pos(j1p, j2)
+
+        #raise NotImplementedError()
     else:
         if isinstance(i, int):
             return correspondance[j] + str(Jeu.taille - i)
@@ -412,7 +455,7 @@ def reorientation(nom_jeu, jeu, coup):
 
     if 'amazons' in nom_jeu or 'clobber' in nom_jeu:
         return chiffre, lettre
-    elif 'xiangqi' in nom_jeu:
+    elif 'xiangqi' in nom_jeu or 'chinese-chess' in nom_jeu or 'chinese_chess' in nom_jeu:
         return jeu.longueur - 1 - chiffre, lettre
     elif 'dames-chinoises' in nom_jeu:
 

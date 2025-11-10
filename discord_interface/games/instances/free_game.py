@@ -1,4 +1,4 @@
-import numpy as np
+
 from discord_interface.games.mygame import *
 
 

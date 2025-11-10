@@ -5,7 +5,12 @@ This file contains a class called EnumGames that stores games used by the Refere
 from enum import Enum#, verify, UNIQUE
 
 from discord_interface.games.instances.amazons import AmazonsDiscord
+from discord_interface.games.instances.arimaa import ArimaaDiscord
+from discord_interface.games.instances.ataxx import AtaxxDiscord
+from discord_interface.games.instances.brazilian_draughts import BrazilianDraughtsDiscord
 from discord_interface.games.instances.breakthrough import BreakthroughDiscord
+from discord_interface.games.instances.canadian_draughts import CanadianDraughtsDiscord
+from discord_interface.games.instances.chinese_chess import ChineseChessDiscord
 from discord_interface.games.instances.clobber import *
 
 #Metadata
@@ -14,21 +19,58 @@ __copyright__ = "Copyright 2025, Interface Computer Olympiad"
 __status__ = "Development"
 __email__ = "oscar.perianayagassamy@dauphine.eu"
 
+from discord_interface.games.instances.connect6 import Connect6Discord
+
 from discord_interface.games.instances.free_game import FreeGame
-from discord_interface.games.instances.gtp_game import GTP_Game
+from discord_interface.games.instances.havannah10 import Havannah10Discord
+from discord_interface.games.instances.havannah8 import Havannah8Discord
+from discord_interface.games.instances.hex11 import Hex11Discord
+from discord_interface.games.instances.hex13 import Hex13Discord
+from discord_interface.games.instances.hex19 import Hex19Discord
+from discord_interface.games.instances.international_draughts import InternationalDraughtsDiscord
+from discord_interface.games.instances.lines_of_action import LinesOfActionDiscord
+from discord_interface.games.instances.othello10 import Othello10Discord
+from discord_interface.games.instances.othello16 import Othello16Discord
+from discord_interface.games.instances.othello8 import Othello8Discord
+from discord_interface.games.instances.outer_open_gomoku import OuterOpenGomokuDiscord
+from discord_interface.games.instances.quoridor import QuoridorDiscord
 from discord_interface.games.instances.santorini import SantoriniDiscord
+from discord_interface.games.instances.shobu import ShobuDiscord
+from discord_interface.games.instances.surakarta import SurakartaDiscord
 
 if __name__ != "__main__":
 
     #@verify(UNIQUE)
     class EnumGames(Enum):
+        QUORIDOR = QuoridorDiscord()
+        SHOBU = ShobuDiscord()
+
         BREAKTHROUGH = BreakthroughDiscord()
         SANTORINI = SantoriniDiscord()
         AMAZONS = AmazonsDiscord()
         CLOBBER = Clobber()
         #AMAZONS_BUGUER = AmazonsDiscordBugger()
+        LINES_OF_ACTION = LinesOfActionDiscord()
+        HEX11 = Hex11Discord()
+        HEX13 = Hex13Discord()
+        HEX19 = Hex19Discord()
+        SURAKARTA = SurakartaDiscord()
+        OUTER_OPEN_GOMOKU = OuterOpenGomokuDiscord()
+        CONNECT6 = Connect6Discord()
+        INTERNATIONAL_DRAUGHTS = InternationalDraughtsDiscord()
+        CANADIAN_DRAUGHTS = CanadianDraughtsDiscord()
+        BRAZILIAN_DRAUGHTS = BrazilianDraughtsDiscord()
+
+        ARIMAA = ArimaaDiscord()
+        CHINESE_CHESS = ChineseChessDiscord()
+        ATAXX = AtaxxDiscord()
+        HAVANNAH8 = Havannah8Discord()
+        HAVANNAH10 = Havannah10Discord()
+        OTHELLO8 = Othello8Discord()
+        OTHELLO10 = Othello10Discord()
+        OTHELLO16 = Othello16Discord()
         FREE_GAME = FreeGame()
-        GTP_GAME = GTP_Game()
+        #GTP_GAME = GTP_Game()
         #ECHECS = EchecDiscord()
 
 
