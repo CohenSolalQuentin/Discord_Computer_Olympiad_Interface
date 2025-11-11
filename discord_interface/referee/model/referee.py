@@ -1,10 +1,9 @@
-import asyncio
-from asyncio import CancelledError
+
 from datetime import datetime, timedelta
 
 from discord_interface.games.mygame import Game
-from discord_interface.utils.mytime import Time, Timer
-from discord import User, TextChannel, Message, DiscordServerError
+from discord_interface.utils.mytime import Time
+from discord import User, TextChannel, Message
 from random import randint
 from typing import Tuple
 from typing import Any
@@ -14,8 +13,6 @@ __author__ = "Oscar PERIANAYAGASSAMY"
 __copyright__ = "Copyright 2025, Interface Computer Olympiad"
 __status__ = "Development"
 __email__ = "oscar.perianayagassamy@dauphine.eu"
-
-from discord_interface.utils.terminal import red
 
 if __name__ != '__main__':
 
@@ -284,6 +281,9 @@ if __name__ != '__main__':
                 # Associate the i-th player to the i-th player in the internal game order structure
                 self.player_correspondence[player] = l
                 self.player_anti_correspondence[l] = player
+
+
+            self.player_anti_correspondence[-1] = None
 
             # Initialise the iterator
             self.current_turn = self.player_anti_correspondence[self.game.get_current_player()]

@@ -998,6 +998,45 @@ if __name__ != "__main__":
                     import traceback
                     traceback.print_exc()
 
+            # chance move
+            elif message.author.id == self.player.referee_id and self.move_verifier(message.content) and message.channel == self.player.channel:
+
+                current_player = await self.get_current_player()
+
+                try:
+                    action = self.player.string_to_action(message.content)
+                    assert action is not None, f"the move ({message.content}) translation into an action is None"
+                except Exception as e:
+                    await self.error_procedure(channel=message.channel,
+                                               error_message="An error with the game action translator occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                               exception=e)
+                else:
+                    try:
+                        if self.async_opponent_plays:
+                            await self.player.opponent_plays(action)  # Update the game instance associated with the player
+
+                        else:
+                            self.player.opponent_plays(action)  # Update the game instance associated with the player
+                    except Exception as e:
+                        await self.error_procedure(channel=message.channel,
+                                                   error_message="An error while playing opponent's validated move occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down. Action:"+str(action),
+                                                   exception=e)
+
+                self.bot_play_log['moves'].append(message.content)
+
+                await self.save_bot_play_log()
+
+                try:
+                    new_current_player = await self.get_current_player()
+                    if current_player == new_current_player:
+                        self.opponent_referee_delay_instruction_message.message = message
+
+                    else:
+                        self.self_referee_delay_instruction_message.message = message
+                except Exception:
+                    import traceback
+                    traceback.print_exc()
+
             # ...Otherwise, nothing has to be done
             else:
                 pass
@@ -1033,6 +1072,12 @@ if __name__ != "__main__":
 
             # ...Otherwise, if the message respects the syntax of a move, and was written in the right chanel by the opponent
             elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
+
+                return False
+
+
+            # chance move
+            elif message.author.id == self.player.referee_id and self.move_verifier(message.content) and message.channel == self.player.channel:
 
                 return False
 
@@ -1642,6 +1687,33 @@ if __name__ != "__main__":
 
                 # ...Otherwise, do nothing
                 # The Referee will send new instructions for the opponent in this case, so it will trigger again in_game_process()
+
+
+            elif message.author.id == self.player.referee_id and self.move_verifier(message.content) and message.channel == self.player.channel:
+
+                try:
+                    action = self.player.string_to_action(message.content)
+                    assert action is not None, f"the move ({message.content}) translation into an action is None"
+                except Exception as e:
+                    await self.error_procedure(channel=message.channel,
+                                               error_message="An error with the game action translator occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                               exception=e)
+                else:
+                    try:
+                        if self.async_opponent_plays:
+                            await self.player.opponent_plays(action)  # Update the game instance associated with the player
+
+                        else:
+                            self.player.opponent_plays(action)  # Update the game instance associated with the player
+                    except Exception as e:
+                        await self.error_procedure(channel=message.channel,
+                                                   error_message="An error while playing opponent's validated move occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                                   exception=e)
+
+                self.bot_play_log['moves'].append(message.content)
+
+                await self.save_bot_play_log()
+
 
             # ...Otherwise, nothing has to be done
             else:

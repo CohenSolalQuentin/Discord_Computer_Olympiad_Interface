@@ -3,6 +3,7 @@ import pickle
 from asyncio import CancelledError
 from datetime import datetime
 from json import JSONDecodeError
+from random import random, choice
 from time import time, perf_counter
 
 import aiofiles
@@ -104,7 +105,10 @@ if __name__ != "__main__":
                 if not self.bot.referee.in_end_game and not self.bot.referee.game.ended():
                     await self.time_exceed_treatment(message)
 
-                # No need to treat our model's own messages except in the previous case
+            if message.author == self.bot.user and self.bot.referee.game.get_current_player() == -1:
+                return True
+
+            # No need to treat our model's own messages except in the previous case
             if message.author == self.bot.user:
                 self.processed_ids.add(message.id)
                 return False
@@ -196,7 +200,7 @@ if __name__ != "__main__":
 
             # If the referee is in-game and the message contains a unique argument, and was sent by a player in the dedicated channel
             if self.bot.referee.game.move_verifier.fullmatch(
-                    message.content) and self.bot.referee.in_game and not self.bot.referee.paused and not self.bot.referee.in_end_game and message.author in self.bot.referee.players and message.channel == self.bot.referee.channel:
+                    message.content) and self.bot.referee.in_game and not self.bot.referee.paused and not self.bot.referee.in_end_game and (message.author in self.bot.referee.players or message.author == self.bot.user) and message.channel == self.bot.referee.channel:
 
 
                 # Retrieve the move
@@ -384,6 +388,8 @@ if __name__ != "__main__":
             # Stop the chronometer
             #&#self.cog_unload_chronometer()
 
+            current_player = self.bot.referee.game.get_current_player()
+
             if move == 'resign':
 
                 self.bot.referee.game.terminate(winner=1-self.bot.referee.game.get_current_player())
@@ -483,7 +489,8 @@ if __name__ != "__main__":
             else:
                 #print('x1')
                 # Store the move in memory
-                self.bot.bot_ref_log[self.bot.referee.current_turn.id].append(move)
+                if current_player != -1:
+                    self.bot.bot_ref_log[self.bot.referee.current_turn.id].append(move)
                 self.bot.bot_ref_log["moves"].append(move)
 
                 #print('x2')
@@ -502,24 +509,30 @@ if __name__ != "__main__":
 
                 ok = True
 
-            #print('x4')
-            # Update time fields and retrieve the current player
-            if self.instruction_message is not None and self.instruction_message.ended_time is None:#-# if self.instruction_message.ended_time is None:
-                self.instruction_message.ended_time = time()
-                #print('<',orange(self.bot.referee.time_remaining_player[self.bot.referee.current_turn]))
-                player = self.bot.referee.update_turn(self.instruction_message.message, message)
-                #print('>',orange(self.bot.referee.time_remaining_player[self.bot.referee.current_turn]),'\n')
-            else:
-                # cas où je joueur jouerait trop vite (avant que le nouveau message d'instruction ne soit créé : si c'est pas None, c'est que le message d'instruction actuel correspond à un autre message (précédent);
-                player = self.bot.referee.current_turn
-            #print('x5')
+
+            if current_player != -1:
+                #print('x4')
+                # Update time fields and retrieve the current player
+                if self.instruction_message is not None and self.instruction_message.ended_time is None:#-# if self.instruction_message.ended_time is None:
+                    self.instruction_message.ended_time = time()
+                    #print('<',orange(self.bot.referee.time_remaining_player[self.bot.referee.current_turn]))
+                    player = self.bot.referee.update_turn(self.instruction_message.message, message)
+                    #print('>',orange(self.bot.referee.time_remaining_player[self.bot.referee.current_turn]),'\n')
+                else:
+                    # cas où je joueur jouerait trop vite (avant que le nouveau message d'instruction ne soit créé : si c'est pas None, c'est que le message d'instruction actuel correspond à un autre message (précédent);
+                    player = self.bot.referee.current_turn
+                #print('x5')
 
             if ok:
-                if self.bot.referee.time_per_move_activated:
-                    self.bot.referee.time_remaining_player[player] = self.bot.referee.game.time_per_player
+                if current_player != -1:
+                    if self.bot.referee.time_per_move_activated:
+                        self.bot.referee.time_remaining_player[player] = self.bot.referee.game.time_per_player
+
+                    await self.chance_move_treatment()
 
                 # Update turn
                 self.bot.referee.next_turn()
+
 
             #print('X2')
             """# Verify that the current player has some time left
@@ -614,6 +627,47 @@ if __name__ != "__main__":
             #print('X8')
             await self.save_backup()
             #print('X9')
+
+        def selection_uniforme(self, coups, probas):
+            s = 0
+
+            somme = sum([probas[cp] for cp in coups])
+
+            r = random() * somme
+
+            for cp in coups:
+                s += probas[cp]
+                if s > r:
+                    return cp
+
+            assert r == somme
+            return choice(coups)
+
+        async def chance_move_treatment(self):
+
+            while self.bot.referee.game.get_current_player() == -1:
+                #print('*')
+
+                chance = self.selection_uniforme(self.bot.referee.game.valid_actions(), self.bot.referee.game.get_action_probabilities())
+
+                self.bot.referee.game.plays(chance)
+
+                self.bot.bot_ref_log["moves"].append(chance)
+
+                try:
+                    chance = self.bot.referee.game.action_to_string(chance)
+                    M = await self.bot.referee.channel.send(chance)
+                    await M.add_reaction('🟩')
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
+                    raise e
+
+                await self.save_bot_ref_log()
+
+                self.bot.referee.next_turn()
+
+
 
         #&#
         async def display_next_turn_info(self, channel: TextChannel, custom_elapsed_time: Time=None):
@@ -874,14 +928,14 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         #async def _start(self, ctx: Context, player1: User, player2: User, *args: None) -> None:
         async def _start(self, ctx: Context, player1: str, player2: str, *args: None) -> None:
-            print(player1, player2)
+            #print(player1, player2)
 
             player1 = self.resolve_member_or_role(ctx, player1)
             player2 = self.resolve_member_or_role(ctx, player2)
 
-            print('here', player1, player2)
+            #print('here', player1, player2)
 
-            #print("???")
+
             """Command that starts the game
 
             After verifying that the bot is neither in game nor in preparation, invoke the function that starts the game
@@ -904,20 +958,25 @@ if __name__ != "__main__":
             if not self.bot.correct_context(ctx):
                 return
 
+            #print("???")
 
             # Checking section
             # To start a game, the model should be in 'in-game' mode
             if self.bot.check_in_game():
                 raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
 
+            #print('A0')
+
             # If the model is already in preparation, can't start a game
             if self.bot.check_in_preparation():
                 raise commands.CheckFailure("The model shouldn't be in preparation when invoking this command.")
 
+            #print('B0')
+
             # The two players must be different
             if player1 == player2:
                 return
-
+            #print('?')
             await self.start_game(ctx, player1, player2)
 
         async def start_game(self, ctx: Context, player1: User, player2: User):
@@ -958,6 +1017,7 @@ if __name__ != "__main__":
             # Preparation phase
             self.bot.referee.prepare()
             self.bot.referee.set_players((player1, player2))
+
             self.bot.referee.set_turns()  # Set the order of turns using a uniform distribution (P1 -> P2 -> P1 -> P2 etc)
 
             # Duration of the timer that waits for player to be ready
@@ -989,12 +1049,12 @@ if __name__ != "__main__":
             # One that manages the timer of the specified duration
             # Two that wait for the players to react appropriately to the starting message
             try:
-                #print('$1')
+
                 coro_timer = self.launch_timer(prep_message, players_involved, players_to_react, duration)
-                #print('$2')
+
                 coro_wait_player1 = self.wait_react(prep_message, duration, players_to_react,
                                                     self.bot.referee.players[0])
-                #print('$3')
+
                 coro_wait_player2 = self.wait_react(prep_message, duration, players_to_react,
                                                     self.bot.referee.players[1])
 
@@ -1106,6 +1166,8 @@ if __name__ != "__main__":
                     # Serializes the structure
                     await self.save_bot_ref_log()
 
+                    await self.chance_move_treatment()
+
                     # Displaying next turn info
                     #&#self.instruction_message = InstructionMessage(message=await self.bot.referee.display_next_turn_info(ctx.channel))
                     self.instruction_message = None
@@ -1129,6 +1191,7 @@ if __name__ != "__main__":
             # In all cases, set _timer_cancel to False for next games
             finally:
                 self.bot._timer_cancel = False
+
 
             #print('-start_game')
 

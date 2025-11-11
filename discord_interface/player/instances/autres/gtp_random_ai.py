@@ -3,6 +3,7 @@ from random import choice
 from discord_interface.games.instances.amazons import AmazonsDiscord
 from discord_interface.games.instances.arimaa import ArimaaDiscord
 from discord_interface.games.instances.ataxx import AtaxxDiscord
+from discord_interface.games.instances.backgammon import BackgammonDiscord
 from discord_interface.games.instances.brazilian_draughts import BrazilianDraughtsDiscord
 from discord_interface.games.instances.breakthrough import BreakthroughDiscord
 from discord_interface.games.instances.canadian_draughts import CanadianDraughtsDiscord
@@ -148,16 +149,19 @@ if __name__ == '__main__':
                 print('=','#','Othello 16 start!')
             elif arg[0].lower() == 'ataxx':
                 game = AtaxxDiscord()
-                print('=','#','Ataxx 16 start!')
+                print('=','#','Ataxx start!')
             elif arg[0].lower() == 'chinese-chess' or arg[0].lower() == 'chinese_chess':
                 game = ChineseChessDiscord()
-                print('=','#','Chinese Chess 16 start!')
+                print('=','#','Chinese Chess start!')
             elif arg[0].lower() == 'quoridor':
                 game = QuoridorDiscord()
-                print('=','#','Quoridor 16 start!')
+                print('=','#','Quoridor start!')
+            elif arg[0].lower() == 'backgammon':
+                game = BackgammonDiscord()
+                print('=','#','Backgammon start!')
             else:
                 game = None
-                print('=','#','Game does not implemented (available games: Amazons, Clobber, Breakthrough, Santorini.')
+                print('=','#','Game does not implemented.')
         else:
 
             if game is None:
