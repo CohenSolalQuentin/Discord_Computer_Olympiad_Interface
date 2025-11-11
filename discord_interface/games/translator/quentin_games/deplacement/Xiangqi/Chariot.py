@@ -1,5 +1,4 @@
-from jeux.deplacement.Piece import Piece
-
+from discord_interface.games.translator.quentin_games.deplacement.Piece import Piece
 
 class Chariot(Piece):
 

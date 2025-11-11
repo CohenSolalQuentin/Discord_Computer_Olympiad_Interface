@@ -16,7 +16,7 @@ class QuoridorDiscord(InterfaceJeuDiscord):
         def trad(string):
 
             string = self.numbification(string)
-            print(string)
+            #print(string)
             lettre, chiffre = string.split(',')
             lettre = int(lettre)
             chiffre = int(chiffre)

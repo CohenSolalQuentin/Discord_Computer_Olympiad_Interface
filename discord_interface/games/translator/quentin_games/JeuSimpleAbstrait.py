@@ -1,6 +1,5 @@
 import numpy as np
 
-from jeux.Jeux_abstraits.JeuAbstrait import JeuAbstrait
 
 taille_par_defaut = 8
 

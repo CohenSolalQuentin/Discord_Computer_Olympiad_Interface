@@ -2,8 +2,6 @@ from time import time
 
 import numpy as np
 
-from jeux.Jeux_abstraits.S8 import S8
-
 taille_par_defaut = 8
 
 class Othello8():

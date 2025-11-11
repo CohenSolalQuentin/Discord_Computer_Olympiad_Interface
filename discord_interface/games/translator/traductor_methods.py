@@ -413,6 +413,21 @@ def correspondance_action_python_ludii(jeu, Jeu, coup):
                 return quoridor_pos(i1m, i2) + '-' + quoridor_pos(i1p, i2) + '-' + quoridor_pos(j1m, j2) + '-' + quoridor_pos(j1p, j2)
 
         #raise NotImplementedError()
+
+    elif 'backgammon' == jeu:
+        def coord(pos):
+            return 'P'+str(pos)
+
+        if isinstance(i, int):
+            return str(i)+'-'+str(j)
+        elif i is None:
+            return 'pass'
+        elif isinstance(j, int):# double
+            return str(j)+'-'+'-'.join([coord(p) for p in i])
+        elif j is None: # simple tronqué
+            return coord(i[0])+'-'+str(i[1])
+        else: # simple
+            return coord(i[0]) + '-' + str(i[1])+'-'+ coord(j[0])+'-'+str(j[1])
     else:
         if isinstance(i, int):
             return correspondance[j] + str(Jeu.taille - i)

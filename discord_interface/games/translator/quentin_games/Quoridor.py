@@ -2,11 +2,9 @@ from heapq import heapify, heappop, heappush
 
 import numpy as np
 
-from jeux.Jeux_abstraits.S2 import S2
-
 taille_par_defaut = 9
 
-class Quoridor(S2): # https://www.gigamic.com/files/catalog/products/rules/quoridor-classic-fr.pdf
+class Quoridor(): # https://www.gigamic.com/files/catalog/products/rules/quoridor-classic-fr.pdf
 
     def __init__(self, taille = taille_par_defaut, borne = 200):
 

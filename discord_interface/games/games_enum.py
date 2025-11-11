@@ -7,6 +7,7 @@ from enum import Enum#, verify, UNIQUE
 from discord_interface.games.instances.amazons import AmazonsDiscord
 from discord_interface.games.instances.arimaa import ArimaaDiscord
 from discord_interface.games.instances.ataxx import AtaxxDiscord
+from discord_interface.games.instances.backgammon import BackgammonDiscord
 from discord_interface.games.instances.brazilian_draughts import BrazilianDraughtsDiscord
 from discord_interface.games.instances.breakthrough import BreakthroughDiscord
 from discord_interface.games.instances.canadian_draughts import CanadianDraughtsDiscord
@@ -42,7 +43,7 @@ if __name__ != "__main__":
 
     #@verify(UNIQUE)
     class EnumGames(Enum):
-        QUORIDOR = QuoridorDiscord()
+        BACKGAMMON = BackgammonDiscord()
         SHOBU = ShobuDiscord()
 
         BREAKTHROUGH = BreakthroughDiscord()
@@ -60,6 +61,7 @@ if __name__ != "__main__":
         INTERNATIONAL_DRAUGHTS = InternationalDraughtsDiscord()
         CANADIAN_DRAUGHTS = CanadianDraughtsDiscord()
         BRAZILIAN_DRAUGHTS = BrazilianDraughtsDiscord()
+        QUORIDOR = QuoridorDiscord()
 
         ARIMAA = ArimaaDiscord()
         CHINESE_CHESS = ChineseChessDiscord()
