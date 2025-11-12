@@ -3,7 +3,7 @@ import numpy as np
 
 class Arimaa_vrai():
 
-    def __init__(self, borne=900, defaite_si_repet=True, repetition_max=1, num_type_hash=0, codage_piege=True):#
+    def __init__(self, borne=900, defaite_si_repet=True, repetition_max=2, num_type_hash=0, codage_piege=True):#
 
         self.codage_extras = 0
 

@@ -19,7 +19,7 @@ class Backgammon():
             self.gagnant = 'blanc'
 
         if not self.fini:
-            if len(self.historique) > self.longueur_max:
+            if self.borne and len(self.historique) > self.borne:
                 self.fini = True
                 if self.score_joueur[0] - self.score_joueur[1] > 0:
                     self.gagnant = 'noir'
@@ -388,7 +388,11 @@ class Backgammon():
             assert set(self.coups_licites) == set(self.probabilite_actions.keys())
 
     def __init__(self):
-        self.longueur_max = 500
+        self.borne = None
+        if self.borne:
+            self.longueur_max = self.borne
+        else:
+            self.longueur_max = 500
         self.init()
 
     def raz(self):

@@ -6,7 +6,7 @@ taille_par_defaut = 9
 
 class Quoridor(): # https://www.gigamic.com/files/catalog/products/rules/quoridor-classic-fr.pdf
 
-    def __init__(self, taille = taille_par_defaut, borne = 200):
+    def __init__(self, taille = taille_par_defaut, borne = None):
 
 
         self.dtype = 'int8'  # 'float32' # 'float'
@@ -278,7 +278,7 @@ class Quoridor(): # https://www.gigamic.com/files/catalog/products/rules/quorido
         return  100
 
     def fin_secondaire(self):
-        return self.extra >= self.seuil_fin() or  self.tour >= self.borne
+        return self.extra >= self.seuil_fin() or self.borne and self.tour >= self.borne
 
     def test_fini(self):
 
