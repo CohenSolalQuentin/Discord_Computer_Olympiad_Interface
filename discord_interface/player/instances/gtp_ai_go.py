@@ -4,6 +4,10 @@ from discord_interface.utils.mytime import Time
 
 class GTP_AI_Go(Textual_AI):
 
+    async def replay_history(self):
+
+        for color, move in self.history:
+            await self.send('play ' + color + ' ' + move)
 
     async def reset(self):
 
@@ -14,6 +18,7 @@ class GTP_AI_Go(Textual_AI):
 
     async def undo(self):
         await self.send('undo')
+        self.history.pop()
 
 
     def get_response_symbol(self):
@@ -27,11 +32,17 @@ class GTP_AI_Go(Textual_AI):
         await self.undo()
 
     async def replays(self, action):
-        await self.send('play '+self.self_color()+' '+self.move_conversion_to_gtp(action))
+        color = self.self_color()
+        move = self.move_conversion_to_gtp(action)
+        await self.send('play '+color+' '+move)
+        self.history.append((color, move))
 
 
     async def opponent_plays(self, action):
-        await self.send('play '+self.opponent_color()+' '+self.move_conversion_to_gtp(action))
+        color = self.opponent_color()
+        move = self.move_conversion_to_gtp(action)
+        await self.send('play '+ color +' '+move)
+        self.history.append((color, move))
 
 
 
@@ -40,7 +51,10 @@ class GTP_AI_Go(Textual_AI):
         await self.send('time_left ' + self.self_color() + ' ' + str(time_left.to_seconds()))
         await self.send('time_left ' + self.opponent_color() + ' ' + str(opponent_time_left.to_seconds()))
         #print('A')
-        action = await self.send('genmove '+str(self.self_color()))
+
+        action = await self.send('genmove '+self.self_color())
+        self.history.append((self.self_color(), action))
+
         #print("'"+action+"'")
         action = self.move_conversion_from_gtp(action)
         #print("'"+self.move_conversion_from_gtp(action)+"'")

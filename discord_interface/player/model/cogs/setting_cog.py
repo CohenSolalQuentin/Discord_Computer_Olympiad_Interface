@@ -107,6 +107,40 @@ if __name__ != '__main__':
             #print('-continue')
 
 
+
+        @commands.command(name='gtp_replay', description='Restart the GTP program and have it replay the match (to try to unfreeze the bot in case of a GTP issue).', aliases=['gr'])
+        #@commands.dm_only()
+        @commands.guild_only()
+        async def _gtp_replay(self, ctx: Context) -> None:
+            #print("???")
+            """Command that starts the game
+
+            After verifying that the bot is neither in game nor in preparation, invoke the function that starts the game
+
+            PARAMETERS
+            ----------
+            ctx : discord.Context
+                The invocation context.
+
+            RETURNS
+            -------
+            None
+            """
+            #print('+continue')
+            # Checking section
+            # To start a game, the model should be in 'in-game' mode
+            if not self.bot.check_in_game():
+                raise commands.CheckFailure("The model should be in game when invoking this command.")
+
+            # If the author is not the owner, raise a CheckFailure...
+            if not self.bot.check_owner(ctx.author):
+                #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                return
+
+            await self.bot.player.replay_the_match()
+            #print('-continue')
+
+
         @commands.command(name='slow_continue', description='Continue the match [alternative (slow) command].', aliases=['sc'])
         #@commands.dm_only()
         @commands.guild_only()

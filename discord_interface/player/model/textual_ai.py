@@ -98,6 +98,16 @@ class Textual_AI(Player):
 
         await self.send('game '+game_name)
 
+    async def replay_the_match(self):
+        await self.terminate()
+
+        self.init()
+
+        await self.send('game '+self.game_name)
+
+        await self.replay_history()
+
+
     def get_white_words(self):
         return ['w', 'white']
 

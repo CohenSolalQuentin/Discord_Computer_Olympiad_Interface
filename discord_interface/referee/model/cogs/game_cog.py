@@ -928,12 +928,12 @@ if __name__ != "__main__":
         #@RefereeBot.check_guild()
         #async def _start(self, ctx: Context, player1: User, player2: User, *args: None) -> None:
         async def _start(self, ctx: Context, player1: str, player2: str, *args: None) -> None:
-            #print(player1, player2)
+            print(player1, player2)
 
             player1 = self.resolve_member_or_role(ctx, player1)
             player2 = self.resolve_member_or_role(ctx, player2)
 
-            #print('here', player1, player2)
+            print('here', player1, player2)
 
 
             """Command that starts the game
@@ -958,25 +958,27 @@ if __name__ != "__main__":
             if not self.bot.correct_context(ctx):
                 return
 
-            #print("???")
+            print("???")
 
             # Checking section
             # To start a game, the model should be in 'in-game' mode
             if self.bot.check_in_game():
                 raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
 
-            #print('A0')
+            print('A0')
 
             # If the model is already in preparation, can't start a game
             if self.bot.check_in_preparation():
                 raise commands.CheckFailure("The model shouldn't be in preparation when invoking this command.")
 
-            #print('B0')
+            print('B0')
 
             # The two players must be different
             if player1 == player2:
+                await ctx.send(f'The two players must be different.')
                 return
-            #print('?')
+
+            print('?')
             await self.start_game(ctx, player1, player2)
 
         async def start_game(self, ctx: Context, player1: User, player2: User):
@@ -1002,7 +1004,7 @@ if __name__ != "__main__":
             None
             """
 
-            #print('+start_game')
+            print('+start_game')
             self.messages_history = []
 
             self.timeout_player = None
@@ -1013,18 +1015,22 @@ if __name__ != "__main__":
             players_involved = [player1.mention, player2.mention]  # transforming the User objects into strings
 
             #asyncio.create_task(self.loop_monitor())
-
+            print('M-1')
             # Preparation phase
             self.bot.referee.prepare()
             self.bot.referee.set_players((player1, player2))
 
-            self.bot.referee.set_turns()  # Set the order of turns using a uniform distribution (P1 -> P2 -> P1 -> P2 etc)
+            print('M0')
 
+            self.bot.referee.set_turns()  # Set the order of turns using a uniform distribution (P1 -> P2 -> P1 -> P2 etc)
+            print('Ma')
             # Duration of the timer that waits for player to be ready
             duration = 15*60#180#20
 
             # Waiting for all reactions to be added
             players_to_react = [player for player in self.bot.referee.players]  # List of player expected to react
+
+            print('Mb')
 
             txt = f'**[rules]** {self.bot.referee.game.rules}\n'
             desc = (f"Game is starting ! \n"
@@ -1036,6 +1042,7 @@ if __name__ != "__main__":
                     #f"**[time per move mode]** {'Activated' if self.bot.referee.time_per_move_activated else 'Deactivated'}\n"
                     f"**[total time]** {self.bot.referee.game.time_per_player}")
 
+            print('Mc')
             try:
                 prep_message = await ctx.send(desc)
                 await prep_message.add_reaction('👍')
@@ -1045,6 +1052,7 @@ if __name__ != "__main__":
                 traceback.print_exc()
                 raise e
 
+            print('Md')
             # Launch at the same time three coroutines
             # One that manages the timer of the specified duration
             # Two that wait for the players to react appropriately to the starting message
@@ -1058,11 +1066,11 @@ if __name__ != "__main__":
                 coro_wait_player2 = self.wait_react(prep_message, duration, players_to_react,
                                                     self.bot.referee.players[1])
 
-                #print('$4')
+                print('$4')
                 _, react1, react2 = await asyncio.gather(coro_timer, coro_wait_player1,
                                      coro_wait_player2)  # it returns each coroutine returned components
 
-                #print('$5')
+                print('$5')
 
             # Case where the timer limit is reached
             except TimeoutError:
