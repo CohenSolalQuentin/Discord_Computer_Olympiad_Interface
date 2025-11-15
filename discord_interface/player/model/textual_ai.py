@@ -81,8 +81,9 @@ class Textual_AI(Player):
         self.history = []
 
     async def update_game(self, game_name:str):
-        self.game = None
-        self.game_name = game_name
+        super().update_game(game_name)
+        #self.game = None
+        #self.game_name = game_name
 
         game = EnumGames.find_game(game_name)
         if game is None:

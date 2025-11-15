@@ -8,10 +8,14 @@ class RandomAI(Player):
         super().__init__(game=game)
 
     def opponent_plays(self, action):
+        #print('o:',action)
         self.game.plays(action)
 
 
+
     def replays(self, action):
+
+        #print('sr:',action)
         self.game.plays(action)
 
 
@@ -24,6 +28,7 @@ class RandomAI(Player):
 
         self.game.plays(action)
 
+        #print('s:',action)
         return action
 
 

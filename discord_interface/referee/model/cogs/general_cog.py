@@ -1,5 +1,5 @@
 import aiofiles
-from discord import Colour, Embed
+from discord import Colour, Embed, User
 from discord.ext import commands
 from discord_interface.referee.model.referee_bot import RefereeBot
 import json
@@ -163,3 +163,24 @@ if __name__ != "__main__":
 
 
 
+        @commands.command(name = 'increase_time', description = 'Increase the time of player X by Y seconds.')
+        @commands.has_permissions(administrator = True)
+        @commands.guild_only()
+        #@RefereeBot.check_guild()
+        async def _increase_time(self, ctx: Context, user:User, time:int) -> None:
+            """Command that resets the current referee instance."""
+
+            if not self.bot.correct_context(ctx):
+                return
+
+            if not self.bot.check_in_game():
+                raise commands.CheckFailure(message ="The model should be in game when invoking the dump command.")
+
+
+            try:
+                self.bot.referee.increase_time(user, time)
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e

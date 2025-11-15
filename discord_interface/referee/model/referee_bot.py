@@ -1,4 +1,5 @@
 import asyncio
+from collections import defaultdict
 
 from discord import Intents
 from discord.ext import commands
@@ -65,6 +66,10 @@ if __name__ != "__main__":
             self._json_file = ''
             self._bot_ref_log = {}
 
+            self.operator = defaultdict(lambda:None)
+
+
+
         def check_in_game(self) -> bool:
             """Check function that verifies whether the referee instance is in game or not"""
             return self.referee.in_game
@@ -87,7 +92,8 @@ if __name__ != "__main__":
 
         def check_player_in_game(self, ctx: Context) -> bool:
             """Check function that verifies if the author of the contextual message is one of the players of the ongoing game (if such a game is going on)"""
-            return ctx.message.author in (self.referee.players if self.referee.players else [])
+            #^#
+            return ctx.message.author in (self.referee.players if self.referee.players else []) or ctx.message.author in [self.operator[player] for player in self.referee.players]
 
         def check_stop_activated(self) -> bool:
             """Check function that verifies whether the referee instance has the stop option activated or not"""

@@ -1,4 +1,5 @@
 from asyncio import sleep
+from collections import defaultdict
 from datetime import datetime
 from json import JSONDecodeError
 from time import time
@@ -52,6 +53,11 @@ if __name__ != "__main__":
         def __init__(self, player: Player, owner_id: int, guild_id: int, intents: Intents, date: str) -> None:
             super().__init__(command_prefix='!', intents=intents,
                              help_command=None)  # DefaultHelpCommand(dm_help=True, show_hidden=True, verify_checks=False))
+
+
+            self.freezed = False
+            self.freezed_message = None
+
             self.player = player  # setting up the Player instance that will be modified through the execution
             self.owner_id = owner_id
             self.guild_id = guild_id
@@ -98,6 +104,27 @@ if __name__ != "__main__":
 
             self.resigning = False
 
+            self.operator = defaultdict(lambda:None)
+
+
+        def is_opponent_message(self, message):
+            """print('?')
+            print(message.author)
+            print(self.player.get_opponent())
+            print(message.author)
+            print(self.operator[self.player.get_opponent()])
+            print(self.player.game.get_current_player())
+            print('x:',self.player.player_number)"""
+
+            #print(message.author , self.player.get_opponent() , '/',message.author , self.operator[self.player.get_opponent()] ,'/', self.player.game.get_current_player() , self.player.player_number)
+
+            return message.author == self.player.get_opponent() or message.author == self.operator[self.player.get_opponent()] and self.player.game.get_current_player() != self.player.player_number
+
+        def is_self_message(self, message):
+            #print(message.author , self.user , message.author , self.operator[self.user] , self.player.game.get_current_player() , self.player.player_number)
+            return message.author == self.user or message.author == self.operator[self.user] and self.player.game.get_current_player() == self.player.player_number
+
+
 
         async def on_ready(self) -> None:
             """Coroutine that is triggered when the model is ready."""
@@ -130,7 +157,11 @@ if __name__ != "__main__":
             #print('on ready...')
 
             for guild in self.guilds:
-                print(f'We have logged in as {self.user} on {guild.name}')
+                if self.guild_id == guild.id:
+                    print(f'We have logged in as {self.user} on {guild.name}')
+                else:
+                    print(f'The bot is registred in another guild: {guild.name} as {self.user}')
+
 
             #*#if self.last_channel_id:
             try:
@@ -259,24 +290,39 @@ if __name__ != "__main__":
                         last_game_file = os.path.join('log/bot_play_log', file)
 
                 if last_game_file != "":
+                    try:
 
-                    async with aiofiles.open(last_game_file, mode="r") as f:
-                        content = await f.read()
-                        loading = json.loads(content)
-                        """with open(last_game_file, mode="r") as file:
-                        loading = json.load(file)"""
+                        async with aiofiles.open(last_game_file, mode="r") as f:
+                            content = await f.read()
+                            loading = json.loads(content)
 
-                        # Check if the last match ended correctly or not
-                        if not only_not_ended or not loading['ended']:
-                            #print(loading)
-                            #print('log is loaded')
-                            self.last_bot_play_log = loading
+                            # Check if the last match ended correctly or not
+                            if not only_not_ended or not loading['ended']:
+                                self.last_bot_play_log = loading
+
+                    except JSONDecodeError as e:
+
+                        file = last_game_file+ '.last'
+
+                        if not os.path.exists(file):
+                            raise e
+
+                        async with aiofiles.open(file, mode="r") as f:
+                            content = await f.read()
+                            loading = json.loads(content)
+
+                            # Check if the last match ended correctly or not
+                            if not only_not_ended or not loading['ended']:
+                                self.last_bot_play_log = loading
+
 
                         ### RECOVERY SECTION
                         ####################
                         ####################
             except JSONDecodeError as e:
-                print('JSONDecodeError')
+                print('JSONDecodeError:',last_game_file)
+                import traceback
+                traceback.print_exc()
             except Exception as e:
                 import traceback
                 print('last_game_file:',last_game_file)
@@ -308,6 +354,47 @@ if __name__ != "__main__":
 
             return True
 
+        async def freeze(self):
+            #print('hein ?', not self.freeze, self.freeze)
+            if not self.freezed:
+                #print('freeze!')
+                self.freezed = True
+                #self.freezed_messages = []
+                self.freezed_message = None
+
+        async def unfreeze(self):
+            if self.freezed:
+                #print('unfreeze!')
+                """if self.freezed_message:
+                    if self.freezed_message.id in self.processed_ids:
+                        self.processed_ids.remove(self.freezed_message.id)
+                    await self.on_message(self.freezed_message)
+                print('...')"""
+                self.freezed = False
+                #print(len(self.freezed_messages))
+                if self.freezed_message is not None:
+                    #print('use fm:',self.freezed_message.content)
+                    await self.process(self.freezed_message)
+                """for message in self.freezed_messages:
+                    await self.on_message(message)"""
+
+
+        def freeze_continue(self, message):
+
+            #print(' <<<<fc:',self.freezed,self.is_self_message(message))
+            if self.freezed:
+                if (self.is_self_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel) or EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user not in message.mentions:
+                    #self.freezed_messages = []
+                    self.freezed_message = None
+                    #print('unset fm')
+
+                if EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user in message.mentions:
+                    #self.freezed_messages.append(message)
+                    self.freezed_message = message
+                    #print('set fm:',self.freezed_message.content)
+                    return False
+            return True
+
         async def on_message(self, message: Message) -> None:
             """coroutine that filters every message in order to keep only the one sent by other entities
 
@@ -320,6 +407,26 @@ if __name__ != "__main__":
             -------
             None
             """
+            #print(message.content,':',self.freezed, self.is_self_message(message), EnumCompiledPattern.is_instruction_message(message.content), self.user in message.mentions)
+            """
+            if self.freezed:
+                if self.is_self_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:
+                    self.freezed_messages = []
+
+                if EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user in message.mentions:
+                    self.freezed_messages.append(message)
+                    return
+
+
+                if message.content.startswith("%") or message.content.startswith("!"):
+                    self.processed_ids.add(message.id)
+                    traiter = await self.prepreprocessing(message)
+                    if traiter:
+                        await self.process_commands(message)
+                else:
+                    self.freezed_messages.append(message)
+                return"""
+            #print('?')
             try:
                 self.message_profiler[message.author.id] += 1
             except KeyError:
@@ -328,6 +435,14 @@ if __name__ != "__main__":
             #*#self.last_channel = message.channel
             #*#self.last_channel_id = message.channel.id
 
+            key = 'Operator:'
+            if message.content[:len(key)] == key:
+                self.operator[message.author]=message.mentions[0]
+                self.bot_play_log['operator'] = {player.id:self.operator[player].id for player in self.operator}
+                await self.save_bot_play_log()
+                return
+
+
             continuer = await self.prepreprocessing(message)
             if not continuer:
                 return
@@ -335,8 +450,9 @@ if __name__ != "__main__":
             ### RECUPERATION DES GAPS DE MESSAGE
             if message.id in self.processed_ids:
                 return
-
+            #print('A')
             async with self.message_lock:
+                #print('B')
                 if self.last_id:
                     manquer = False
                     first_analyser = False
@@ -365,7 +481,7 @@ if __name__ != "__main__":
                 self.last_id = message.id
 
                 if message.id not in self.processed_ids:
-                    #print('M:',message.author, message.content)
+                    #print('M delanchant:',message.author, message.content)
                     await self.preprocess(message)
                     self.processed_ids.add(message.id)
 
@@ -375,7 +491,9 @@ if __name__ != "__main__":
                 #print('process cmd')
                 await self.process_commands(message)
             else:
-                await self.process(message)
+                if self.freeze_continue(message):
+                    await self.process(message)
+
 
         async def process(self, message: Message) -> None:
             """coroutine that processes the message that is in input.
@@ -448,17 +566,19 @@ if __name__ != "__main__":
 
         def start_start_game(self, message):
 
+            self.resigning = False
+
             mentions = message.mentions  # Retrieve the mentions
 
             #print('AA')
             #print(message.content)
             # Recover here some information contained in the starting message
             start_information = dict(EnumCompiledPattern.analyse_start_message(message.content))
-            # print(start_information)
+            #print(start_information)
             #print('BB')
             #print(start_information)
             game_name = start_information['game name'].lower()
-            # print('>',game_name, start_information['game name'], start_information)
+            #print('>',game_name, start_information['game name'], start_information)
             #print('CC')
             total_time = Time.string_to_Time(start_information['total time'])
 
@@ -512,6 +632,10 @@ if __name__ != "__main__":
                     #print(e)
                 else:
                     #print('Ajout de la réaction')
+
+
+
+
                     await asyncio.sleep(1)  # Let some time for the RefereeBot to prepare to handle the reaction
                     try:
                         await message.add_reaction('👍')  # Inform the referee that the PlayerBot will play the game
@@ -567,6 +691,8 @@ if __name__ != "__main__":
             self.bot_play_log['total_time'] = str(self.player.total_time)
             self.bot_play_log['starting_time'] = str(Time.now())
 
+            self.bot_play_log['player_number'] = self.player.player_number
+
             #print('--')
 
             # Set the json file path
@@ -580,6 +706,17 @@ if __name__ != "__main__":
 
             self.player.set_channel(message.channel)
 
+            try:
+                user = await self.fetch_user(self.owner_id)
+                if self.owner_id and self.owner_id >= 0:
+                    await self.player.channel.send('Operator:' + str(user.mention))
+
+                else:
+                    await self.player.channel.send('Operator:None')
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+
             self.player.start()
             #print('-end_start_game')
 
@@ -591,10 +728,11 @@ if __name__ != "__main__":
                 return  self.player.move_verifier.fullmatch(text)
 
         async def get_current_player(self):
-            if self.player.game is not None:
+            return self.player.game.get_current_player()
+            """if self.player.game is not None:
                 return self.player.game.get_current_player()
             else:
-                return await self.player.get_current_player()
+                return await self.player.get_current_player()"""
 
         def resign(self):
             self.resigning = True
@@ -624,9 +762,15 @@ if __name__ != "__main__":
             # (In short: if it is the PlayerBot's turn to play a move)
 
             #print(message.author , self.player.get_opponent() , self.move_verifier(message.content), message.content)
+            #print(self.is_opponent_message(message),'<',message.content)
+            if self.is_self_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:#^#
+                if self.user == message.author:
+                    print('CATA')
+                assert self.user != message.author
+                await self.in_game_reprocess(message)
 
-            if EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user in message.mentions and message.channel == self.player.channel:
-
+            elif EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user in message.mentions and message.channel == self.player.channel:
+                #print('>>>', message.content,':', EnumCompiledPattern.is_instruction_message(message.content) , message.author.id == self.player.referee_id , self.user in message.mentions , message.channel == self.player.channel)
                 if self.resigning:
                     self.resigning = False
 
@@ -851,7 +995,8 @@ if __name__ != "__main__":
                     traceback.print_exc()
 
             # ...Otherwise, if the message respects the syntax of a move, and was written in the right chanel by the opponent
-            elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
+            #^#elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
+            elif self.is_opponent_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:
                 #print('!!!!!! !!!!!!')
 
                 current_player = await self.get_current_player()
@@ -1071,8 +1216,8 @@ if __name__ != "__main__":
                 return False
 
             # ...Otherwise, if the message respects the syntax of a move, and was written in the right chanel by the opponent
-            elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
-
+            #^#elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
+            elif self.is_opponent_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:
                 return False
 
 
@@ -1081,17 +1226,13 @@ if __name__ != "__main__":
 
                 return False
 
-            # ...Otherwise, if the message respects the syntax of a move, and was written in the right chanel by the opponent
-            elif message.author == self.user and self.move_verifier(message.content) and message.channel == self.player.channel:
+            # ...Otherwise, if the message respects the syntax of a move, and was written in the right chanel by self
+            #^#elif message.author == self.user and self.move_verifier(message.content) and message.channel == self.player.channel:
+            elif self.is_self_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:
 
                 current_player = await self.get_current_player()
 
-                move = message.content
 
-                if self.async_replays:
-                    await self.player.replays(self.player.string_to_action(move))
-                else:
-                    self.player.replays(self.player.string_to_action(move))
 
                 try:
 
@@ -1174,25 +1315,35 @@ if __name__ != "__main__":
                 #print('g4')
                 # If the move is valid...
                 if emoji == '🟩':
+
+                    move = message.content
+
+                    if self.async_replays:
+                        await self.player.replays(self.player.string_to_action(move))
+                    else:
+                        self.player.replays(self.player.string_to_action(move))
+
                     self.player.last_actions_self.append(move)  # Record it internally
                     self.bot_play_log['self_moves'].append(move)  # Record it for json serialisation
                     self.bot_play_log['moves'].append(move)
 
                     await self.save_bot_play_log()
 
+                    new_current_player = await self.get_current_player()
+                    if current_player == new_current_player:
+                        self.self_referee_delay_instruction_message.message = message
+
+                    else:
+                        self.opponent_referee_delay_instruction_message.message = message
+
                 #print('g5')
                 # Otherwise, do nothing
-                if emoji == '🟥':
-                    await self.player.invalid_action_processing()
+                """if emoji == '🟥':
+                    await self.player.invalid_action_processing()"""
 
                 #print('g6')
 
-                new_current_player = await self.get_current_player()
-                if current_player == new_current_player:
-                    self.self_referee_delay_instruction_message.message = message
 
-                else:
-                    self.opponent_referee_delay_instruction_message.message = message
 
                 #print('G7')
 
@@ -1257,6 +1408,10 @@ if __name__ != "__main__":
         async def save_bot_play_log(self):
             """with open(self.json_file, 'w') as file:
                 json.dump(self.bot_play_log, file)"""
+
+            if os.path.exists(self.json_file):
+                os.rename(self.json_file, self.json_file+'.last')
+
 
             self.bot_play_log['message_profiler'] = self.message_profiler
             self.bot_play_log['reaction_profiler'] = self.reaction_profiler
@@ -1323,97 +1478,105 @@ if __name__ != "__main__":
 
         async def continue_match(self, context):
             #print('+continue_match')
-            try:
-                self.bot_play_log = self.last_bot_play_log
 
-                self.plays_time = self.bot_play_log['plays_time']
-                self.deconnection_lost_time = self.bot_play_log['deconnection_lost_time']
 
-                self.last_id = self.bot_play_log['last_id']
-                #*#self.last_channel = context.channel
-                #*#self.last_channel_id = context.channel.id
-                self.processed_ids = set(self.bot_play_log['processed_ids'])
-
-                self.player.set_total_time(Time.string_to_Time(self.bot_play_log['total_time']))
-                #print('CA')
+            if not self.player.is_in_game():
                 try:
+                    self.bot_play_log = self.last_bot_play_log
 
-                    if self.async_update_game:
-                        await self.player.update_game(self.bot_play_log['game_name'])
-                    else:
-                        self.player.update_game(self.bot_play_log['game_name'])
+                    self.player.player_number = self.bot_play_log['player_number']
+                    for player, operator in self.bot_play_log['operator'].items():
+                        self.operator[await self.fetch_user(player)] = await self.fetch_user(operator)
 
-                # ...If an exception is raised print it, and do not set ready for game.
+
+                    self.plays_time = self.bot_play_log['plays_time']
+                    self.deconnection_lost_time = self.bot_play_log['deconnection_lost_time']
+
+                    self.last_id = self.bot_play_log['last_id']
+                    #*#self.last_channel = context.channel
+                    #*#self.last_channel_id = context.channel.id
+                    self.processed_ids = set(self.bot_play_log['processed_ids'])
+
+                    self.player.set_total_time(Time.string_to_Time(self.bot_play_log['total_time']))
+                    #print('CA')
+                    try:
+
+                        if self.async_update_game:
+                            await self.player.update_game(self.bot_play_log['game_name'])
+                        else:
+                            self.player.update_game(self.bot_play_log['game_name'])
+
+                    # ...If an exception is raised print it, and do not set ready for game.
+                    except Exception as e:
+                        import traceback
+                        print(red(traceback.format_exc()))
+                    #print('CB')
+                    self.player.set_referee_id(self.bot_play_log['referee_id'])
+
+                    self.player.set_opponent(await self.fetch_user(self.bot_play_log['players'][1]))
+
+                    self.player.set_starting_time(Time.string_to_Time(self.bot_play_log['starting_time']))
+
+                    self.set_json_file(self.user.id, context.guild.name, context.channel.name, self.date, self.player.starting_time.get_logformated())
+
+                    self.player.set_channel(context.channel)
+
+                    self.message_profiler = self.bot_play_log['message_profiler']
+                    self.reaction_profiler = self.bot_play_log['reaction_profiler']
+                    self.message_edit_profiler = self.bot_play_log['message_edit_profiler']
+
+                    try:
+                        if self.bot_play_log['opponent_instruction_message'][0] is None:
+                            self.opponent_instruction_message.message = None
+
+                        else:
+                            self.opponent_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['opponent_instruction_message'][0])
+                        self.opponent_instruction_message.time = Time.string_to_Time(self.bot_play_log['opponent_instruction_message'][1])
+
+                        if self.bot_play_log['self_instruction_message'][0] is None:
+                            self.self_instruction_message.message = None
+
+                        else:
+                            self.self_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['self_instruction_message'][0])
+                        self.self_instruction_message.time = Time.string_to_Time(self.bot_play_log['self_instruction_message'][1])
+
+
+                        if self.bot_play_log['opponent_referee_delay_instruction_message'][0] is None:
+                            self.opponent_referee_delay_instruction_message.message = None
+
+                        else:
+                            self.opponent_referee_delay_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['opponent_referee_delay_instruction_message'][0])
+                        self.opponent_referee_delay_instruction_message.time = Time.string_to_Time(self.bot_play_log['opponent_referee_delay_instruction_message'][1])
+
+                        if self.bot_play_log['self_referee_delay_instruction_message'][0] is None:
+                            self.self_referee_delay_instruction_message.message = None
+
+                        else:
+                            self.self_referee_delay_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['self_referee_delay_instruction_message'][0])
+                        self.self_referee_delay_instruction_message.time = Time.string_to_Time(self.bot_play_log['self_referee_delay_instruction_message'][1])
+                    except Exception:
+                        import traceback
+                        traceback.print_exc()
+
+                    #print('CC')
+                    self.player.start()
+                    #print('CD')
+                    for move in self.last_bot_play_log['moves']:
+                        if self.async_replays:
+                            await self.player.replays(self.player.string_to_action(move))
+                        else:
+                            self.player.replays(self.player.string_to_action(move))
+                        #print('>',move)#, len(self.player.jeu.historique)
+
+                    #print('op. id:',self.player.opponent.id, self.bot_play_log['players'])
+                    #print('CE')
+                    await self.reprise_des_messages(lock=False)
+                    #print('CF')
+
+                    #print('op. id:',self.player.opponent.id, self.bot_play_log['players'])
                 except Exception as e:
                     import traceback
                     print(red(traceback.format_exc()))
-                #print('CB')
-                self.player.set_referee_id(self.bot_play_log['referee_id'])
-
-                self.player.set_opponent(await self.fetch_user(self.bot_play_log['players'][1]))
-
-                self.player.set_starting_time(Time.string_to_Time(self.bot_play_log['starting_time']))
-
-                self.set_json_file(self.user.id, context.guild.name, context.channel.name, self.date, self.player.starting_time.get_logformated())
-
-                self.player.set_channel(context.channel)
-
-                self.message_profiler = self.bot_play_log['message_profiler']
-                self.reaction_profiler = self.bot_play_log['reaction_profiler']
-                self.message_edit_profiler = self.bot_play_log['message_edit_profiler']
-
-                try:
-                    if self.bot_play_log['opponent_instruction_message'][0] is None:
-                        self.opponent_instruction_message.message = None
-
-                    else:
-                        self.opponent_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['opponent_instruction_message'][0])
-                    self.opponent_instruction_message.time = Time.string_to_Time(self.bot_play_log['opponent_instruction_message'][1])
-
-                    if self.bot_play_log['self_instruction_message'][0] is None:
-                        self.self_instruction_message.message = None
-
-                    else:
-                        self.self_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['self_instruction_message'][0])
-                    self.self_instruction_message.time = Time.string_to_Time(self.bot_play_log['self_instruction_message'][1])
-
-
-                    if self.bot_play_log['opponent_referee_delay_instruction_message'][0] is None:
-                        self.opponent_referee_delay_instruction_message.message = None
-
-                    else:
-                        self.opponent_referee_delay_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['opponent_referee_delay_instruction_message'][0])
-                    self.opponent_referee_delay_instruction_message.time = Time.string_to_Time(self.bot_play_log['opponent_referee_delay_instruction_message'][1])
-
-                    if self.bot_play_log['self_referee_delay_instruction_message'][0] is None:
-                        self.self_referee_delay_instruction_message.message = None
-
-                    else:
-                        self.self_referee_delay_instruction_message.message = await context.channel.fetch_message(self.bot_play_log['self_referee_delay_instruction_message'][0])
-                    self.self_referee_delay_instruction_message.time = Time.string_to_Time(self.bot_play_log['self_referee_delay_instruction_message'][1])
-                except Exception:
-                    import traceback
-                    traceback.print_exc()
-
-                #print('CC')
-                self.player.start()
-                #print('CD')
-                for move in self.last_bot_play_log['moves']:
-                    if self.async_replays:
-                        await self.player.replays(self.player.string_to_action(move))
-                    else:
-                        self.player.replays(self.player.string_to_action(move))
-                    #print('>',move)#, len(self.player.jeu.historique)
-
-                #print('op. id:',self.player.opponent.id, self.bot_play_log['players'])
-                #print('CE')
-                await self.reprise_des_messages(lock=False)
-                #print('CF')
-
-                #print('op. id:',self.player.opponent.id, self.bot_play_log['players'])
-            except Exception as e:
-                import traceback
-                print(red(traceback.format_exc()))
 
             #print('-continue_match')
 
@@ -1487,9 +1650,9 @@ if __name__ != "__main__":
             #print('+in_game_reprocess')
             # If the message contains instruction, mentions the PlayerBot instance, is written in the same chanel as the start message, and was sent by a model...
             # (In short: if it is the PlayerBot's turn to play a move)
-            #if EnumCompiledPattern.is_instruction_message(message.content) and message.author.id == self.player.referee_id and self.user in message.mentions and message.channel == self.player.channel:
             #print(message.author == self.user , self.move_verifier(message.content) , message.channel == self.player.channel)
-            if message.author == self.user and self.move_verifier(message.content) and message.channel == self.player.channel:
+            #^#if message.author == self.user and self.move_verifier(message.content) and message.channel == self.player.channel:
+            if self.is_self_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:
                 #print('Analyse de la réaction de soi...')
 
                 if not self.connected:
@@ -1591,7 +1754,9 @@ if __name__ != "__main__":
 
 
             # ...Otherwise, if the message respects the syntax of a move, and was written in the right chanel by the opponent
-            elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
+            #^#elif message.author == self.player.get_opponent() and self.move_verifier(message.content) and message.channel == self.player.channel:
+            elif self.is_opponent_message(message) and self.move_verifier(message.content) and message.channel == self.player.channel:
+
                 #print('Analyse de la réaction de l adv...')
                 #print('!!!!!!')
                 if not self.connected:
@@ -1665,7 +1830,7 @@ if __name__ != "__main__":
                         assert action is not None, f"the move ({message.content}) translation into an action is None"
                     except Exception as e:
                         await self.error_procedure(channel=message.channel,
-                                                   error_message="An error with the game action translator occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                                   error_message="An error with the game action translator occurred (1). As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
                                                    exception=e)
                     else:
                         try:
@@ -1678,7 +1843,7 @@ if __name__ != "__main__":
                                 self.player.opponent_plays(action)  # Update the game instance associated with the player
                         except Exception as e:
                             await self.error_procedure(channel=message.channel,
-                                                       error_message="An error while playing opponent's validated move occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                                       error_message="An error while playing opponent's validated move occurred (2). As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
                                                        exception=e)
 
                     self.bot_play_log['moves'].append(message.content)
@@ -1696,7 +1861,7 @@ if __name__ != "__main__":
                     assert action is not None, f"the move ({message.content}) translation into an action is None"
                 except Exception as e:
                     await self.error_procedure(channel=message.channel,
-                                               error_message="An error with the game action translator occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                               error_message="An error with the game action translator occurred (3). As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
                                                exception=e)
                 else:
                     try:
@@ -1707,7 +1872,7 @@ if __name__ != "__main__":
                             self.player.opponent_plays(action)  # Update the game instance associated with the player
                     except Exception as e:
                         await self.error_procedure(channel=message.channel,
-                                                   error_message="An error while playing opponent's validated move occurred. As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
+                                                   error_message="An error while playing opponent's validated move occurred (4). As the action was validated by the referee, the problem is by player's side. The bot will shut down.",
                                                    exception=e)
 
                 self.bot_play_log['moves'].append(message.content)

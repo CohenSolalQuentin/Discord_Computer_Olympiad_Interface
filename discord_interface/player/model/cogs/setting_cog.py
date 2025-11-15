@@ -31,30 +31,43 @@ if __name__ != '__main__':
             """Coroutine that implements the quit command"""
             #print('> quit to close')
 
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                return
+            try:
 
-            # ...Otherwise shut down the model
-            await ctx.send(f"shutting down {self.bot.user.mention}...")
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
 
-            await self.bot.close()
+                # ...Otherwise shut down the model
+                await ctx.send(f"shutting down {self.bot.user.mention}...")
+
+                await self.bot.close()
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
 
         @commands.command(name="resign", description="command to resign.")
         #@commands.dm_only()
         async def _resign(self, ctx: Context, *args: None) -> None:
             """Coroutine that implements the resign command"""
 
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                #await ctx.send(f"test... "+str(ctx.author))
-                return
+            try:
 
-            #await ctx.send(f"resigning...")
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    #await ctx.send(f"test... "+str(ctx.author))
+                    return
 
-            await self.bot.resign()
+                #await ctx.send(f"resigning...")
+
+                await self.bot.resign()
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
 
 
 
@@ -92,19 +105,28 @@ if __name__ != '__main__':
             -------
             None
             """
-            #print('+continue')
-            # Checking section
-            # To start a game, the model should be in 'in-game' mode
-            if self.bot.check_in_game():
-                raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
 
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                return
+            try:
 
-            await self.bot.continue_match(ctx)#
-            #print('-continue')
+                #print('+continue')
+                # Checking section
+                # To start a game, the model should be in 'in-game' mode
+                if self.bot.check_in_game():
+                    return
+                    #raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
+
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
+
+                await self.bot.continue_match(ctx)#
+                #print('-continue')
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
 
 
 
@@ -129,16 +151,22 @@ if __name__ != '__main__':
             #print('+continue')
             # Checking section
             # To start a game, the model should be in 'in-game' mode
-            if not self.bot.check_in_game():
-                raise commands.CheckFailure("The model should be in game when invoking this command.")
 
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                return
+            try:
+                if not self.bot.check_in_game():
+                    raise commands.CheckFailure("The model should be in game when invoking this command.")
 
-            await self.bot.player.replay_the_match()
-            #print('-continue')
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
+
+                await self.bot.player.replay_the_match()
+                #print('-continue')
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
 
 
         @commands.command(name='slow_continue', description='Continue the match [alternative (slow) command].', aliases=['sc'])
@@ -190,12 +218,19 @@ if __name__ != '__main__':
             None
             """
 
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                return
+            try:
 
-            await self.bot.profile(ctx)
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
+
+                await self.bot.profile(ctx)
+
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
 
         @commands.command(name='load_log', description='Load last log.')
         # @commands.dm_only()
@@ -212,17 +247,20 @@ if __name__ != '__main__':
             -------
             None
             """
+            try:
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
 
-            # If the author is not the owner, raise a CheckFailure...
-            if not self.bot.check_owner(ctx.author):
-                #raise commands.CheckFailure("Only the owner of the model can use this command.")
-                return
+                if self.bot.check_in_game():
+                    raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
 
-            if self.bot.check_in_game():
-                raise commands.CheckFailure("The model shouldn't be in game when invoking this command.")
-
-            await self.bot.log_loading(only_not_ended=False)
-
+                await self.bot.log_loading(only_not_ended=False)
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
 
         @commands.command(name='conf_test', description='Test the configuration file.', aliases=['et'])
         #@commands.dm_only()
@@ -234,3 +272,76 @@ if __name__ != '__main__':
                 raise commands.CheckFailure("Bad OWNER_ID in parameters.conf")#'Bot id '+str(self.bot.user.id)+
 
             print(blue('All is OK!'))
+
+
+
+
+
+        @commands.command(name='freeze', description="Pauses the bot's play function.", aliases=['f'])#'The bot no longer processes messages in the conversation and therefore stops playing.'
+        #@commands.dm_only()
+        @commands.guild_only()
+        async def _freeze(self, ctx: Context) -> None:
+            print('+freeze')
+
+            """Command that starts the game
+
+            After verifying that the bot is in game but not in preparation, invoke the function that freeze the game
+
+            PARAMETERS
+            ----------
+            ctx : discord.Context
+                The invocation context.
+
+            RETURNS
+            -------
+            None
+            """
+            try:
+                if not self.bot.check_in_game():
+                    raise commands.CheckFailure("The model should be in game when invoking this command.")
+
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    #raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
+
+                await self.bot.freeze()
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e
+
+        @commands.command(name='unfreeze', description="Restarts the bot's play function.", aliases=['uf'])#'The bot processes messages again in the conversation and therefore restarts playing.'
+        # @commands.dm_only()
+        @commands.guild_only()
+        async def _unfreeze(self, ctx: Context) -> None:
+            print('+unfreeze')
+            """Command that starts the game
+
+            After verifying that the bot is in game but not in preparation, invoke the function that unfreeze the game
+
+            PARAMETERS
+            ----------
+            ctx : discord.Context
+                The invocation context.
+
+            RETURNS
+            -------
+            None
+            """
+
+            try:
+                if not self.bot.check_in_game():
+                    raise commands.CheckFailure("The model should be in game when invoking this command.")
+                #print('B')
+                # If the author is not the owner, raise a CheckFailure...
+                if not self.bot.check_owner(ctx.author):
+                    # raise commands.CheckFailure("Only the owner of the model can use this command.")
+                    return
+                #print('C')
+
+                await self.bot.unfreeze()
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                raise e

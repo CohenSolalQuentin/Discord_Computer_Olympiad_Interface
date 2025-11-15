@@ -30,19 +30,32 @@ class GTP_AI_Go(Textual_AI):
 
     async def invalid_action_processing(self):
         await self.undo()
+        self.game.undo()
 
     async def replays(self, action):
+
+
+        self.game.plays(action)
+
+        action = self.action_to_string(action)
+
         color = self.self_color()
         move = self.move_conversion_to_gtp(action)
         await self.send('play '+color+' '+move)
         self.history.append((color, move))
 
 
+
     async def opponent_plays(self, action):
+        self.game.plays(action)
+
+        action = self.action_to_string(action)
+
         color = self.opponent_color()
         move = self.move_conversion_to_gtp(action)
         await self.send('play '+ color +' '+move)
         self.history.append((color, move))
+
 
 
 
@@ -58,6 +71,12 @@ class GTP_AI_Go(Textual_AI):
         #print("'"+action+"'")
         action = self.move_conversion_from_gtp(action)
         #print("'"+self.move_conversion_from_gtp(action)+"'")
+
+
+        action = self.string_to_action(action)
+
+        self.game.plays(action)
+
         return action
 
     def move_conversion_from_gtp(self, move):

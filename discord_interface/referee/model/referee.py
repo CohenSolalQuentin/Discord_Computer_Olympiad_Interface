@@ -249,6 +249,9 @@ if __name__ != '__main__':
             """
             self.players = players
 
+        def set_referee(self, user:User):
+            self.referee_user = user
+
         def set_turns(self) -> None:
             """Method that initializes the turns
 
@@ -283,7 +286,7 @@ if __name__ != '__main__':
                 self.player_anti_correspondence[l] = player
 
 
-            self.player_anti_correspondence[-1] = None
+            self.player_anti_correspondence[-1] = self.referee_user
 
             # Initialise the iterator
             self.current_turn = self.player_anti_correspondence[self.game.get_current_player()]
@@ -353,6 +356,50 @@ if __name__ != '__main__':
 
             return player
 
+        def increase_time(self, player: User, time: int):
+            #print('+increase_time')
+
+            if player in self.players:
+
+                if time > 0:
+
+                    time = Time.seconds_to_Time(time)
+
+                    if player == self.current_turn:
+
+                        self.time_elapsed -= time
+
+                    """if self.time_remaining_player[player] - time_elapsed_player == Time(): # If the player exceeds it allowed time
+                        self.time_exceeding_player[player] += time_elapsed_player - self.time_remaining_player[player]"""
+
+                    try:
+                        self.time_elapsed_player[player] -= time
+                    except KeyError:
+                        self.time_elapsed_player[player] = Time()
+
+                    #print('\n\n',self.time_remaining_player[self.current_turn],'\n')
+                    self.time_remaining_player[player] += time
+                    #print('\n',self.time_remaining_player[self.current_turn],'\n\n')
+
+                else:
+                    time = Time.seconds_to_Time(-time)
+
+                    if player == self.current_turn:
+                        self.time_elapsed -= time
+
+                    """if self.time_remaining_player[player] - time_elapsed_player == Time(): # If the player exceeds it allowed time
+                        self.time_exceeding_player[player] += time_elapsed_player - self.time_remaining_player[player]"""
+
+                    try:
+                        self.time_elapsed_player[player] += time
+                    except KeyError:
+                        self.time_elapsed_player[player] = time
+
+                    #print('\n\n',self.time_remaining_player[self.current_turn],'\n')
+                    self.time_remaining_player[player] -= time
+                    #print('\n',self.time_remaining_player[self.current_turn],'\n\n')
+
+            #print('-increase_time')
 
         def regular_time_update_turn(self, time_elapsed_player: Time) -> User:
             """Method that updates the current turn, and the time in the regular time setting
@@ -488,7 +535,7 @@ if __name__ != '__main__':
                 Player that exceeded its time alloted
             """
             try:
-                print(f'{player.mention} has exceeded his allowed time:', datetime.now().strftime("%H:%M"))
+                #print(f'{player.mention} has exceeded his allowed time:', datetime.now().strftime("%H:%M"))
                 await channel.send(f'{player.mention} has exceeded his allowed time')
             except Exception as e:
                 import traceback
