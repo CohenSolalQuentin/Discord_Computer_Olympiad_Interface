@@ -1,14 +1,13 @@
 import json
-import os
 
+from discord_interface.games.game_viewing.interface.Interface_hex_dyna import Interface_hex_dyna
 from discord_interface.games.games_enum import Discord_Game
-from jeux.interfaces_graphiques.Interface_square_amazons import Interface_square_amazons
-from jeux.interfaces_graphiques.Interface_square_deplacement import Interface_square_deplacement
+from discord_interface.games.game_viewing.interface.Interface_square_amazons import Interface_square_amazons
+from discord_interface.games.game_viewing.interface.Interface_square_deplacement import Interface_square_deplacement
 
 import os
 
-class GameChange(Exception):
-    pass
+
 
 def more_recent_file(dossier: str) -> str | None:
     """
@@ -16,6 +15,7 @@ def more_recent_file(dossier: str) -> str | None:
     Si le dossier est vide ou ne contient pas de fichiers, retourne None.
     """
     # Liste les fichiers seulement (pas les sous-dossiers)
+    #print()
     fichiers = [os.path.join(dossier, f) for f in os.listdir(dossier)
                 if os.path.isfile(os.path.join(dossier, f))]
 
@@ -25,8 +25,8 @@ def more_recent_file(dossier: str) -> str | None:
     # Cherche le fichier avec le temps de modification le plus récent
     return max(fichiers, key=os.path.getmtime)
 
-def game_construction():
-    _json_file = more_recent_file('../log/bot_ref_log/')
+def game_construction(log_file):
+    _json_file = more_recent_file(log_file)
 
     with (open(_json_file, 'r') as file):
         _bot_ref_log = json.load(file)
@@ -36,50 +36,62 @@ def game_construction():
         histo = _bot_ref_log['moves']
 
         game_name = _bot_ref_log['game_name']
-        game = Discord_Game(game_name)
+        #print('game_name:', game_name)
+        #print('H:',histo)
+        game = Discord_Game(game_name).__class__()
         histo = [game.string_to_action(m) for m in histo]
 
         for a in histo:
+            #print(game.action_to_string(a))
+            #print(len(game.jeu.historique), game.valid_actions())
             assert a in game.valid_actions()
             game.plays(a)
 
 
     return game_name, game
 
-def lire_fichier_et_maj():
+
+
+
+def go_interface(log_file):
     global game_name
+    game_name, game = game_construction(log_file)
 
-    old_game_name = game_name
-    game_name, game = game_construction()
+    def lire_fichier_et_maj():
+        global game_name
 
-    if old_game_name != game_name:
-        interface.quit()
-        #raise GameChange()
+        old_game_name = game_name
+        game_name, game = game_construction(log_file)
 
-    interface.hex = game
+        if old_game_name != game_name:
+            interface.quit()
+            # raise GameChange()
 
-    #print(len(jeu.historique))
+        interface.hex = game
 
-    interface.actualisation_graphique(interface.canvas)
+        #print(len(jeu.historique))
 
-    # Relancer la lecture dans 1000 ms (1 seconde)
-    interface.after(1000, lire_fichier_et_maj)
+        interface.actualisation_graphique(interface.canvas)
+
+        # Relancer la lecture dans 1000 ms (1 seconde)
+        interface.after(1000, lire_fichier_et_maj)
 
 
-game_name, game = game_construction()
+    while True:
+        try:
+            if game_name == 'clobber' or game_name == 'breakthrough':
+                interface = Interface_square_deplacement(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False)
+            elif game_name == 'amazons':
+                interface = Interface_square_amazons(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False)
+            elif 'hex' in game_name or 'havannah' in game_name:
+                interface = Interface_hex_dyna(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False, affiche_coup_licites=False)
 
-while True:
-    try:
-        if game_name == 'clobber':
-            interface = Interface_square_deplacement(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False)
-        elif game_name == 'amazons':
-            interface = Interface_square_amazons(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False)
+            # Démarrer la boucle de lecture/maj
+            lire_fichier_et_maj()
 
-        # Démarrer la boucle de lecture/maj
-        lire_fichier_et_maj()
+            interface.lancer()
 
-        interface.lancer()
+            break
 
-    except GameChange:
-        """"""
-
+        except Exception:
+            """"""
