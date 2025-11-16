@@ -297,7 +297,7 @@ if __name__ != "__main__":
         async def reprise_des_messages(self, continue_reprise=False) -> None:
 
             #print('reprise_des_messages', self.last_id )#, self.last_channel
-            if self.last_id:# *# and self.last_channel:
+            if self.last_id and self.bot.referee.channel:# *# and self.last_channel:
                 #*#async for missed_msg in self.last_channel.history(after=Object(id=self.last_id), oldest_first=True):
                 async for missed_msg in self.bot.referee.channel.history(after=Object(id=self.last_id), oldest_first=True):
 
@@ -499,20 +499,23 @@ if __name__ != "__main__":
 
                 #print('>>>', message.content)
 
-                if self.bot.referee.game.get_current_player() == -1:
+                if reprise:
 
-                    move = message.content
+                    if self.bot.referee.game.get_current_player() == -1:
 
-                    action = self.bot.referee.game.string_to_action(move)
+                        move = message.content
 
-                    if action in self.bot.referee.game.valid_actions():
-                        self.bot.referee.game.plays(action)
+                        action = self.bot.referee.game.string_to_action(move)
 
-                        await message.add_reaction('🟩')
+                        if action in self.bot.referee.game.valid_actions():
+                            #print('???')
+                            self.bot.referee.game.plays(action)
 
-                        #print('>>>>',message.content)
+                            await message.add_reaction('🟩')
 
-                        ok = True
+                            #print('>>>>',message.content)
+
+                            ok = True
 
             else:
 
@@ -582,6 +585,7 @@ if __name__ != "__main__":
                     # Store the move in memory
                     if current_player != -1:
                         self.bot.bot_ref_log[self.bot.referee.current_turn.id].append(move)
+                    #print('*',move)
                     self.bot.bot_ref_log["moves"].append(move)
 
                     #print('x2')
@@ -765,13 +769,18 @@ if __name__ != "__main__":
 
                 self.bot.referee.game.plays(chance)
 
-                #print('-')
-                self.bot.bot_ref_log["moves"].append(chance)
+                #print('-',chance)
 
                 try:
+                    avant_trad = chance
                     chance = self.bot.referee.game.action_to_string(chance)
+                    #print(avant_trad, '>',chance, '-', len(self.bot.referee.game.jeu.historique))
                     M = await self.bot.referee.channel.send(chance)
+
+                    self.bot.bot_ref_log["moves"].append(chance)
+
                     await M.add_reaction('🟩')
+
                 except Exception as e:
                     import traceback
                     traceback.print_exc()
