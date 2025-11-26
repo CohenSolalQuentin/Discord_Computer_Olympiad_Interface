@@ -734,7 +734,7 @@ if __name__ != "__main__":
             else:
                 return await self.player.get_current_player()"""
 
-        def resign(self):
+        async def resign(self):
             self.resigning = True
 
         async def in_game_process(self, message: Message) -> None:
@@ -1967,4 +1967,5 @@ if __name__ != "__main__":
             try:
                 self.message_edit_profiler[after.author.id] += 1
             except KeyError:
+
                 self.message_edit_profiler[after.author.id] = 1
