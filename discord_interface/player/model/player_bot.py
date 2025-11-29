@@ -1409,52 +1409,54 @@ if __name__ != "__main__":
             """with open(self.json_file, 'w') as file:
                 json.dump(self.bot_play_log, file)"""
 
-            if os.path.exists(self.json_file):
-                os.rename(self.json_file, self.json_file+'.last')
+            if self.json_file:
+
+                if os.path.exists(self.json_file):
+                    os.rename(self.json_file, self.json_file+'.last')
 
 
-            self.bot_play_log['message_profiler'] = self.message_profiler
-            self.bot_play_log['reaction_profiler'] = self.reaction_profiler
-            self.bot_play_log['message_edit_profiler'] = self.message_edit_profiler
+                self.bot_play_log['message_profiler'] = self.message_profiler
+                self.bot_play_log['reaction_profiler'] = self.reaction_profiler
+                self.bot_play_log['message_edit_profiler'] = self.message_edit_profiler
 
-            self.bot_play_log['processed_ids'] = list(self.processed_ids)
-            self.bot_play_log['last_id'] = self.last_id
+                self.bot_play_log['processed_ids'] = list(self.processed_ids)
+                self.bot_play_log['last_id'] = self.last_id
 
-            try:
-                if self.opponent_instruction_message.message is None:
-                    self.bot_play_log['opponent_instruction_message'] = (None, str(self.opponent_instruction_message.time))
-                else:
-                    self.bot_play_log['opponent_instruction_message'] = (self.opponent_instruction_message.message.id, str(self.opponent_instruction_message.time))
+                try:
+                    if self.opponent_instruction_message.message is None:
+                        self.bot_play_log['opponent_instruction_message'] = (None, str(self.opponent_instruction_message.time))
+                    else:
+                        self.bot_play_log['opponent_instruction_message'] = (self.opponent_instruction_message.message.id, str(self.opponent_instruction_message.time))
 
-                if self.self_instruction_message.message is None:
-                    self.bot_play_log['self_instruction_message'] = (None, str(self.self_instruction_message.time))
-                else:
-                    self.bot_play_log['self_instruction_message'] = (self.self_instruction_message.message.id, str(self.self_instruction_message.time))
+                    if self.self_instruction_message.message is None:
+                        self.bot_play_log['self_instruction_message'] = (None, str(self.self_instruction_message.time))
+                    else:
+                        self.bot_play_log['self_instruction_message'] = (self.self_instruction_message.message.id, str(self.self_instruction_message.time))
 
-                if self.opponent_referee_delay_instruction_message.message is None:
-                    self.bot_play_log['opponent_referee_delay_instruction_message'] = (None, str(self.opponent_referee_delay_instruction_message.time))
-                else:
-                    self.bot_play_log['opponent_referee_delay_instruction_message'] = (self.opponent_referee_delay_instruction_message.message.id, str(self.opponent_referee_delay_instruction_message.time))
+                    if self.opponent_referee_delay_instruction_message.message is None:
+                        self.bot_play_log['opponent_referee_delay_instruction_message'] = (None, str(self.opponent_referee_delay_instruction_message.time))
+                    else:
+                        self.bot_play_log['opponent_referee_delay_instruction_message'] = (self.opponent_referee_delay_instruction_message.message.id, str(self.opponent_referee_delay_instruction_message.time))
 
-                if self.self_referee_delay_instruction_message.message is None:
-                    self.bot_play_log['self_referee_delay_instruction_message'] = (None, str(self.self_referee_delay_instruction_message.time))
-                else:
-                    self.bot_play_log['self_referee_delay_instruction_message'] = (self.self_referee_delay_instruction_message.message.id, str(self.self_referee_delay_instruction_message.time))
-            except Exception:
-                import traceback
-                traceback.print_exc()
+                    if self.self_referee_delay_instruction_message.message is None:
+                        self.bot_play_log['self_referee_delay_instruction_message'] = (None, str(self.self_referee_delay_instruction_message.time))
+                    else:
+                        self.bot_play_log['self_referee_delay_instruction_message'] = (self.self_referee_delay_instruction_message.message.id, str(self.self_referee_delay_instruction_message.time))
+                except Exception:
+                    import traceback
+                    traceback.print_exc()
 
 
-            self.bot_play_log['deconnection_lost_time'] = self.deconnection_lost_time
-            self.bot_play_log['plays_time'] = self.plays_time
+                self.bot_play_log['deconnection_lost_time'] = self.deconnection_lost_time
+                self.bot_play_log['plays_time'] = self.plays_time
 
-            try:
-                async with aiofiles.open(self.json_file, 'w') as f:
-                    await f.write(json.dumps(self.bot_play_log))
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-                raise e
+                try:
+                    async with aiofiles.open(self.json_file, 'w') as f:
+                        await f.write(json.dumps(self.bot_play_log))
+                except Exception as e:
+                    import traceback
+                    traceback.print_exc()
+                    raise e
 
         async def restart_game(self, message):
             game_name, mentions = self.start_start_game(message)
@@ -1967,5 +1969,4 @@ if __name__ != "__main__":
             try:
                 self.message_edit_profiler[after.author.id] += 1
             except KeyError:
-
                 self.message_edit_profiler[after.author.id] = 1
