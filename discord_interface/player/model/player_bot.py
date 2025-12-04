@@ -450,7 +450,7 @@ if __name__ != "__main__":
             ### RECUPERATION DES GAPS DE MESSAGE
             if message.id in self.processed_ids:
                 return
-            #print('A')
+            
             async with self.message_lock:
                 #print('B')
                 if self.last_id:
@@ -1731,7 +1731,15 @@ if __name__ != "__main__":
                 # If the move is valid...
                 if emoji == '🟩':
 
-                    self.player.last_actions_opponents.append(message.content)  # Record it internally
+                    self.player.last_actions_self.append(message.content)  # Record it internally
+
+                    if message.content == 'resign':
+                        self.player.game.terminate(winner=1 - await self.get_current_player())
+                        self.bot_play_log['moves'].append(message.content)
+
+                        await self.save_bot_play_log()
+
+                        return
 
                     try:
                         action = self.player.string_to_action(message.content)
