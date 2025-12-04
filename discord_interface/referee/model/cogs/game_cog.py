@@ -26,7 +26,7 @@ from typing import List
 import re
 
 # Metadata
-__author__ = "Oscar PERIANAYAGASSAMY"
+__author__ = "Oscar PERIANAYAGASSAMY & Quentin Cohen-Solal"
 __copyright__ = "Copyright 2025, Interface Computer Olympiad"
 __status__ = "Development"
 __email__ = "oscar.perianayagassamy@dauphine.eu"
@@ -2139,9 +2139,16 @@ if __name__ != "__main__":
             def check(reaction: Reaction, user: User) -> bool:
                 """Check function that verifies that the reaction added by user is 👍, and that user is enrolled in the game"""
                 try:
-                    return (str(
-                        reaction.emoji) == '👍' or str(
-                        reaction.emoji) == '👎') and (user == player or user == self.bot.operator[player]) and reaction.message.id == prep_message.id
+                    ok = str(reaction.emoji) == '👍' and user == player and reaction.message.id == prep_message.id
+
+                    not_ok = str(reaction.emoji) == '👎' and (user == player or user == self.bot.operator[player] or self.bot.operator[player] == None and user != self.bot.user) and reaction.message.id == prep_message.id
+
+
+                    #print(user, reaction, ':', ok or not_ok)
+                    #print(str(reaction.emoji) == '👍', str(reaction.emoji) == '👎', user == player, user == self.bot.operator[player], self.bot.operator[player] == None , user != self.bot.user)
+                    #print()
+
+                    return ok or not_ok
                 except:
                     print('DEBUG INFO:\t:',type(self.bot.operator))
                     print('DEBUG INFO:\t:',self.bot.operator)
@@ -2193,7 +2200,7 @@ if __name__ != "__main__":
 
             #print('FF')
             # If all players reacted positively, cancel the ongoing timer...
-            if players_to_react == [] or react == '👎':
+            if players_to_react == [] or str(react.emoji) == '👎':
                 self.bot._timer_cancel = True
 
             #print('GG', react)
@@ -2301,11 +2308,18 @@ Bottle.aiff	Glass.aiff	Ping.aiff	Sosumi.aiff"""
             #del self_dict['last_channel']
 
 
-            self_dict = remove_unpicklable(self_dict)
-            operators = {user.id:operator.id for user, operator in self.bot.operator.items()}
+            self_dict = remove_unpicklable(self_dict)#:operator.id
+            #print(self.bot.operator.items())
+
+            operators = {}
+            for user, operator in self.bot.operator.items():
+                if operator is not None:
+                    operators[user.id] = operator.id
+                else:
+                    operators[user.id] = None
 
 
-            #print('S4')
+                    #print('S4')
             del referee_dict['player_correspondence']
             del referee_dict['player_anti_correspondence']
             del referee_dict['current_turn']
@@ -2412,7 +2426,11 @@ Bottle.aiff	Glass.aiff	Ping.aiff	Sosumi.aiff"""
 
                 self.bot.operator = defaultdict(lambda: None)
                 for user, operator in operators.items():
-                    self.bot.operator[await self.bot.fetch_user(user)] = await self.bot.fetch_user(operator)
+                    if operator is not None:
+                        self.bot.operator[await self.bot.fetch_user(user)] = await self.bot.fetch_user(operator)
+                    else:
+                        self.bot.operator[await self.bot.fetch_user(user)] = None
+
 
 
                 #print('L1')
