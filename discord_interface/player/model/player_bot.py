@@ -587,9 +587,15 @@ if __name__ != "__main__":
 
             self.player.set_total_time(total_time)
 
+
             return game_name, mentions
 
 
+        async def get_ordered_mentions(self, message):
+            mention_pattern = r"<@!?(\d+)>"
+            ordered_ids = re.findall(mention_pattern, message.content)
+            # ordered_mentions = [message.guild.get_member(int(uid)) for uid in ordered_ids]
+            return [await message.guild.fetch_member(int(uid)) for uid in ordered_ids]
 
         async def general_process(self, message: Message) -> None:
             """coroutine that apply a general process to the message that is in input.
@@ -615,6 +621,8 @@ if __name__ != "__main__":
             if message.content.startswith("Game is starting !") and self.user in message.mentions and message.author.bot:
 
                 game_name, mentions = self.start_start_game(message)
+
+                ordered_mentions = await self.get_ordered_mentions(message)
 
                 #print('Mise à jour du jeu')
                 # Try to load the right game from the enumeration...
@@ -652,10 +660,10 @@ if __name__ != "__main__":
 
                     # ...Otherwise, If the emoji is 🟩, then the game will start soon
                     if reaction.emoji.__str__() == '🟩':
-                        await self.end_start_game(message=message, mentions=mentions)
+                        await self.end_start_game(message=message, mentions=mentions, ordered_mentions=ordered_mentions)
 
 
-        async def end_start_game(self, message, mentions):
+        async def end_start_game(self, message, mentions, ordered_mentions):
             #print('+end_start_game')
             self.player.set_referee_id(message.author.id)
 
@@ -669,8 +677,8 @@ if __name__ != "__main__":
             self.plays_time = 0
             self.last_deconnection_time = None
             self.deconnection_lost_time = 0
-
-            self.player.player_number = mentions.index(self.user)
+            #print('>ordered players:',ordered_mentions)
+            self.player.player_number = ordered_mentions.index(self.user)
             #print('#',self.player_number )
 
             mentions.remove(self.user)  # For the moment mentions has size 2, so if self.user is removed only the opponent will remain
@@ -1461,6 +1469,8 @@ if __name__ != "__main__":
         async def restart_game(self, message):
             game_name, mentions = self.start_start_game(message)
 
+            ordered_mentions = await self.get_ordered_mentions(message)
+
             #print('Mise à jour du jeu')
             # Try to load the right game from the enumeration...
             try:
@@ -1476,7 +1486,7 @@ if __name__ != "__main__":
                 print(red(traceback.format_exc()))
                 # print(e)
             else:
-                await self.end_start_game(message=message, mentions=mentions)
+                await self.end_start_game(message=message, mentions=mentions, ordered_mentions=ordered_mentions)
 
         async def continue_match(self, context):
             #print('+continue_match')
