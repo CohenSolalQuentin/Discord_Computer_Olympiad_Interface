@@ -611,9 +611,8 @@ if __name__ != "__main__":
                 # Update time fields and retrieve the current player
                 if self.instruction_message is not None and self.instruction_message.ended_time is None:#-# if self.instruction_message.ended_time is None:
                     self.instruction_message.ended_time = time()
-                    #print('<',orange(self.bot.referee.time_remaining_player[self.bot.referee.current_turn]))
+                    
                     player = self.bot.referee.update_turn(self.instruction_message.message, message)
-                    #print('>',orange(self.bot.referee.time_remaining_player[self.bot.referee.current_turn]),'\n')
                 else:
                     # cas où je joueur jouerait trop vite (avant que le nouveau message d'instruction ne soit créé : si c'est pas None, c'est que le message d'instruction actuel correspond à un autre message (précédent);
                     player = self.bot.referee.current_turn
@@ -631,24 +630,7 @@ if __name__ != "__main__":
                 # Update turn
                 self.bot.referee.next_turn()
 
-            #print('channel e:', self.bot.referee.channel)
 
-            #print('X2')
-            """# Verify that the current player has some time left
-            if self.bot.referee.time_remaining_player[player] == Time():
-                print('TIMEOUT: ',self.bot.referee.time_remaining_player[player] , Time(), )
-                print('chronometer.stop')
-                self.chronometer.ended = True
-                self.chronometer.stop()
-                self.bot.referee.enters_end_game()
-                self.instruction_message.reset()
-                self.bot.referee.wins(self.bot.referee.opposite(player))
-                await self.bot.referee.display_time_exceed(message.channel, player)"""
-
-
-            #print('X3')
-
-            #async with self.message_lock_beginend:
             # If the game has ended...
             if self.bot.referee.game.ended() or self.bot.referee.in_end_game:
                 #print('Traitement fin de partie classique')
@@ -820,9 +802,9 @@ if __name__ != "__main__":
                 #print('>',self.time_remaining_player[self.current_turn])
                 cpt = 0
                 while True:
-                    #print()
-                    #print(f'>{cpt}>{self.bot.referee.current_turn.mention} must play (he has {self.bot.referee.time_remaining_player[self.bot.referee.current_turn]} left)')
+
                     try:
+                        print('>',self.bot.referee.time_remaining_player[self.bot.referee.current_turn])
                         M = await channel.send(
                         f'{self.bot.referee.current_turn.mention} must play (he has {self.bot.referee.time_remaining_player[self.bot.referee.current_turn]} left)')
                         self.canceled_chronometer_number = 0
@@ -850,6 +832,11 @@ if __name__ != "__main__":
                         if self.instruction_message.ended_time is not None:
                             sec = int(self.instruction_message.ended_time - self.instruction_message.creation_time)
                             milli = int((self.instruction_message.ended_time - self.instruction_message.creation_time - sec)*1000)
+                            #print('A:',sec, milli)
+                            tps = self.bot.referee.time_remaining_player[player] #- Time(second=sec, millisecond=milli)
+                            
+                            # au moins parfois la bonne valeur c'est sans le moins
+                            # si parfois ça requiert le moins, pour corriger, il suffit juste de ne pas mettre alors a jour la valeur du compte dans ce cas
 
                         else:
                             sec = int(time()-self.instruction_message.creation_time)
@@ -858,16 +845,12 @@ if __name__ != "__main__":
                             if int(time()-self.instruction_message.creation_time) % 120 == 119:
                                 self.alarme('Purr')
                                 self.alarme('Purr')
+                            #print('B:', sec, milli)
 
-                            """if int(time()-self.instruction_message.creation_time) >= self.bot.referee.time_remaining_player[self.bot.referee.current_turn].to_seconds():                            
-                                tps = Time()
-                                #print('!')
-                                print('chronometer.stop')
-                                self.chronometer.stop()
-                                self.chronometer.ended=True"""
 
-                        tps = self.bot.referee.time_remaining_player[player] - Time(second=sec, millisecond=milli)
 
+                            tps = self.bot.referee.time_remaining_player[player] - Time(second=sec, millisecond=milli)
+                        #print('t:', self.bot.referee.time_remaining_player[player], player)
                         if tps == Time():
                             #print('chronometer_stop Z')
                             self.chronometer_stop()
@@ -876,8 +859,9 @@ if __name__ != "__main__":
 
                         if self.instruction_message.last_time is None or self.instruction_message.last_time.to_seconds() != tps.to_seconds():
                             self.instruction_message.last_time = tps
-                            #print(f'>>{player.mention} must play (he has {tps} left)')#, self.bot.referee.time_remaining_player[self.bot.referee.current_turn], int(time()-self.instruction_message.creation_time), )
+                           
                             try:
+                                #print('>>',tps)
                                 await self.instruction_message.message.edit(content=
                                     f'{player.mention} must play (he has {tps} left)')
                                 self.canceled_chronometer_number = 0
