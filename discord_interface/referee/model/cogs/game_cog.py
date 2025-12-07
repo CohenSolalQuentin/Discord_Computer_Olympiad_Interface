@@ -477,8 +477,12 @@ if __name__ != "__main__":
 
                 #print('-4')
                 # Store the winner/loser
-                self.bot.bot_ref_log["winner"] = self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].id
-                self.bot.bot_ref_log["loser"] = self.bot.referee.opposite(self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner]).id
+                if self.bot.referee.game.winner in [0.5, '0.5', 'draw','nul']:
+                    self.bot.bot_ref_log["winner"] = 'draw'
+                    self.bot.bot_ref_log["loser"] = 'draw'
+                else:
+                    self.bot.bot_ref_log["winner"] = self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].id
+                    self.bot.bot_ref_log["loser"] = self.bot.referee.opposite(self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner]).id
                 self.bot.bot_ref_log["ended"] = True
 
                 # Reset the referee instance keeping some property as they are at the moment (display_activated, game.time_per_player, ...)
@@ -611,7 +615,7 @@ if __name__ != "__main__":
                 # Update time fields and retrieve the current player
                 if self.instruction_message is not None and self.instruction_message.ended_time is None:#-# if self.instruction_message.ended_time is None:
                     self.instruction_message.ended_time = time()
-                    
+
                     player = self.bot.referee.update_turn(self.instruction_message.message, message)
                 else:
                     # cas où je joueur jouerait trop vite (avant que le nouveau message d'instruction ne soit créé : si c'est pas None, c'est que le message d'instruction actuel correspond à un autre message (précédent);
@@ -660,8 +664,12 @@ if __name__ != "__main__":
                     raise e
 
                 # Store the winner/loser
-                self.bot.bot_ref_log["winner"] = self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].id
-                self.bot.bot_ref_log["loser"] = self.bot.referee.opposite(self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner]).id
+                if self.bot.referee.game.winner in [0.5, '0.5', 'draw', 'nul']:
+                    self.bot.bot_ref_log["winner"] = 'draw'
+                    self.bot.bot_ref_log["loser"] = 'draw'
+                else:
+                    self.bot.bot_ref_log["winner"] = self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner].id
+                    self.bot.bot_ref_log["loser"] = self.bot.referee.opposite(self.bot.referee.player_anti_correspondence[self.bot.referee.game.winner]).id
                 self.bot.bot_ref_log["ended"] = True
 
                 # Reset the referee instance keeping some property as they are at the moment (display_activated, game.time_per_player, ...)
@@ -804,7 +812,7 @@ if __name__ != "__main__":
                 while True:
 
                     try:
-                        print('>',self.bot.referee.time_remaining_player[self.bot.referee.current_turn])
+                        #print('>',self.bot.referee.time_remaining_player[self.bot.referee.current_turn])
                         M = await channel.send(
                         f'{self.bot.referee.current_turn.mention} must play (he has {self.bot.referee.time_remaining_player[self.bot.referee.current_turn]} left)')
                         self.canceled_chronometer_number = 0
@@ -834,7 +842,7 @@ if __name__ != "__main__":
                             milli = int((self.instruction_message.ended_time - self.instruction_message.creation_time - sec)*1000)
                             #print('A:',sec, milli)
                             tps = self.bot.referee.time_remaining_player[player] #- Time(second=sec, millisecond=milli)
-                            
+
                             # au moins parfois la bonne valeur c'est sans le moins
                             # si parfois ça requiert le moins, pour corriger, il suffit juste de ne pas mettre alors a jour la valeur du compte dans ce cas
 
@@ -859,7 +867,7 @@ if __name__ != "__main__":
 
                         if self.instruction_message.last_time is None or self.instruction_message.last_time.to_seconds() != tps.to_seconds():
                             self.instruction_message.last_time = tps
-                           
+
                             try:
                                 #print('>>',tps)
                                 await self.instruction_message.message.edit(content=
