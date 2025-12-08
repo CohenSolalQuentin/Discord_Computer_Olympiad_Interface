@@ -13,6 +13,8 @@ class GTP_AI_Go(Textual_AI):
 
         await super().reset()
 
+        self.game.reset()
+
         await self.send('clear_board')
 
 
