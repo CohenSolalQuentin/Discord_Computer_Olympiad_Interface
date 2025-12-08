@@ -97,11 +97,13 @@ async def test(game_name, stats):
                     await ai.undo()
                     cp = await ai.plays(tps, tps)
                 #print('GTP:',"'"+cp+"'")
+                
+                cp = game.action_to_string(cp)
             else:
 
                 cp = choice(game.textual_legal_moves())
 
-                await ai.opponent_plays(cp)
+                await ai.opponent_plays(game.string_to_action(cp))
                 #print('R:', "'" + cp + "'")
 
             game.textual_plays(cp)
