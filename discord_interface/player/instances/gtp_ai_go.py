@@ -18,6 +18,7 @@ class GTP_AI_Go(Textual_AI):
 
     async def undo(self):
         await self.send('undo')
+        self.game.undo()
         self.history.pop()
 
 
@@ -30,7 +31,6 @@ class GTP_AI_Go(Textual_AI):
 
     async def invalid_action_processing(self):
         await self.undo()
-        self.game.undo()
 
     async def replays(self, action):
 
