@@ -1,6 +1,7 @@
 import json
 
 from discord_interface.games.game_viewing.interface.Interface_hex_dyna import Interface_hex_dyna
+from discord_interface.games.game_viewing.interface.visualisation_backgammon import interface_backgammon
 from discord_interface.games.games_enum import Discord_Game
 from discord_interface.games.game_viewing.interface.Interface_square_amazons import Interface_square_amazons
 from discord_interface.games.game_viewing.interface.Interface_square_deplacement import Interface_square_deplacement
@@ -17,7 +18,7 @@ def more_recent_file(dossier: str) -> str | None:
     # Liste les fichiers seulement (pas les sous-dossiers)
     #print()
     fichiers = [os.path.join(dossier, f) for f in os.listdir(dossier)
-                if os.path.isfile(os.path.join(dossier, f))]
+                if os.path.isfile(os.path.join(dossier, f)) and f != '.DS_Store']
 
     if not fichiers:
         return None
@@ -39,17 +40,18 @@ def game_construction(log_file):
         #print('game_name:', game_name)
         #print('H:',histo)
         game = Discord_Game(game_name).__class__()
-        histo = [game.string_to_action(m) for m in histo]
+        #histo = [game.string_to_action(m) for m in histo]
 
         for a in histo:
             #print(game.action_to_string(a))
             #print(len(game.jeu.historique), game.valid_actions())
-            assert a in game.valid_actions()
-            game.plays(a)
+            #assert a in game.valid_actions()
+            assert a in game.textual_legal_moves()
+            #game.plays(a)
+            game.textual_plays(a)
 
 
     return game_name, game
-
 
 
 
@@ -67,7 +69,7 @@ def go_interface(log_file):
             interface.quit()
             # raise GameChange()
 
-        interface.hex = game
+        interface.game = game
 
         #print(len(jeu.historique))
 
@@ -85,7 +87,8 @@ def go_interface(log_file):
                 interface = Interface_square_amazons(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False)
             elif 'hex' in game_name or 'havannah' in game_name:
                 interface = Interface_hex_dyna(game, ia_noir=None, ia_blanc=None, permu_couleur=False, affichage_valeurs=False, affiche_coup_licites=False)
-
+            elif 'backgammon' == game_name:
+                interface = interface_backgammon(game)
             # Démarrer la boucle de lecture/maj
             lire_fichier_et_maj()
 
@@ -94,4 +97,6 @@ def go_interface(log_file):
             break
 
         except Exception:
+            import traceback
+            traceback.print_exc()
             """"""
