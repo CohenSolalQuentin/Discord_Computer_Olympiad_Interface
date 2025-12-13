@@ -232,15 +232,17 @@ class Backgammon():
                 positions_avant = range(6, p, -1)
             else:
                 positions_avant = range(19, p)
-            positions_avant = [p for p in positions_avant if p in positions and plateau[p + v, 0, int(not self.joueur_en_cours)] < 2]  # if 0 < p + v < 25 and plateau[p+v, int(not self.joueur_en_cours)] < 2:
+
+            positions_avant = [p for p in positions_avant if p in positions]
+            positions_avant_deplacable = [p for p in positions_avant if p in positions and plateau[p + v, 0, int(not self.joueur_en_cours)] < 2]  # if 0 < p + v < 25 and plateau[p+v, int(not self.joueur_en_cours)] < 2:
 
             if p in positions:
                 #print('?',[p])
-                return [p] + positions_avant
+                return [p] + positions_avant_deplacable
             else:
 
                 if positions_avant:
-                    return positions_avant
+                    return positions_avant_deplacable
                 else:
                     if self.joueur_en_cours:
                         positions_apres = [p for p in range(1,p) if p in positions]
@@ -482,3 +484,4 @@ class Backgammon():
 
     def coupsLicites(self):
         return self.coups_licites
+
