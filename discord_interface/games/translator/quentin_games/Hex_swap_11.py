@@ -120,7 +120,11 @@ class Hex_swap():
         #print(self.coupsLicites())
 
     def coupsLicites(self):
-        return list(self.coups_licites)
+        if len(self.historique) != 1:
+            return list(self.coups_licites)
+        else:
+            return list(self.coups_licites)+[('swap', 'swap')]
+
 
 
 
